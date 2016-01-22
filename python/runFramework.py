@@ -5,6 +5,7 @@ Inverse optimizer example
 # License:
 
 import sys
+from setData import load_data_from_text
 # import numpy as np
 # from newLFPySimulation import newLFPySimulation
 
@@ -32,11 +33,11 @@ def main():
     """
 
     # Data path/filename
-    data_path = './'
-    file_name = data_path + 'data_single.data'
+    data_path = ''
+    file_name = data_path + 'CAP.csv'
     print "Looking for file" + file_name
-    # n_channels, s_rate, data_raw = load_data(file_name)
-
+    data_raw = load_data_from_text(file_name)
+    print data_raw.shape
     # Electrode positions - 3 vectors
     # voxel_pos = create_voxels(elPos[0], elPos[1], elPos
     # [2])

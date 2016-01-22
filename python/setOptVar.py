@@ -6,7 +6,7 @@ Create attributes for the localization framework
 import numpy as np
 
 
-def create_voxels(elx, ely, elz, p_vres=1, el_radius=5,
+def create_voxels(elx, ely, elz, p_vres=5, el_radius=5,
                   max_depth=55, p_jlen=2):
     """
     Create voxel space w.r.t. -m- electrode positions, 1 voxel larger margin
