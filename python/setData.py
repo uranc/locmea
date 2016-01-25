@@ -25,11 +25,13 @@ class load_data(object):
     Functions
     ---------
     """
-    def __init__(self, f_name, flag_cell=True):
-        self.f_name = f_name
-        self.flag_cell = flag_cell
+    def __init__(self, *args, **kwargs):
+        self.f_name = args[0]
+        self.flag_cell = kwargs.get('flag_cell')
+        print args, kwargs
         print self.f_name
-        if flag_cell:
+        print self.flag_cell
+        if self.flag_cell:
             self.cell, self.data_raw, self.srate = self.load_h5py_data(
                 self.f_name, self.flag_cell)
         else:

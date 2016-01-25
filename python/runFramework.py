@@ -34,10 +34,10 @@ def main():
 
     # Data path/filename
     data_path = ''
-    file_name = data_path + 'data_sim.hdf5'
-    loaded_data = load_data(file_name)
-    print loaded_data
+    file_name = data_path + 'data_sim_l8e3.hdf5'
     print "Looking for file" + file_name
+    loaded_data = load_data(file_name, flag_cell=True)
+    print "Data loaded", loaded_data.srate
     # Electrode positions - 3 vectors
     # voxel_pos = create_voxels(elPos[0], elPos[1], elPos
     # [2])
