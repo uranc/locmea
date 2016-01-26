@@ -78,12 +78,16 @@ def cmp_fwd_matrix(elx, ely, elz, vx, vy, vz, p_sigma=0.3):
     return 1./(fwd_matrix*(4.*np.pi*p_sigma))
 
 
-def cmp_inv_matrix(fwd_matrix, depth_norm_matrix, method='sLoreta'):
+def cmp_inv_matrix(fwd_matrix, depth_norm_matrix, p_lmbda=1e-2):
     """
     Computes regularized inverse matrix in the given method
     (Can be a class later on with multiple methods)
     """
-    inv_matrix = np.array(0)
+    cov_n = np.eye(fwd_matrix.shape[0])
+    inv_matrix = np.dot(np.dot(depth_norm_matrix, np.transpose(fwd_matrix)),
+                        np.linalg.inv(
+                        np.dot(np.dot(fwd_matrix, depth_norm_matrix),
+                               np.transpose(fwd_matrix)) + (p_lmbda**2)*cov_n))
     return inv_matrix
 
 
