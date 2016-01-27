@@ -15,8 +15,9 @@ import numpy as np
 def main():
     """
     Main module for the optimization problem
+    ----------
     Inputs
-
+    ----------
     data_path
     filename
     electrode_pos  (optional)
@@ -57,12 +58,11 @@ def main():
                          voxel_pos[0, :].flatten(),
                          voxel_pos[1, :].flatten(),
                          voxel_pos[2, :].flatten())
-    dn_fwd = cmp_depth_norm_matrix(fwd)
-    inv = cmp_inv_matrix(fwd, dn_fwd, p_lmbda = 1e-3)
-    neuron_csd = np.dot(inv,measurements_y)
-    print neuron_csd.shape    
-    print neuron_csd[:,30].reshape((voxel_pos[0,:].shape))
-    print np.max(neuron_csd[:,30].reshape((voxel_pos[0,:].shape)))
+    # testables
+    dn_fwd = cmp_depth_norm_matrix(fwd, p_depth=1.)
+    inv = cmp_inv_matrix(fwd, dn_fwd, p_lmbda=1e-1)
+    neuron_csd = np.dot(inv, measurements_y)
+
 
 if __name__ == "__main__":
     sys.exit(main())
