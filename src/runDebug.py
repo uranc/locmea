@@ -8,7 +8,7 @@ from setData import data_in
 from setOptProb import opt_out
 import casadi as ca
 # Data path/filename
-data_path = ''
+data_path = '../data/'
 file_name = data_path + 'data_sim_l8e3.hdf5'
 print "Looking for file" + file_name
 data = data_in(file_name, flag_cell=True, flag_electode=False)
