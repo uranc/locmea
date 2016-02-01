@@ -141,7 +141,24 @@ class data_out(object):
         """
         return np.dot(inv_matrix, fwd_matrix)
 
-    def visualize_reconstructions(this):
+    def visualize_setup(cell, electrode, voxels):
+        """
+        Visualize electrode positions, cell, and the voxels
+        """
+        fig = plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        elx, ely, elz = electrode
+        vx, vy, vz = voxels
+        cx, cy, cz = cell
+        ax.scatter(elx, ely, elz, c='r', marker='o')
+        ax.scatter(vx, vy, vz, c='r', marker='.')
+        ax.scatter(cx, cy, cz, c='r', marker='*')
+        ax.set_xlabel('x axis')
+        ax.set_ylabel('y axis')
+        ax.set_zlabel('z axis')
+        plt.show()
+
+    def visualize_inverse_solution(this):
         """
         visualize the reconstructions
         """
@@ -169,3 +186,9 @@ class data_out(object):
         """
         write output results, parameters, fig details, etc.
         """
+    def visualize_fwd_matrix(fwd):
+        """
+        Visualize the exponential decay
+        PSF and CTF functions
+        """
+

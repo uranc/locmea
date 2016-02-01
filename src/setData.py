@@ -31,9 +31,9 @@ class data_in(object):
         print self.f_name
         print self.flag_cell
         if self.flag_cell:
-            (self.cell_pos, self.cell_csd, self.electrode_pos,
-                self.electrode_rec, self.srate) = self.load_h5py_data(
-                self.f_name, self.flag_cell)
+            (self.cell_pos_start, self.cell_pos, self.cell_pos_end,
+             self.cell_csd, self.electrode_pos, self.electrode_rec,
+             self.srate) = self.load_h5py_data(self.f_name, self.flag_cell)
         else:
             self.data_raw, self.srate = self.load_h5py_data(self.f_name,
                                                             self.flag_cell)
@@ -46,9 +46,9 @@ class data_in(object):
         f = h5py.File(self.f_name, 'r')
         print "Cell data avaliable"
         if flag_cell:
-            return (f['cell'][:, 0:3], f['cell'][:, 3:],
-                    f['electrode'][:, 0:3], f['electrode'][:, 3:],
-                    f['srate'][()])
+            return (f['cell'][:, 0:3], f['cell'][:, 3:6], f['cell'][:, 6:9],
+                    f['cell'][:, 9:], f['electrode'][:, 0:3],
+                    f['electrode'][:, 3:], f['srate'][()])
         else:
             return f['data'][:], f['srate'][()]
 

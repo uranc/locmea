@@ -38,12 +38,3 @@ class opt_out(data_out):
         ax.set_xlabel('time (s)')
         ax.set_xlim(0, 10)
         ax.set_ylim(-5.5, 5.5)
-
-    def write_log(self):
-        """
-        write optimization log
-        """
-    def write_output_data(self):
-        """
-        write output results, parameters, fig details, etc.
-        """
