@@ -51,8 +51,39 @@ class data_in(object):
                     f['srate'][()])
         else:
             return f['data'][:], f['srate'][()]
-    # def high_pass_data():
-    # def car_data():
-    # def epoch_data():
-    # def cmp_cov_source():
-    # def cmp_cov_meas():
+
+    def filter_bpass_data(self):
+        """
+        filter raw data
+        """
+    def car_data(self):
+        """
+        common average reference
+        """
+    def epoch_data(self):
+        """
+        threshold to get spike time points
+        (can be overwritten)
+        """
+    def cmp_cov_sensor(self):
+        """
+        compute the covariance matrix for sensors
+        """
+    def visualize_data(self):
+        """
+        visualize recordings, epochs, etc..
+        frq., power (can be extra function)
+        """
+    def visualize_cell(self):
+        """
+        visualize morphology
+        frq. power ( can be extra)
+        """
+    def visualize_cov(self):
+        """
+        visualize covariance matrix
+        """
+    def cmp_pca_ica(self):
+        """
+        compute pca, ica, dimensionality reduction
+        """

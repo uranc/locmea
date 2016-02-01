@@ -4,6 +4,7 @@ Create attributes for the localization framework
 # Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
 # License:
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 class data_out(object):
@@ -139,3 +140,32 @@ class data_out(object):
         (1./sum(a_i^2))^depth_par - column norm for fwd_matrix[:,i]
         """
         return np.dot(inv_matrix, fwd_matrix)
+
+    def visualize_reconstructions(this):
+        """
+        visualize the reconstructions
+        """
+    def evaluate_localization(this):
+        """
+        evaluate the localization
+        """
+    def generate_figure(self):
+        """
+        Initialize the figure
+        """
+        self.fig = plt.figure(figsize=(20, 10))
+        ax = self.fig.add_subplot(232)
+        ax.legend(prop={'size': 12})
+        ax.set_ylabel('controls ')
+        ax.set_xlabel('time (s)')
+        ax.set_xlim(0, 10)
+        ax.set_ylim(-5.5, 5.5)
+
+    def write_log(self):
+        """
+        write optimization log
+        """
+    def write_output_data(self):
+        """
+        write output results, parameters, fig details, etc.
+        """
