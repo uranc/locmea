@@ -16,10 +16,16 @@ data = data_in(file_name, flag_cell=True, flag_electode=False)
 opt = opt_out(data.electrode_pos, p_vres=20, p_jlen=0)
 fwd = SX(opt.cmp_fwd_matrix(opt.electrode_pos, opt.voxels))
 
-
+t_ind = 30
+t_interval = 2
 # Single frame
-y = SX(data.electrode_rec)
-x = SX.sym('x', fwd.shape[1],y.shape[1])
+#y = SX(data.electrode_rec[:, t_ind])
+#x = SX.sym('x', fwd.shape[1], y.shape[1])
+
+# Multi frame
+y = SX(data.electrode_rec[:, t_ind:t_ind+t_interval])
+x = SX.sym('x', fwd.shape[1], y.shape[1])
+print y.shape, x.shape, fwd.shape
 # Parameters
 
 # Function value
