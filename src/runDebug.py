@@ -3,24 +3,26 @@ Inverse optimizer example
 """
 # Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
 # License:
-
 from setData import data_in
 from setOptProb import opt_out
+from setInvProb import data_out
 import casadi as ca
 # Data path/filename
 data_path = '../data/'
 file_name = data_path + 'data_sim_low.hdf5'
 print "Looking for file" + file_name
 data = data_in(file_name, flag_cell=True, flag_electode=False)
-opt = opt_out(data.electrode_pos, p_vres=20, p_jlen=0)
-fwd = ca.SX(opt.cmp_fwd_matrix(opt.electrode_pos, opt.voxels))
+loc = data_out(data, p_vres=20, p_jlen=0)
+opt = opt_out(data, p_vres=20, p_jlen=0)
+
+fwd = ca.DMatrix(opt.cmp_fwd_matrix(opt.electrode_pos, opt.voxels))
 
 t_ind = 30
 t_interval = 1
 
 # Multi frame
-y = ca.SX(data.electrode_rec[:, t_ind:t_ind+t_interval])
-x = ca.SX.sym('x', fwd.shape[1], y.shape[1])
+y = ca.MX(data.electrode_rec[:, t_ind:t_ind+t_interval])
+x = ca.MX.sym('x', fwd.shape[1], y.shape[1])
 print y.shape, x.shape, fwd.shape
 # Parameters
 

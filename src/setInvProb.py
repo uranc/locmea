@@ -4,7 +4,10 @@ Create attributes for the localization framework
 # Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
 # License:
 import numpy as np
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 
 class data_out(object):
@@ -16,7 +19,8 @@ class data_out(object):
     """
 
     def __init__(self, *args, **kwargs):
-        self.electrode_pos = args[0]
+        self.data = args[0]
+        self.electrode_pos = self.data.electrode_pos
         self.options = {'p_vres': 5,
                         'p_jlen': 2,
                         'p_erad': 5,
@@ -158,6 +162,11 @@ class data_out(object):
         ax.set_zlabel('z axis')
         plt.show()
 
+    def visualize_cell_morphology(this):
+        """
+        visualize cell morphology
+        """
+
     def visualize_inverse_solution(this):
         """
         visualize the reconstructions
@@ -170,14 +179,100 @@ class data_out(object):
         """
         Initialize the figure
         """
+        data = self.data
+        tmax = 20  # tmax from reconstruction
+        cmax = tmax  # cmax from rec
         self.fig = plt.figure(figsize=(20, 10))
-        ax = self.fig.add_subplot(232)
-        ax.legend(prop={'size': 12})
-        ax.set_ylabel('controls ')
-        ax.set_xlabel('time (s)')
-        ax.set_xlim(0, 10)
-        ax.set_ylim(-5.5, 5.5)
 
+        # csd plot
+        ax = self.fig.add_subplot(233)
+        self.csdPlot = [ax.plot(1, 1, '-', label='True CSD')[0]]
+        self.csdPlot.append(ax.plot(0, 0, label='Reconstruction')[0])
+        ax.legend(prop={'size': 12})
+        ax.set_ylabel('Amlitude(uC)')
+        ax.set_xlabel('Time (ms)')
+        ax.set_xlim(0, tmax)
+        ax.set_ylim(-cmax, cmax)
+        self.Axis = {'csd': ax}
+        # second plot
+        ax = self.fig.add_subplot(236)
+        self.potPlot = [ax.plot(0, 0, '-', label='MEA recordings')[0]]
+        self.potPlot.append(ax.plot(0, 0, label='Average data')[0])
+        ax.legend(prop={'size': 12})
+        ax.set_ylabel('Potential(mV)')
+        ax.set_xlabel('Time (ms)')
+        ax.set_xlim(0, tmax)
+        ax.set_ylim(-cmax, cmax)
+        self.Axis['pot'] = ax
+        # morphology
+        ax = self.fig.add_subplot(131, projection='3d')
+        self.morpPlot = [ax.plot(np.r_[data.cell_pos_start[:, 0],
+                                       data.cell_pos_end[:, 0]],
+                                 np.r_[data.cell_pos_start[:, 1],
+                                       data.cell_pos_end[:, 1]],
+                                 np.r_[data.cell_pos_start[:, 2],
+                                       data.cell_pos_end[:, 2]],
+                                 color='k')[0]]
+        self.morpPlot.append(ax.plot(data.electrode_pos[:, 0],
+                                     data.electrode_pos[:, 1],
+                                     data.electrode_pos[:, 2],
+                                     color='g',
+                                     marker='o')[0])  # electrodes
+        self.morpPlot.append(ax.scatter(data.cell_pos[:, 0],
+                                        data.cell_pos[:, 1],
+                                        data.cell_pos[:, 2],
+                                        color='b',
+                                        marker='o'))  # midpoints
+        ax.set_xlim(-300, 300)
+        ax.set_xticklabels('')
+        ax.set_ylim(-130, 130)
+        ax.set_yticklabels('')
+        ax.set_zlim(-400, 400)
+        ax.set_zticklabels('')
+        ax.azim = 165-90
+        ax.elev = 20
+        self.Axis['morp'] = ax
+        # self.morpPlot['Axis'] = ax
+        # second morphology
+        ax = self.fig.add_subplot(132, projection='3d', aspect='equal')
+        self.recPlot = [ax.plot(np.r_[data.cell_pos_start[:, 0],
+                                      data.cell_pos_end[:, 0]],
+                                np.r_[data.cell_pos_start[:, 1],
+                                      data.cell_pos_end[:, 1]],
+                                np.r_[data.cell_pos_start[:, 2],
+                                      data.cell_pos_end[:, 2]],
+                                color='k')]
+        self.recPlot.append(ax.plot(data.electrode_pos[:, 0],
+                                    data.electrode_pos[:, 1],
+                                    data.electrode_pos[:, 2],
+                                    color='g',
+                                    marker='o'))  # electrodes
+        ax.scatter(data.cell_pos[:, 0],
+                   data.cell_pos[:, 1],
+                   data.cell_pos[:, 2],
+                   color='b',
+                   marker='o')  # midpoints
+        ax.set_xlim(-300, 300)
+        ax.set_xticklabels('')
+        ax.set_ylim(-130, 130)
+        ax.set_yticklabels('')
+        ax.set_zlim(-400, 400)
+        ax.set_zticklabels('')
+        ax.azim = 165-90
+        ax.elev = 20
+        self.Axis['rec'] = ax
+        # show all
+        self.fig.tight_layout()
+        # plt.axis('equal')
+        # plt.axis(np.array(plt.axis())*0.8)
+        plt.ion()
+        plt.show()
+        plt.pause(0.1)
+
+    def plot_data(self):
+        """
+        plot data - update
+        """
     def write_log(self):
         """
         write optimization log
@@ -191,4 +286,3 @@ class data_out(object):
         Visualize the exponential decay
         PSF and CTF functions
         """
-
