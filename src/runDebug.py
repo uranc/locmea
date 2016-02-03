@@ -7,6 +7,7 @@ from setData import data_in
 from setOptProb import opt_out
 from setInvProb import data_out
 import casadi as ca
+import numpy as np
 # Data path/filename
 data_path = '../data/'
 file_name = data_path + 'data_sim_low.hdf5'
@@ -15,33 +16,33 @@ data = data_in(file_name, flag_cell=True, flag_electode=False)
 loc = data_out(data, p_vres=20, p_jlen=0)
 opt = opt_out(data, p_vres=20, p_jlen=0)
 
-fwd = ca.DMatrix(opt.cmp_fwd_matrix(opt.electrode_pos, opt.voxels))
+fwd = opt.cmp_fwd_matrix(opt.electrode_pos, opt.voxels)
 
 t_ind = 30
 t_interval = 1
 
 # Multi frame
-y = ca.MX(data.electrode_rec[:, t_ind:t_ind+t_interval])
-x = ca.MX.sym('x', fwd.shape[1], y.shape[1])
-print y.shape, x.shape, fwd.shape
+y = data.electrode_rec[:, t_ind:t_ind+t_interval]
+x = ca.SX.sym('x', fwd.shape[1])
 # Parameters
 
 # Function value
 f = ca.norm_1(x)
 g = (y-ca.mul(fwd, x))**2
 # Initialize
-x0 = [0]
-lbx = [-100]
-ubx = [100]
-lbg = [0]
-ubg = [1e-5]
+x0 = ca.vertcat([np.zeros(363)])
+lbx = ca.vertcat([np.ones(363)*-100])
+ubx = ca.vertcat([np.ones(363)*100])
+lbg = ca.vertcat([np.zeros(81)])
+ubg = ca.vertcat([np.ones(81)*1e-5])
 # Nonlinear bounds
 
 # Create NLP
-nlp = ca.SXFunction("nlp", ca.nlpIn(x=x), ca.nlpOut(f=f, g=g))
+nlp = ca.MXFunction("nlp", ca.nlpIn(x=x), ca.nlpOut(f=f, g=g))
 
 # NLP solver options
-opts = {"max_iter": 10000}
+opts = {"max_iter": 1000}
+
 # opts["compute_red_hessian"] = "yes"
 # Create NLP solver
 solver = ca.NlpSolver("solver", "ipopt", nlp, opts)
@@ -51,3 +52,4 @@ res = solver({"x0": x0,
               "ubx": ubx,
               "lbg": lbg,
               "ubg": ubg})
+print y.shape, x.shape, fwd.shape

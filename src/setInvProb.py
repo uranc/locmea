@@ -183,7 +183,14 @@ class data_out(object):
         tmax = 20  # tmax from reconstruction
         cmax = tmax  # cmax from rec
         self.fig = plt.figure(figsize=(20, 10))
-
+        # mask reconstruction volume
+        vx, vy, vz = self.voxels
+        xmin, xmax = np.min(vx), np.max(vx)
+        ymin, ymax = np.min(vy), np.max(vy)
+        zmin, zmax = np.min(vz), np.max(vz)
+        ind = ((xmin <= data.cell_pos[:, 0]) & (xmax <= data.cell_pos[:, 0]) &
+               (ymin <= data.cell_pos[:, 1]) & (ymax <= data.cell_pos[:, 1]) &
+               (zmin <= data.cell_pos[:, 2]) & (zmax <= data.cell_pos[:, 2]))
         # csd plot
         ax = self.fig.add_subplot(233)
         self.csdPlot = [ax.plot(1, 1, '-', label='True CSD')[0]]
@@ -213,11 +220,11 @@ class data_out(object):
                                  np.r_[data.cell_pos_start[:, 2],
                                        data.cell_pos_end[:, 2]],
                                  color='k')[0]]
-        self.morpPlot.append(ax.plot(data.electrode_pos[:, 0],
-                                     data.electrode_pos[:, 1],
-                                     data.electrode_pos[:, 2],
-                                     color='g',
-                                     marker='o')[0])  # electrodes
+        self.morpPlot.append(ax.scatter(data.electrode_pos[:, 0],
+                                        data.electrode_pos[:, 1],
+                                        data.electrode_pos[:, 2],
+                                        color='g',
+                                        marker='o'))  # electrodes
         self.morpPlot.append(ax.scatter(data.cell_pos[:, 0],
                                         data.cell_pos[:, 1],
                                         data.cell_pos[:, 2],
@@ -225,9 +232,9 @@ class data_out(object):
                                         marker='o'))  # midpoints
         ax.set_xlim(-300, 300)
         ax.set_xticklabels('')
-        ax.set_ylim(-130, 130)
+        ax.set_ylim(ymin, ymax)
         ax.set_yticklabels('')
-        ax.set_zlim(-400, 400)
+        ax.set_zlim(zmin, zmax)
         ax.set_zticklabels('')
         ax.azim = 165-90
         ax.elev = 20
@@ -247,16 +254,16 @@ class data_out(object):
                                     data.electrode_pos[:, 2],
                                     color='g',
                                     marker='o'))  # electrodes
-        ax.scatter(data.cell_pos[:, 0],
-                   data.cell_pos[:, 1],
-                   data.cell_pos[:, 2],
-                   color='b',
-                   marker='o')  # midpoints
-        ax.set_xlim(-300, 300)
+        self.recPlot.append(ax.scatter(data.cell_pos[:, 0],
+                                       data.cell_pos[:, 1],
+                                       data.cell_pos[:, 2],
+                                       color='b',
+                                       marker='o'))  # midpoints
+        ax.set_xlim(xmin, xmax)
         ax.set_xticklabels('')
-        ax.set_ylim(-130, 130)
+        ax.set_ylim(ymin, ymax)
         ax.set_yticklabels('')
-        ax.set_zlim(-400, 400)
+        ax.set_zlim(zmin, zmax)
         ax.set_zticklabels('')
         ax.azim = 165-90
         ax.elev = 20
