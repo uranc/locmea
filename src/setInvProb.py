@@ -180,61 +180,64 @@ class data_out(object):
         Initialize the figure
         """
         data = self.data
-        tmax = 20  # tmax from reconstruction
-        cmax = tmax  # cmax from rec
+        tp = np.arange(0, data.electrode_rec.shape[1]/data.srate,
+                       1./data.srate)
         self.fig = plt.figure(figsize=(20, 10))
+        # cmax = 1e-3
+        # tmax = 1e-3
         # mask reconstruction volume
         vx, vy, vz = self.voxels
+        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()
         xmin, xmax = np.min(vx), np.max(vx)
         ymin, ymax = np.min(vy), np.max(vy)
         zmin, zmax = np.min(vz), np.max(vz)
-        ind = ((xmin <= data.cell_pos[:, 0]) & (xmax <= data.cell_pos[:, 0]) &
-               (ymin <= data.cell_pos[:, 1]) & (ymax <= data.cell_pos[:, 1]) &
-               (zmin <= data.cell_pos[:, 2]) & (zmax <= data.cell_pos[:, 2]))
+        ind = ((xmin <= data.cell_pos[:, 0]) & (xmax >= data.cell_pos[:, 0]) &
+               (ymin <= data.cell_pos[:, 1]) & (ymax >= data.cell_pos[:, 1]) &
+               (zmin <= data.cell_pos[:, 2]) & (zmax >= data.cell_pos[:, 2]))
         # csd plot
         ax = self.fig.add_subplot(233)
-        self.csdPlot = [ax.plot(1, 1, '-', label='True CSD')[0]]
-        self.csdPlot.append(ax.plot(0, 0, label='Reconstruction')[0])
-        ax.legend(prop={'size': 12})
-        ax.set_ylabel('Amlitude(uC)')
+        self.csdPlot = [ax.plot(data.cell_csd[ind, :].T, label='CSD')[0]]
+        self.csdPlot.append(ax.plot(data.cell_csd[ind, :].T, label='Rec')[0])
+        # ax.legend(prop={'size': 12})
+        ax.set_ylabel('Transmembrane Current(nA)')
         ax.set_xlabel('Time (ms)')
-        ax.set_xlim(0, tmax)
-        ax.set_ylim(-cmax, cmax)
+        # ax.set_xlim(0, tmax)
+        # ax.set_ylim(-cmax, cmax)
         self.Axis = {'csd': ax}
         # second plot
         ax = self.fig.add_subplot(236)
-        self.potPlot = [ax.plot(0, 0, '-', label='MEA recordings')[0]]
-        self.potPlot.append(ax.plot(0, 0, label='Average data')[0])
-        ax.legend(prop={'size': 12})
-        ax.set_ylabel('Potential(mV)')
+        self.potPlot = [ax.plot(data.electrode_rec.T, '-', label='MEA')[0]]
+        self.potPlot.append(ax.plot(data.electrode_rec.T, label='Filter')[0])
+        # ax.legend(prop={'size': 12})
+        ax.set_ylabel('Electrode Potential(mV)')
         ax.set_xlabel('Time (ms)')
-        ax.set_xlim(0, tmax)
-        ax.set_ylim(-cmax, cmax)
+        # ax.set_xlim(0, tmax)
+        # ax.set_ylim(-cmax, cmax)
         self.Axis['pot'] = ax
         # morphology
         ax = self.fig.add_subplot(131, projection='3d')
-        self.morpPlot = [ax.plot(np.r_[data.cell_pos_start[:, 0],
-                                       data.cell_pos_end[:, 0]],
-                                 np.r_[data.cell_pos_start[:, 1],
-                                       data.cell_pos_end[:, 1]],
-                                 np.r_[data.cell_pos_start[:, 2],
-                                       data.cell_pos_end[:, 2]],
+        self.morpPlot = [ax.plot(np.r_[data.cell_pos_start[ind, 0],
+                                       data.cell_pos_end[ind, 0]],
+                                 np.r_[data.cell_pos_start[ind, 1],
+                                       data.cell_pos_end[ind, 1]],
+                                 np.r_[data.cell_pos_start[ind, 2],
+                                       data.cell_pos_end[ind, 2]],
                                  color='k')[0]]
         self.morpPlot.append(ax.scatter(data.electrode_pos[:, 0],
                                         data.electrode_pos[:, 1],
                                         data.electrode_pos[:, 2],
                                         color='g',
                                         marker='o'))  # electrodes
-        self.morpPlot.append(ax.scatter(data.cell_pos[:, 0],
-                                        data.cell_pos[:, 1],
-                                        data.cell_pos[:, 2],
+        self.morpPlot.append(ax.scatter(data.cell_pos[ind, 0],
+                                        data.cell_pos[ind, 1],
+                                        data.cell_pos[ind, 2],
                                         color='b',
                                         marker='o'))  # midpoints
-        ax.set_xlim(-300, 300)
+        ax.set_xlim(xmin*3, xmax*3)
         ax.set_xticklabels('')
-        ax.set_ylim(ymin, ymax)
+        ax.set_ylim(ymin*3, ymax*3)
         ax.set_yticklabels('')
-        ax.set_zlim(zmin, zmax)
+        ax.set_zlim(zmin*3, zmax*3)
         ax.set_zticklabels('')
         ax.azim = 165-90
         ax.elev = 20
@@ -242,28 +245,28 @@ class data_out(object):
         # self.morpPlot['Axis'] = ax
         # second morphology
         ax = self.fig.add_subplot(132, projection='3d', aspect='equal')
-        self.recPlot = [ax.plot(np.r_[data.cell_pos_start[:, 0],
-                                      data.cell_pos_end[:, 0]],
-                                np.r_[data.cell_pos_start[:, 1],
-                                      data.cell_pos_end[:, 1]],
-                                np.r_[data.cell_pos_start[:, 2],
-                                      data.cell_pos_end[:, 2]],
+        self.recPlot = [ax.plot(np.r_[data.cell_pos_start[ind, 0],
+                                      data.cell_pos_end[ind, 0]],
+                                np.r_[data.cell_pos_start[ind, 1],
+                                      data.cell_pos_end[ind, 1]],
+                                np.r_[data.cell_pos_start[ind, 2],
+                                      data.cell_pos_end[ind, 2]],
                                 color='k')]
-        self.recPlot.append(ax.plot(data.electrode_pos[:, 0],
-                                    data.electrode_pos[:, 1],
-                                    data.electrode_pos[:, 2],
-                                    color='g',
-                                    marker='o'))  # electrodes
-        self.recPlot.append(ax.scatter(data.cell_pos[:, 0],
-                                       data.cell_pos[:, 1],
-                                       data.cell_pos[:, 2],
+        self.recPlot.append(ax.scatter(data.electrode_pos[:, 0],
+                                       data.electrode_pos[:, 1],
+                                       data.electrode_pos[:, 2],
+                                       color='g',
+                                       marker='o'))  # electrodes
+        self.recPlot.append(ax.scatter(data.cell_pos[ind, 0],
+                                       data.cell_pos[ind, 1],
+                                       data.cell_pos[ind, 2],
                                        color='b',
                                        marker='o'))  # midpoints
-        ax.set_xlim(xmin, xmax)
+        ax.set_xlim(xmin*3, xmax*3)
         ax.set_xticklabels('')
-        ax.set_ylim(ymin, ymax)
+        ax.set_ylim(ymin*3, ymax*3)
         ax.set_yticklabels('')
-        ax.set_zlim(zmin, zmax)
+        ax.set_zlim(zmin*3, zmax*3)
         ax.set_zticklabels('')
         ax.azim = 165-90
         ax.elev = 20
@@ -272,9 +275,9 @@ class data_out(object):
         self.fig.tight_layout()
         # plt.axis('equal')
         # plt.axis(np.array(plt.axis())*0.8)
-        plt.ion()
+        # plt.ion()
         plt.show()
-        plt.pause(0.1)
+        # plt.pause(0.1)
 
     def plot_data(self):
         """

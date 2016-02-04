@@ -23,6 +23,7 @@ t_interval = 1
 
 # Multi frame
 y = data.electrode_rec[:, t_ind:t_ind+t_interval]
+y = y
 x = ca.SX.sym('x', fwd.shape[1])
 # Parameters
 
@@ -38,7 +39,7 @@ ubg = ca.vertcat([np.ones(81)*1e-5])
 # Nonlinear bounds
 
 # Create NLP
-nlp = ca.MXFunction("nlp", ca.nlpIn(x=x), ca.nlpOut(f=f, g=g))
+nlp = ca.SXFunction("nlp", ca.nlpIn(x=x), ca.nlpOut(f=f, g=g))
 
 # NLP solver options
 opts = {"max_iter": 1000}
