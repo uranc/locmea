@@ -26,7 +26,7 @@ class opt_out(data_out):
         self.plot_data(x)
         return 0
 
-    def cmp_dx(self, i, j, k):
+    def cmp_dx(self, i, j, k, t):
         """
         cmp_dx
         """
@@ -42,7 +42,7 @@ class opt_out(data_out):
             ind_1 = np.ravel_multi_index((i - 1, j, k), vx.shape)
             ind2 = np.ravel_multi_index((i + 2, j, k), vx.shape)
             # dx = 8(x1-x_1)-1(x2-x0) x0 instead of x_2 (2nd order)
-            dx = 8 * (x[ind1] - x[ind_1]) - 1 * (x[ind2] - x[ind0])
+            dx = 8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind0, t])
         elif i == ni - 1:
             # dx = 0
             dx = 0
@@ -51,17 +51,17 @@ class opt_out(data_out):
             ind_1 = np.ravel_multi_index((i - 1, j, k), vx.shape)
             ind_2 = np.ravel_multi_index((i - 2, j, k), vx.shape)
             # dx = 8(x1-x_1)-1(x0-x_2) x0 instead of x2 (mirror)
-            dx = 8 * (x[ind1] - x[ind_1]) - 1 * (x[ind0] - x[ind_2])
+            dx = 8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind0, t] - x[ind_2, t])
         else:
             ind1 = np.ravel_multi_index((i + 1, j, k), vx.shape)
             ind_1 = np.ravel_multi_index((i - 1, j, k), vx.shape)
             ind2 = np.ravel_multi_index((i + 2, j, k), vx.shape)
             ind_2 = np.ravel_multi_index((i - 2, j, k), vx.shape)
             # dx = 8(x1-x_1)-1(x2-x_2)
-            dx = 8 * (x[ind1] - x[ind_1]) - 1 * (x[ind2] - x[ind_2])
+            dx = 8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind_2, t])
         return dx
 
-    def cmp_dy(self, i, j, k):
+    def cmp_dy(self, i, j, k, t):
         """
         cmp_dy
         """
@@ -77,7 +77,7 @@ class opt_out(data_out):
             ind_1 = np.ravel_multi_index((i, j - 1, k), vx.shape)
             ind2 = np.ravel_multi_index((i, j + 2, k), vx.shape)
             # dy = 8(x1-x_1)-1(x2-x0) x0 instead of x_2 (2nd order)
-            dy = 8 * (x[ind1] - x[ind_1]) - 1 * (x[ind2] - x[ind0])
+            dy = 8*(x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind0, t])
         elif j == nj - 1:
             # dy = 0
             dy = 0
@@ -86,17 +86,17 @@ class opt_out(data_out):
             ind_1 = np.ravel_multi_index((i, j - 1, k), vx.shape)
             ind_2 = np.ravel_multi_index((i, j - 2, k), vx.shape)
             # dy = 8(x1-x_1)-1(x0-x_2) x0 instead of x2 (mirror)
-            dy = 8 * (x[ind1] - x[ind_1]) - 1 * (x[ind0] - x[ind_2])
+            dy = 8*(x[ind1, t] - x[ind_1, t]) - 1*(x[ind0, t] - x[ind_2, t])
         else:
             ind1 = np.ravel_multi_index((i, j + 1, k), vx.shape)
             ind_1 = np.ravel_multi_index((i, j - 1, k), vx.shape)
             ind2 = np.ravel_multi_index((i, j + 2, k), vx.shape)
             ind_2 = np.ravel_multi_index((i, j - 2, k), vx.shape)
             # dy = 8(x1-x_1)-1(x2-x_2)
-            dy = 8 * (x[ind1] - x[ind_1]) - 1 * (x[ind2] - x[ind_2])
+            dy = 8*(x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind_2, t])
         return dy
 
-    def cmp_dz(self, i, j, k):
+    def cmp_dz(self, i, j, k, t):
         """
         cmp_dz
         """
@@ -112,7 +112,7 @@ class opt_out(data_out):
             ind_1 = np.ravel_multi_index((i, j, k - 1), vx.shape)
             ind2 = np.ravel_multi_index((i, j, k + 2), vx.shape)
             # dx = 8(x1-x_1)-1(x2-x0) x0 instead of x_2 (2nd order)
-            dz = 8 * (x[ind1] - x[ind_1]) - 1 * (x[ind2] - x[ind0])
+            dz = 8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind0, t])
         elif k == nk - 1:
             # dx = 0
             dz = 0
@@ -121,14 +121,14 @@ class opt_out(data_out):
             ind_1 = np.ravel_multi_index((i, j, k - 1), vx.shape)
             ind_2 = np.ravel_multi_index((i, j, k - 2), vx.shape)
             # dx = 8(x1-x_1)-1(x0-x_2) x0 instead of x2 (mirror)
-            dz = 8 * (x[ind1] - x[ind_1]) - 1 * (x[ind0] - x[ind_2])
+            dz = 8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind0, t] - x[ind_2, t])
         else:
             ind1 = np.ravel_multi_index((i, j, k + 1), vx.shape)
             ind_1 = np.ravel_multi_index((i, j, k - 1), vx.shape)
             ind2 = np.ravel_multi_index((i, j, k + 2), vx.shape)
             ind_2 = np.ravel_multi_index((i, j, k - 2), vx.shape)
             # dx = 8(x1-x_1)-1(x2-x_2)
-            dz = 8 * (x[ind1] - x[ind_1]) - 1 * (x[ind2] - x[ind_2])
+            dz = 8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind_2, t])
         return dz
 
     def cmp_gradient(self, flag_tmp_smooth=False, h=1, p_diff='2'):
@@ -144,12 +144,38 @@ class opt_out(data_out):
             nt = nv / x.size()
         else:
             nt = 1
-        print "Time points: ", nt
+        print "Time point(s): ", nt
         # loop over the voxels
-        for i in range(ni):
-            for j in range(nj):
-                for k in range(nk):
-                    np.ravel_multi_index((i, j, k), vx.shape)
-                    self.cmp_dx(i, j, k)
-                    self.cmp_dy(i, j, k)
-                    self.cmp_dz(i, j, k)
+        for t in range(nt):
+            for i in range(ni):
+                for j in range(nj):
+                    for k in range(nk):
+                        ind = np.ravel_multi_index((i, j, k), vx.shape)
+                        if ind == 0:
+                            grad_mtr = ca.sumRows(
+                                ca.sumRows(self.cmp_dx(i, j, k, t))**2 +
+                                ca.sumRows(self.cmp_dy(i, j, k, t))**2 +
+                                ca.sumRows(self.cmp_dz(i, j, k, t))**2)
+                        else:
+                            grad_mtr = ca.vertcat([grad_mtr, ca.sumRows(
+                                ca.sumRows(self.cmp_dx(i, j, k, t))**2 +
+                                ca.sumRows(self.cmp_dy(i, j, k, t))**2 +
+                                ca.sumRows(self.cmp_dz(i, j, k, t))**2)])
+        if flag_tmp_smooth:
+            # compute temporal gradient
+            print "Temporal smoothness enforced."
+        return grad_mtr
+
+    def initial_guess(self):
+        """
+        ##############
+        initial guess
+        ##############
+        """
+
+    def minimization_module(self):
+        """
+        ##############
+        set optimization problem
+        ##############
+        """
