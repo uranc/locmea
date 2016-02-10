@@ -19,7 +19,7 @@ class data_out(object):
     """
 
     def __init__(self, *args, **kwargs):
-        self.data = args[0]
+        self.data = args[0]    # does not have to be data dependant
         self.electrode_pos = self.data.electrode_pos
         self.options = {'p_vres': 5,
                         'p_jlen': 2,

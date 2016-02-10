@@ -14,7 +14,7 @@ file_name = data_path + 'data_sim_low.hdf5'
 print "Looking for file" + file_name
 data = data_in(file_name, flag_cell=True, flag_electode=False)
 loc = data_out(data, p_vres=20, p_jlen=0)
-opt = opt_out(data, p_vres=5, p_jlen=0)
+opt = opt_out(data, p_vres=10, p_jlen=0, p_maxd=65)
 vx, vy, vz = opt.voxels
 opt.x = ca.MX.sym('x', vx.flatten().shape[0])
 grd = opt.cmp_gradient()

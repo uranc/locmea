@@ -16,14 +16,63 @@ class opt_out(data_out):
 
     def __init__(self, *args, **kwargs):
         data_out.__init__(self, *args, **kwargs)
+        # ######################## #
+        #    Problem parameters    #
+        # ######################## #
+        self.t_ind = 30
+        self.t_int = 1
+        # ######################## #
+        #   Optimization problems  #
+        # ######################## #
+        self.method = 'grad'
+        # ######################## #
+        #  Optimization variables  #
+        # ######################## #
+        self.y = ca.MX(self.data.electrode_rec[:,
+                       self.t_ind:self.t_ind+self.t_int])
+        self.x = ca.MX.sym('x', self.voxels[0, :].flatten().shape[0])
+        self.alpha = ca.MX.sym('alpha', self.x.shape[0])
+        self.fwd = ca.MX(self.cmp_fwd_matrix(self.electrode_pos, self.voxels))
+        self.grad = self.cmp_gradient()
+        # Objective
+        self.f = ca.sumRows(self.alpha)
+        # Constraints
+        self.g = ca.sum_square(self.y-ca.mul(self.fwd, self.x))
+        # self.g = ca.vertcat([self.g, self.grad])
+        self.g = ca.vertcat([self.g, (self.x**2-self.alpha**2)])
+        # Bounds
+        self.lbx = np.ones(self.x.shape[0])*0.
+        self.ubx = np.ones(self.x.shape[0])*100.
+        self.lbx = ca.vertcat([self.lbx, np.ones(self.x.shape[0])*-100.])
+        self.ubx = ca.vertcat([self.ubx, np.ones(self.x.shape[0])*100.])
+        self.lbg = np.ones(1)*0.
+        self.ubg = np.ones(1)*1.e-3
+        self.lbg = ca.vertcat([self.lbg, np.ones(self.x.shape[0])*0.])
+        self.ubg = ca.vertcat([self.ubg, np.ones(self.x.shape[0])*1.e-3])
+        # Initialize
+        self.x0 = np.ones(self.x.shape[0])*0.
+        # Create NLP
+        self.nlp = ca.MXFunction("nlp", ca.nlpIn(x=self.x),
+                                 ca.nlpOut(f=self.f, g=self.g))
+        # NLP solver options
+        self.opts = {"iteration_callback": self.plot_updates,
+                     "max_iter": 10000}
+        # "iteration_callback_step": self.plotUpdateSteps}
+        # Create solver
+        # self.solver = ca.NlpSolver("solver", "ipopt", self.nlp, self.opts)
+        # Solve NLP
+        # self.res = self.solver({"x0": self.x0,
+        #                        "lbx": self.lbx,
+        #                        "ubx": self.ubx,
+        #                        "lbg": self.lbg,
+        #                        "ubg": self.ubg})
 
     @ca.pycallback
     def plot_updates(self, f):
         """
         Gets inter-optimization plots
         """
-        x = f.getOutput('x')
-        self.plot_data(x)
+        print "callback here"
         return 0
 
     def cmp_dx(self, i, j, k, t):
@@ -172,7 +221,13 @@ class opt_out(data_out):
         initial guess
         ##############
         """
-
+    def set_constraints(self):
+        """
+        ##########
+        set some constraints
+        ##########
+        """
+        
     def minimization_module(self):
         """
         ##############
