@@ -28,44 +28,52 @@ class opt_out(data_out):
         # ######################## #
         #  Optimization variables  #
         # ######################## #
-        self.y = ca.MX(self.data.electrode_rec[:,
-                       self.t_ind:self.t_ind+self.t_int])
-        self.x = ca.MX.sym('x', self.voxels[0, :].flatten().shape[0])
-        self.alpha = ca.MX.sym('alpha', self.x.shape[0])
-        self.fwd = ca.MX(self.cmp_fwd_matrix(self.electrode_pos, self.voxels))
-        self.grad = self.cmp_gradient()
+        self.y = ca.SX(self.data.electrode_rec[:,
+                                         self.t_ind:self.t_ind+self.t_int])
+        self.x = ca.SX.sym('x', self.voxels[0, :].flatten().shape[0])
+        # self.alpha = ca.MX.sym('alpha', self.x.shape[0])
+        self.fwd = ca.SX(self.cmp_fwd_matrix(self.electrode_pos, self.voxels))
+        # self.grad = self.cmp_gradient()
+        self.sigma = 1
         # Objective
-        self.f = ca.sumRows(self.alpha)
-        # Constraints
-        self.g = ca.sum_square(self.y-ca.mul(self.fwd, self.x))
+        self.f = 0
+        # self.fvector = (self.y-ca.mul(self.fwd,self.x))**2
+        for i in range(self.y.shape[0]):
+            self.f += (self.y[i]-ca.mul(self.fwd[i,:],self.x))**2
+        self.f.shape
+        # assert isinstance(time, ca.SX)
+        # Constraint
+        #self.g = []
         # self.g = ca.vertcat([self.g, self.grad])
-        self.g = ca.vertcat([self.g, (self.x**2-self.alpha**2)])
+        #self.g = ca.vertcat([self.g, (self.x**2-self.alpha**2)])
         # Bounds
-        self.lbx = np.ones(self.x.shape[0])*0.
+        #self.lbg = []
+        #self.ubg = []
+        self.lbx = np.ones(self.x.shape[0])*-100.
         self.ubx = np.ones(self.x.shape[0])*100.
-        self.lbx = ca.vertcat([self.lbx, np.ones(self.x.shape[0])*-100.])
-        self.ubx = ca.vertcat([self.ubx, np.ones(self.x.shape[0])*100.])
-        self.lbg = np.ones(1)*0.
-        self.ubg = np.ones(1)*1.e-3
-        self.lbg = ca.vertcat([self.lbg, np.ones(self.x.shape[0])*0.])
-        self.ubg = ca.vertcat([self.ubg, np.ones(self.x.shape[0])*1.e-3])
+        #self.lbx = ca.vertcat([self.lbx, np.ones(self.x.shape[0])*-100.])
+        #self.ubx = ca.vertcat([self.ubx, np.ones(self.x.shape[0])*100.])
+        #self.lbg = ca.vertcat([self.lbg, np.ones(self.x.shape[0])*0])
+        #self.ubg = ca.vertcat([self.ubg, np.ones(self.g.shape[0])*0])
+        #self.x = ca.vertcat([self.alpha, self.x])
         # Initialize
         self.x0 = np.ones(self.x.shape[0])*0.
         # Create NLP
-        self.nlp = ca.MXFunction("nlp", ca.nlpIn(x=self.x),
-                                 ca.nlpOut(f=self.f, g=self.g))
+        self.nlp = ca.SXFunction("nlp", ca.nlpIn(x=self.x),
+                                 ca.nlpOut(f=self.f))  #, g=self.g))
         # NLP solver options
-        self.opts = {"iteration_callback": self.plot_updates,
-                     "max_iter": 10000}
+        self.opts = {"max_iter": 10000}
         # "iteration_callback_step": self.plotUpdateSteps}
         # Create solver
-        # self.solver = ca.NlpSolver("solver", "ipopt", self.nlp, self.opts)
+        self.solver = ca.NlpSolver("solver", "ipopt", self.nlp)  #, self.opts)
         # Solve NLP
-        # self.res = self.solver({"x0": self.x0,
-        #                        "lbx": self.lbx,
-        #                        "ubx": self.ubx,
-        #                        "lbg": self.lbg,
-        #                        "ubg": self.ubg})
+        self.solver.setInput(self.x0, "x0")  # initial guess
+        self.solver.setInput(self.lbx, "lbx")  # lower boundary on x
+        self.solver.setInput(self.ubx, "ubx")  # upper boundary on x
+        #self.solver.setInput(self.lbg, "lbg")  # boundary on g
+        #self.solver.setInput(self.ubg, "ubg")  # boundary on g
+        self.solver.evaluate()
+        self.solution_x = self.solver.getOutput("x")
 
     @ca.pycallback
     def plot_updates(self, f):
@@ -75,7 +83,7 @@ class opt_out(data_out):
         print "callback here"
         return 0
 
-    def cmp_dx(self, i, j, k, t):
+    def cmp_dx(self, i, j, k, t, h=1):
         """
         cmp_dx
         """
@@ -91,7 +99,7 @@ class opt_out(data_out):
             ind_1 = np.ravel_multi_index((i - 1, j, k), vx.shape)
             ind2 = np.ravel_multi_index((i + 2, j, k), vx.shape)
             # dx = 8(x1-x_1)-1(x2-x0) x0 instead of x_2 (2nd order)
-            dx = 8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind0, t])
+            dx = (8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind0, t]))/(12*h)
         elif i == ni - 1:
             # dx = 0
             dx = 0
@@ -100,17 +108,17 @@ class opt_out(data_out):
             ind_1 = np.ravel_multi_index((i - 1, j, k), vx.shape)
             ind_2 = np.ravel_multi_index((i - 2, j, k), vx.shape)
             # dx = 8(x1-x_1)-1(x0-x_2) x0 instead of x2 (mirror)
-            dx = 8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind0, t] - x[ind_2, t])
+            dx = (8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind0, t] - x[ind_2, t]))/(12*h)
         else:
             ind1 = np.ravel_multi_index((i + 1, j, k), vx.shape)
             ind_1 = np.ravel_multi_index((i - 1, j, k), vx.shape)
             ind2 = np.ravel_multi_index((i + 2, j, k), vx.shape)
             ind_2 = np.ravel_multi_index((i - 2, j, k), vx.shape)
             # dx = 8(x1-x_1)-1(x2-x_2)
-            dx = 8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind_2, t])
+            dx = (8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind_2, t]))/(12*h)
         return dx
 
-    def cmp_dy(self, i, j, k, t):
+    def cmp_dy(self, i, j, k, t, h=1):
         """
         cmp_dy
         """
@@ -126,7 +134,7 @@ class opt_out(data_out):
             ind_1 = np.ravel_multi_index((i, j - 1, k), vx.shape)
             ind2 = np.ravel_multi_index((i, j + 2, k), vx.shape)
             # dy = 8(x1-x_1)-1(x2-x0) x0 instead of x_2 (2nd order)
-            dy = 8*(x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind0, t])
+            dy = (8*(x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind0, t]))/(12*h)
         elif j == nj - 1:
             # dy = 0
             dy = 0
@@ -135,17 +143,17 @@ class opt_out(data_out):
             ind_1 = np.ravel_multi_index((i, j - 1, k), vx.shape)
             ind_2 = np.ravel_multi_index((i, j - 2, k), vx.shape)
             # dy = 8(x1-x_1)-1(x0-x_2) x0 instead of x2 (mirror)
-            dy = 8*(x[ind1, t] - x[ind_1, t]) - 1*(x[ind0, t] - x[ind_2, t])
+            dy = (8*(x[ind1, t] - x[ind_1, t]) - 1*(x[ind0, t] - x[ind_2, t]))/(12*h)
         else:
             ind1 = np.ravel_multi_index((i, j + 1, k), vx.shape)
             ind_1 = np.ravel_multi_index((i, j - 1, k), vx.shape)
             ind2 = np.ravel_multi_index((i, j + 2, k), vx.shape)
             ind_2 = np.ravel_multi_index((i, j - 2, k), vx.shape)
             # dy = 8(x1-x_1)-1(x2-x_2)
-            dy = 8*(x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind_2, t])
+            dy = (8*(x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind_2, t]))/(12*h)
         return dy
 
-    def cmp_dz(self, i, j, k, t):
+    def cmp_dz(self, i, j, k, t, h=1):
         """
         cmp_dz
         """
@@ -161,7 +169,7 @@ class opt_out(data_out):
             ind_1 = np.ravel_multi_index((i, j, k - 1), vx.shape)
             ind2 = np.ravel_multi_index((i, j, k + 2), vx.shape)
             # dx = 8(x1-x_1)-1(x2-x0) x0 instead of x_2 (2nd order)
-            dz = 8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind0, t])
+            dz = (8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind0, t]))/(12*h)
         elif k == nk - 1:
             # dx = 0
             dz = 0
@@ -170,14 +178,14 @@ class opt_out(data_out):
             ind_1 = np.ravel_multi_index((i, j, k - 1), vx.shape)
             ind_2 = np.ravel_multi_index((i, j, k - 2), vx.shape)
             # dx = 8(x1-x_1)-1(x0-x_2) x0 instead of x2 (mirror)
-            dz = 8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind0, t] - x[ind_2, t])
+            dz = (8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind0, t] - x[ind_2, t]))/(12*h)
         else:
             ind1 = np.ravel_multi_index((i, j, k + 1), vx.shape)
             ind_1 = np.ravel_multi_index((i, j, k - 1), vx.shape)
             ind2 = np.ravel_multi_index((i, j, k + 2), vx.shape)
             ind_2 = np.ravel_multi_index((i, j, k - 2), vx.shape)
             # dx = 8(x1-x_1)-1(x2-x_2)
-            dz = 8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind_2, t])
+            dz = (8 * (x[ind1, t] - x[ind_1, t]) - 1*(x[ind2, t] - x[ind_2, t]))/(12*h)
         return dz
 
     def cmp_gradient(self, flag_tmp_smooth=False, h=1, p_diff='2'):
@@ -202,14 +210,14 @@ class opt_out(data_out):
                         ind = np.ravel_multi_index((i, j, k), vx.shape)
                         if ind == 0:
                             grad_mtr = ca.sumRows(
-                                ca.sumRows(self.cmp_dx(i, j, k, t))**2 +
-                                ca.sumRows(self.cmp_dy(i, j, k, t))**2 +
-                                ca.sumRows(self.cmp_dz(i, j, k, t))**2)
+                                ca.sumRows(self.cmp_dx(i, j, k, t ,h))**2 +
+                                ca.sumRows(self.cmp_dy(i, j, k, t, h))**2 +
+                                ca.sumRows(self.cmp_dz(i, j, k, t, h))**2)
                         else:
                             grad_mtr = ca.vertcat([grad_mtr, ca.sumRows(
-                                ca.sumRows(self.cmp_dx(i, j, k, t))**2 +
-                                ca.sumRows(self.cmp_dy(i, j, k, t))**2 +
-                                ca.sumRows(self.cmp_dz(i, j, k, t))**2)])
+                                ca.sumRows(self.cmp_dx(i, j, k, t, h))**2 +
+                                ca.sumRows(self.cmp_dy(i, j, k, t, h))**2 +
+                                ca.sumRows(self.cmp_dz(i, j, k, t, h))**2)])
         if flag_tmp_smooth:
             # compute temporal gradient
             print "Temporal smoothness enforced."
