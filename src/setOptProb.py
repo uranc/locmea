@@ -28,8 +28,7 @@ class opt_out(data_out):
         # ######################## #
         #  Optimization variables  #
         # ######################## #
-        self.y = ca.SX(self.data.electrode_rec[:,
-                                         self.t_ind:self.t_ind+self.t_int])
+        self.y = ca.SX(self.data.electrode_rec[:, self.t_ind:self.t_ind+self.t_int])
         self.x = ca.SX.sym('x', self.voxels[0, :].flatten().shape[0])
         # self.alpha = ca.MX.sym('alpha', self.x.shape[0])
         self.fwd = ca.SX(self.cmp_fwd_matrix(self.electrode_pos, self.voxels))
@@ -38,9 +37,16 @@ class opt_out(data_out):
         # Objective
         self.f = 0
         # self.fvector = (self.y-ca.mul(self.fwd,self.x))**2
-        for i in range(self.y.shape[0]):
-            self.f += (self.y[i]-ca.mul(self.fwd[i,:],self.x))**2
-        self.f.shape
+        # self.f = []
+        #for i in range(self.y.shape[0]):
+        #    self.tmp = []
+        #    for n in range(self.fwd.shape[1]):
+        #        self.tmp =sum(self.fwd[i, n]*self.x[n])
+        #    self.f += sum((self.y[i] - sum(self.tmp))**2)
+        self.f += sum([(self.y[i] - sum([self.fwd[i, n]*self.x[n] for n in
+                      range(self.fwd.shape[1])])**2) for i in
+            range(self.y.shape[0])])
+        #self.f.shape
         # assert isinstance(time, ca.SX)
         # Constraint
         #self.g = []
@@ -59,12 +65,14 @@ class opt_out(data_out):
         # Initialize
         self.x0 = np.ones(self.x.shape[0])*0.
         # Create NLP
+        print self.f
         self.nlp = ca.SXFunction("nlp", ca.nlpIn(x=self.x),
                                  ca.nlpOut(f=self.f))  #, g=self.g))
         # NLP solver options
         self.opts = {"max_iter": 10000}
         # "iteration_callback_step": self.plotUpdateSteps}
         # Create solver
+        print "hallo"
         self.solver = ca.NlpSolver("solver", "ipopt", self.nlp)  #, self.opts)
         # Solve NLP
         self.solver.setInput(self.x0, "x0")  # initial guess
@@ -72,8 +80,8 @@ class opt_out(data_out):
         self.solver.setInput(self.ubx, "ubx")  # upper boundary on x
         #self.solver.setInput(self.lbg, "lbg")  # boundary on g
         #self.solver.setInput(self.ubg, "ubg")  # boundary on g
-        self.solver.evaluate()
-        self.solution_x = self.solver.getOutput("x")
+        # self.solver.evaluate()
+        # self.solution_x = self.solver.getOutput("x")
 
     @ca.pycallback
     def plot_updates(self, f):
