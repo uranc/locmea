@@ -43,9 +43,11 @@ class opt_out(data_out):
         #    for n in range(self.fwd.shape[1]):
         #        self.tmp =sum(self.fwd[i, n]*self.x[n])
         #    self.f += sum((self.y[i] - sum(self.tmp))**2)
-        self.f += sum([(self.y[i] - sum([self.fwd[i, n]*self.x[n] for n in
-                      range(self.fwd.shape[1])])**2) for i in
-            range(self.y.shape[0])])
+        # self.f += sum([(self.y[i] - sum([self.fwd[i, n]*self.x[n] for n in
+        #              range(self.fwd.shape[1])])**2) for i in
+        #   range(self.y.shape[0])])
+        self.f = sum(self.y-ca.mul(self.fwd,self.x))**2 
+        print self.f                     
         #self.f.shape
         # assert isinstance(time, ca.SX)
         # Constraint
@@ -65,7 +67,6 @@ class opt_out(data_out):
         # Initialize
         self.x0 = np.ones(self.x.shape[0])*0.
         # Create NLP
-        print self.f
         self.nlp = ca.SXFunction("nlp", ca.nlpIn(x=self.x),
                                  ca.nlpOut(f=self.f))  #, g=self.g))
         # NLP solver options
@@ -80,8 +81,8 @@ class opt_out(data_out):
         self.solver.setInput(self.ubx, "ubx")  # upper boundary on x
         #self.solver.setInput(self.lbg, "lbg")  # boundary on g
         #self.solver.setInput(self.ubg, "ubg")  # boundary on g
-        # self.solver.evaluate()
-        # self.solution_x = self.solver.getOutput("x")
+        self.solver.evaluate()
+        self.solution_x = self.solver.getOutput("x")
 
     @ca.pycallback
     def plot_updates(self, f):
