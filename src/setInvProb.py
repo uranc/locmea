@@ -183,10 +183,14 @@ class data_out(object):
         tp = np.arange(0, data.electrode_rec.shape[1]/data.srate,
                        1./data.srate)
         self.fig = plt.figure(figsize=(20, 10))
-        # cmax = 1e-3
+        resn = self.res['x'].full().reshape(self.voxels[0, :, :, :].shape)
+        cmax = 5e-2
+        t_ind = 30
+        resn_ind = np.abs(resn) > cmax
         # tmax = 1e-3
         # mask reconstruction volume
         vx, vy, vz = self.voxels
+        rx, ry, rz = vx, vy, vz
         vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()
         xmin, xmax = np.min(vx), np.max(vx)
         ymin, ymax = np.min(vy), np.max(vy)
@@ -216,22 +220,24 @@ class data_out(object):
         self.Axis['pot'] = ax
         # morphology
         ax = self.fig.add_subplot(131, projection='3d')
-        self.morpPlot = [ax.plot(np.r_[data.cell_pos_start[ind, 0],
-                                       data.cell_pos_end[ind, 0]],
-                                 np.r_[data.cell_pos_start[ind, 1],
-                                       data.cell_pos_end[ind, 1]],
-                                 np.r_[data.cell_pos_start[ind, 2],
-                                       data.cell_pos_end[ind, 2]],
-                                 color='k')[0]]
+        self.morpPlot = []
+        # self.morpPlot = [ax.plot(np.r_[data.cell_pos_start[ind, 0],
+        #                                data.cell_pos_end[ind, 0]],
+        #                          np.r_[data.cell_pos_start[ind, 1],
+        #                                data.cell_pos_end[ind, 1]],
+        #                          np.r_[data.cell_pos_start[ind, 2],
+        #                                data.cell_pos_end[ind, 2]],
+        #                          color='k')[0]]
         self.morpPlot.append(ax.scatter(data.electrode_pos[:, 0],
                                         data.electrode_pos[:, 1],
                                         data.electrode_pos[:, 2],
-                                        color='g',
-                                        marker='o'))  # electrodes
+                                        color='b',
+                                        marker='.'))  # electrodes
         self.morpPlot.append(ax.scatter(data.cell_pos[ind, 0],
                                         data.cell_pos[ind, 1],
                                         data.cell_pos[ind, 2],
-                                        color='b',
+                                        c=data.cell_csd[ind, t_ind],
+                                        cmap='RdBu',
                                         marker='o'))  # midpoints
         ax.set_xlim(xmin*3, xmax*3)
         ax.set_xticklabels('')
@@ -244,23 +250,25 @@ class data_out(object):
         self.Axis['morp'] = ax
         # self.morpPlot['Axis'] = ax
         # second morphology
-        ax = self.fig.add_subplot(132, projection='3d', aspect='equal')
-        self.recPlot = [ax.plot(np.r_[data.cell_pos_start[ind, 0],
-                                      data.cell_pos_end[ind, 0]],
-                                np.r_[data.cell_pos_start[ind, 1],
-                                      data.cell_pos_end[ind, 1]],
-                                np.r_[data.cell_pos_start[ind, 2],
-                                      data.cell_pos_end[ind, 2]],
-                                color='k')]
+        ax = self.fig.add_subplot(132, projection='3d')  # , aspect='equal'
+        self.recPlot = []
+        # self.recPlot = [ax.plot(np.r_[data.cell_pos_start[ind, 0],
+        #                               data.cell_pos_end[ind, 0]],
+        #                         np.r_[data.cell_pos_start[ind, 1],
+        #                               data.cell_pos_end[ind, 1]],
+        #                         np.r_[data.cell_pos_start[ind, 2],
+        #                               data.cell_pos_end[ind, 2]],
+        #                         color='k')]
         self.recPlot.append(ax.scatter(data.electrode_pos[:, 0],
                                        data.electrode_pos[:, 1],
                                        data.electrode_pos[:, 2],
-                                       color='g',
-                                       marker='o'))  # electrodes
-        self.recPlot.append(ax.scatter(data.cell_pos[ind, 0],
-                                       data.cell_pos[ind, 1],
-                                       data.cell_pos[ind, 2],
                                        color='b',
+                                       marker='.'))  # electrodes
+        self.recPlot.append(ax.scatter(rx[resn_ind],
+                                       ry[resn_ind],
+                                       rz[resn_ind],
+                                       c=resn[resn_ind],
+                                       cmap='RdBu',
                                        marker='o'))  # midpoints
         ax.set_xlim(xmin*3, xmax*3)
         ax.set_xticklabels('')

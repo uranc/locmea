@@ -17,7 +17,7 @@ GNU General Public License for more details.
 
 import sys
 from setData import data_in
-from setInvProb import data_out
+from setOptProb import opt_out
 
 
 def main():
@@ -39,10 +39,12 @@ def main():
 
     # Data path/filename
     data_path = '../data/'
-    file_name = data_path + 'data_sim_l8e3.hdf5'
+    file_name = data_path + 'data_sim_low.hdf5'
     print "Looking for file" + file_name
     data = data_in(file_name, flag_cell=True, flag_electode=False)
-    loc = data_out(data.electrode_pos, p_vres=20, p_jlen=0)
+    opt = opt_out(data, p_vres=10, p_jlen=0, p_maxd=55)
+    opt.minimize_problem()
+    resn = opt.res['x'].full().reshape(opt.voxels[0,:,:,:].shape)
 
 if __name__ == "__main__":
     sys.exit(main())
