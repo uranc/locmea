@@ -118,7 +118,7 @@ class data_out(object):
         return 1. / (fwd_matrix * (4. * np.pi * p_sigma))
 
     def cmp_inv_matrix(self, fwd_matrix, depth_norm_matrix,
-                       p_lmbda=1e-2, snr=20):
+                       p_lmbda=1e-2, snr=5):
         """
         Computes regularized inverse matrix in the given method
         (Can be a class later on with multiple methods)
@@ -134,7 +134,7 @@ class data_out(object):
                                        fwd_matrix)) + (p_lmbda ** 2) * cov_n))
         return inv_matrix
 
-    def cmp_weight_matrix(self, fwd_matrix, p_depth=1.):
+    def cmp_weight_matrix(self, fwd_matrix, p_depth=2.):
         """
         Calculate the column(depth) normalization matrix given by
         (1./sum(a_i^2))^depth_par - column norm for fwd_matrix[:,i]
@@ -190,7 +190,7 @@ class data_out(object):
         """
         data = self.data
         self.fig = plt.figure(figsize=(20, 10))
-        cmax = 1e-1
+        cmax = 5e-2
         t_ind = 30
         tmax = 1e-3
         # mask reconstruction volume
@@ -302,8 +302,8 @@ class data_out(object):
         data = self.data
         self.fig = plt.figure(figsize=(20, 10))
         resn = self.xres
-        cmax = 5e-2
-        t_ind = 30
+        cmax = 5e-4
+        t_ind = 37
         resn_ind = np.abs(resn) > cmax
         # tmax = 1e-3
         # mask reconstruction volume
