@@ -17,7 +17,7 @@ class opt_out(data_out):
     def __init__(self, *args, **kwargs):
         data_out.__init__(self, *args, **kwargs)
 
-    def solve_ipopt(self):
+    def solve_ipopt_mean_cost(self):
         # ######################## #
         #    Problem parameters    #
         # ######################## #
@@ -70,13 +70,56 @@ class opt_out(data_out):
         args["ubg"] = 0
         self.res = self.solver(args)
 
-    # @ca.pycallback
-    # def plot_updates(self, f):
-    #     """
-    #     Gets inter-optimization plots
-    #     """
-    #     print "callback here"
-    #     return 0
+    def solve_ipopt_slack_cost(self):
+        # ######################## #
+        #    Problem parameters    #
+        # ######################## #
+        self.t_ind = 30
+        self.t_int = 1
+        # ######################## #
+        #   Optimization problems  #
+        # ######################## #
+        self.method = 'grad'
+        # ######################## #
+        #  Optimization variables  #
+        # ######################## #
+        self.y = ca.SX(self.data.electrode_rec[
+                       :, self.t_ind:self.t_ind+self.t_int])
+        self.x = ca.SX.sym('x', self.voxels[0, :].flatten().shape[0])
+        self.fwd = ca.SX(self.cmp_fwd_matrix(self.electrode_pos, self.voxels))
+        # self.grad = self.cmp_gradient()
+        # ################## #
+        # Objective function #
+        # ################## #
+        self.f = ca.norm_1(self.x)
+        # self.f = ca.norm_2(self.x)
+        # Constraint
+        self.g = [(self.y[i]-ca.mtimes(self.fwd[i, :], self.x))**2
+                  for i in range(self.y.shape[0])]
+        # Bounds
+        self.lbg = np.zeros(self.y.shape[0])
+        self.ubg = np.ones(self.y.shape[0])*1.e-10
+        self.lbx = np.ones(self.x.shape[0])*-20.
+        self.ubx = np.ones(self.x.shape[0])*20.
+        # Initialize
+        self.x0 = np.random.randn(self.x.shape[0])*0.
+        # Create NLP
+        self.nlp = {'x': self.x, 'f': self.f, 'g': ca.vertcat(self.g)}
+        # NLP solver options
+        self.opts = {"ipopt.max_iter": 40000}
+        # "iteration_callback_step": self.plotUpdateSteps}
+        # Create solver
+        print "Initializing the solver"
+        self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
+        # Solve NLP
+        args = {}
+        args["x0"] = self.x0
+        args["lbx"] = ca.vertcat([self.lbx])
+        args["ubx"] = ca.vertcat([self.ubx])
+        args["lbg"] = ca.vertcat([self.lbg])
+        args["ubg"] = ca.vertcat([self.ubg])
+        self.res = self.solver(args)
+        self.xres = self.res['x'].full().reshape(self.voxels[0, :, :, :].shape)
 
     def cmp_dx(self, i, j, k, t, h=1):
         """
