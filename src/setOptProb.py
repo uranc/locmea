@@ -33,7 +33,6 @@ class opt_out(data_out):
         self.y = ca.SX(self.data.electrode_rec[
                        :, self.t_ind:self.t_ind+self.t_int])
         self.x = ca.SX.sym('x', self.voxels[0, :].flatten().shape[0])
-        # self.alpha = ca.MX.sym('alpha', self.x.shape[0])
         self.fwd = ca.SX(self.cmp_fwd_matrix(self.electrode_pos, self.voxels))
         # self.grad = self.cmp_gradient()
         self.sigma = 1
@@ -86,19 +85,22 @@ class opt_out(data_out):
         self.y = ca.SX(self.data.electrode_rec[
                        :, self.t_ind:self.t_ind+self.t_int])
         self.x = ca.SX.sym('x', self.voxels[0, :].flatten().shape[0])
-        self.fwd = ca.SX(self.cmp_fwd_matrix(self.electrode_pos, self.voxels))
+        fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
+        dw = self.cmp_weight_matrix(fwd)
+        dfwd = np.dot(fwd, dw)
+        self.fwd = ca.SX(dfwd)
         # self.grad = self.cmp_gradient()
         # ################## #
         # Objective function #
         # ################## #
+        self.f = 0
         self.f = ca.norm_1(self.x)
-        # self.f = ca.norm_2(self.x)
         # Constraint
         self.g = [(self.y[i]-ca.mtimes(self.fwd[i, :], self.x))**2
                   for i in range(self.y.shape[0])]
         # Bounds
         self.lbg = np.zeros(self.y.shape[0])
-        self.ubg = np.ones(self.y.shape[0])*1.e-10
+        self.ubg = np.ones(self.y.shape[0])*0.
         self.lbx = np.ones(self.x.shape[0])*-20.
         self.ubx = np.ones(self.x.shape[0])*20.
         # Initialize
@@ -106,7 +108,7 @@ class opt_out(data_out):
         # Create NLP
         self.nlp = {'x': self.x, 'f': self.f, 'g': ca.vertcat(self.g)}
         # NLP solver options
-        self.opts = {"ipopt.max_iter": 40000}
+        self.opts = {"ipopt.max_iter": 100000}
         # "iteration_callback_step": self.plotUpdateSteps}
         # Create solver
         print "Initializing the solver"
@@ -270,15 +272,29 @@ class opt_out(data_out):
             print "Temporal smoothness enforced."
         return grad_mtr
 
-    def initial_guess(self):
+    def optimize_waveform(self):
         """
-        ##############
-        initial guess
-        ##############
+        fit waveform to a bipolar alpha function
         """
-    def set_constraints(self):
-        """
-        ##########
-        set some constraints
-        ##########
-        """
+        srate = self.data.srate
+        fit_data = self.data.cell_csd[0, 30:]
+        tlin = ca.SX(np.linspace(
+                     0, (fit_data.shape[0]-1)/srate, fit_data.shape[0]))
+        t = ca.SX.sym('t')
+        t1 = ca.SX.sym('t1')
+        t2 = ca.SX.sym('t2')
+        a = ca.SX.sym('a')
+        r = ca.vertcat([t1, t2, a])
+        f = (ca.exp(-t*t1)*t*t1*t1 - ca.exp(-t*t2)*t*t2*t2)*a
+        F = ca.Function('F', [r, t], [f])
+        Y = [(fit_data[i]-F([r, tlin[i]])[0])**2
+             for i in range(fit_data.shape[0])]
+        nlp_root = {'x': r, 'f': sum(Y)**(1./2)}
+        root_solver = ca.nlpsol("solver", "ipopt", nlp_root)
+        r0 = [1.e3, 2.e3, 1.]
+        args = {}
+        args["x0"] = r0
+        args["lbx"] = ca.vertcat([-ca.inf, -ca.inf, -ca.inf])
+        args["ubx"] = ca.vertcat([ca.inf, ca.inf, ca.inf])
+        res = root_solver(args)
+        return [F([res['x'], tlin[i]])[0] for i in range(fit_data.shape[0])]
