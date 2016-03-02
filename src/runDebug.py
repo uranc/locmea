@@ -33,3 +33,10 @@ dw = opt.cmp_weight_matrix(fwd)
 nn = np.diag(dw).reshape(opt.voxels[0,:,:,:].shape)
 nf = fwd[0,:].reshape(opt.voxels[0,:,:,:].shape)
 plt.imshow(nf[:,0,:])
+
+@ca.pycallback
+def plot_update(self, f):
+    x = f.getOutput("x")
+    self.plot_data(x, self.X, self.N, self.timeSlotSizes, self.E0, self.V_W,\
+    data = self.data)
+    return 0

@@ -17,58 +17,6 @@ class opt_out(data_out):
     def __init__(self, *args, **kwargs):
         data_out.__init__(self, *args, **kwargs)
 
-    def solve_ipopt_mean_cost(self):
-        # ######################## #
-        #    Problem parameters    #
-        # ######################## #
-        self.t_ind = 30
-        self.t_int = 1
-        # ######################## #
-        #   Optimization problems  #
-        # ######################## #
-        self.method = 'grad'
-        # ######################## #
-        #  Optimization variables  #
-        # ######################## #
-        self.y = ca.SX(self.data.electrode_rec[
-                       :, self.t_ind:self.t_ind+self.t_int])
-        self.x = ca.SX.sym('x', self.voxels[0, :].flatten().shape[0])
-        self.fwd = ca.SX(self.cmp_fwd_matrix(self.electrode_pos, self.voxels))
-        # self.grad = self.cmp_gradient()
-        self.sigma = 1
-        # ################## #
-        # Objective function #
-        # ################## #
-        self.f = sum([(self.y[i]-ca.mtimes(self.fwd[i, :], self.x))**2
-                     for i in range(self.y.shape[0])])
-        # assert isinstance(time, ca.MX)
-        # Constraint
-        # self.g = []
-        # self.g = ca.vertcat([self.g, self.grad])
-        # Bounds
-        # self.lbg = []
-        # self.ubg = []
-        self.lbx = np.ones(self.x.shape[0])*-100.
-        self.ubx = np.ones(self.x.shape[0])*100.
-        # Initialize
-        self.x0 = np.ones(self.x.shape[0])*0.
-        # Create NLP
-        self.nlp = {'x': self.x, 'f': self.f}
-        # NLP solver options
-        # self.opts = {"max_iter": 10000}
-        # "iteration_callback_step": self.plotUpdateSteps}
-        # Create solver
-        print "hallo"
-        self.solver = ca.nlpsol("solver", "ipopt", self.nlp)  # , self.opts)
-        # Solve NLP
-        args = {}
-        args["x0"] = self.x0
-        args["lbx"] = ca.vertcat([self.lbx])
-        args["ubx"] = ca.vertcat([self.ubx])
-        args["lbg"] = 0
-        args["ubg"] = 0
-        self.res = self.solver(args)
-
     def solve_ipopt_slack_cost(self):
         # ######################## #
         #    Problem parameters    #
@@ -123,7 +71,7 @@ class opt_out(data_out):
         self.res = self.solver(args)
         self.xres = self.res['x'].full().reshape(self.voxels[0, :, :, :].shape)
 
-    def cmp_dx(self, i, j, k, t, h=1):
+    def cmp_dx(self, i, j, k, t, h=1.):
         """
         cmp_dx
         """
@@ -161,7 +109,7 @@ class opt_out(data_out):
                   1*(x[ind2, t] - x[ind_2, t]))/(12*h)
         return dx
 
-    def cmp_dy(self, i, j, k, t, h=1):
+    def cmp_dy(self, i, j, k, t, h=1.):
         """
         cmp_dy
         """
@@ -190,16 +138,23 @@ class opt_out(data_out):
             dy = (8*(x[ind1, t] - x[ind_1, t]) -
                   1*(x[ind0, t] - x[ind_2, t]))/(12*h)
         else:
-            ind1 = np.ravel_multi_index((i, j + 1, k), vx.shape)
-            ind_1 = np.ravel_multi_index((i, j - 1, k), vx.shape)
-            ind2 = np.ravel_multi_index((i, j + 2, k), vx.shape)
-            ind_2 = np.ravel_multi_index((i, j - 2, k), vx.shape)
-            # dy = 8(x1-x_1)-1(x2-x_2)
-            dy = (8*(x[ind1, t] - x[ind_1, t]) -
-                  1*(x[ind2, t] - x[ind_2, t]))/(12*h)
+            if nj < 5:
+                print "Warning: 1st order differences due to size"
+                ind1 = np.ravel_multi_index((i, j + 1, k), vx.shape)
+                ind_1 = np.ravel_multi_index((i, j - 1, k), vx.shape)
+                # dy = (x1-x_1)/2h
+                dy = (8*(x[ind1, t] - x[ind_1, t]))/(2*h)
+            else:
+                ind1 = np.ravel_multi_index((i, j + 1, k), vx.shape)
+                ind_1 = np.ravel_multi_index((i, j - 1, k), vx.shape)
+                ind2 = np.ravel_multi_index((i, j + 2, k), vx.shape)
+                ind_2 = np.ravel_multi_index((i, j - 2, k), vx.shape)
+                # dy = 8(x1-x_1)-1(x2-x_2)
+                dy = (8*(x[ind1, t] - x[ind_1, t]) -
+                      1*(x[ind2, t] - x[ind_2, t]))/(12*h)
         return dy
 
-    def cmp_dz(self, i, j, k, t, h=1):
+    def cmp_dz(self, i, j, k, t, h=1.):
         """
         cmp_dz
         """
@@ -237,7 +192,7 @@ class opt_out(data_out):
                   1*(x[ind2, t] - x[ind_2, t]))/(12*h)
         return dz
 
-    def cmp_gradient(self, flag_tmp_smooth=False, h=1, p_diff='2'):
+    def cmp_gradient(self, flag_tmp_smooth=False, h=1., flag_second=True):
         """
         <F7>cmp_gradient
         """
@@ -246,8 +201,8 @@ class opt_out(data_out):
         vx, vy, vz = self.voxels
         ni, nj, nk = vx.shape
         nv = ni * nj * nk
-        if x.size() != nv:
-            nt = nv / x.size()
+        if x.shape[0] != nv:
+            nt = nv / x.shape[0]
         else:
             nt = 1
         print "Time point(s): ", nt
