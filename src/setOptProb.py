@@ -41,20 +41,21 @@ class opt_out(data_out):
         # ################## #
         # Objective function #
         # ################## #
+        self.sim = ca.Function('sim', [self.x], [ca.mtimes(self.fwd, self.x)])
+        self.ls = ca.Function('ls', [self.x], [self.y-self.sim([self.x])[0]])
         self.f = 0
-        self.f = ca.norm_1(self.x)
+        self.g = ca.norm_1(self.x)
         # Constraint
-        self.g = [(self.y[i]-ca.mtimes(self.fwd[i, :], self.x))**2
-                  for i in range(self.y.shape[0])]
+        self.f = ca.dot(self.ls([self.x])[0], self.ls([self.x])[0])
         # Bounds
-        self.lbg = np.zeros(self.y.shape[0])
-        self.ubg = np.ones(self.y.shape[0])*0.
-        self.lbx = np.ones(self.x.shape[0])*-20.
-        self.ubx = np.ones(self.x.shape[0])*20.
+        self.lbg = np.ones(self.g.shape[0])*0.
+        self.ubg = np.ones(self.g.shape[0])*30.
+        self.lbx = np.ones(self.x.shape[0])*-100.
+        self.ubx = np.ones(self.x.shape[0])*100.
         # Initialize
         self.x0 = np.random.randn(self.x.shape[0])*0.
         # Create NLP
-        self.nlp = {'x': self.x, 'f': self.f, 'g': ca.vertcat(self.g)}
+        self.nlp = {'x': self.x, 'f': self.f, 'g': self.g}
         # NLP solver options
         self.opts = {"ipopt.max_iter": 100000}
         # "iteration_callback_step": self.plotUpdateSteps}
@@ -229,7 +230,7 @@ class opt_out(data_out):
 
     def optimize_waveform(self):
         """
-        fit waveform to a bipolar alpha function
+        fit waveform to a biphasic alpha function
         """
         srate = self.data.srate
         fit_data = self.data.cell_csd[0, 30:]
@@ -253,3 +254,61 @@ class opt_out(data_out):
         args["ubx"] = ca.vertcat([ca.inf, ca.inf, ca.inf])
         res = root_solver(args)
         return [F([res['x'], tlin[i]])[0] for i in range(fit_data.shape[0])]
+
+    def solve_ipopt_reformulate(self):
+        # ######################## #
+        #    Problem parameters    #
+        # ######################## #
+        self.t_ind = 30
+        self.t_int = 1
+        # ######################## #
+        #   Optimization problems  #
+        # ######################## #
+        self.method = 'grad'
+        # ######################## #
+        #  Optimization variables  #
+        # ######################## #
+        self.ys = ca.SX.sym('ys', self.data.electrode_rec[
+                            :, self.t_ind:self.t_ind+self.t_int].shape)
+        self.y = ca.SX(self.data.electrode_rec[
+                       :, self.t_ind:self.t_ind+self.t_int])
+        self.x = ca.SX.sym('x', self.voxels[0, :].flatten().shape[0])
+        self.xs = ca.SX.sym('xs', self.voxels[0, :].flatten().shape[0])
+        fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
+        dw = self.cmp_weight_matrix(fwd)
+        dfwd = np.dot(fwd, dw)
+        self.fwd = ca.SX(dfwd)
+        # self.grad = self.cmp_gradient()
+        # ################## #
+        # Objective function #
+        # ################## #
+        self.sim = ca.Function('sim', [self.x], [ca.mtimes(self.fwd, self.x)])
+        self.ls = ca.Function('ls', [self.xs, self.ys], [self.ys-self.sim([self.xs])[0]])
+        self.f = 0
+        self.g = ca.norm_1(self.x)
+        # Constraint
+        self.f = ca.dot(self.ls([self.x, self.y])[0], self.ls([self.x, self.y])[0])
+        # Bounds
+        self.lbg = np.ones(self.g.shape[0])*0.
+        self.ubg = np.ones(self.g.shape[0])*30.
+        self.lbx = np.ones(self.x.shape[0])*-100.
+        self.ubx = np.ones(self.x.shape[0])*100.
+        # Initialize
+        self.x0 = np.random.randn(self.x.shape[0])*0.
+        # Create NLP
+        self.nlp = {'x': self.x, 'f': self.f, 'g': self.g}
+        # NLP solver options
+        self.opts = {"ipopt.max_iter": 100000}
+        # "iteration_callback_step": self.plotUpdateSteps}
+        # Create solver
+        print "Initializing the solver"
+        self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
+        # Solve NLP
+        args = {}
+        args["x0"] = self.x0
+        args["lbx"] = ca.vertcat([self.lbx])
+        args["ubx"] = ca.vertcat([self.ubx])
+        args["lbg"] = ca.vertcat([self.lbg])
+        args["ubg"] = ca.vertcat([self.ubg])
+        self.res = self.solver(args)
+        self.xres = self.res['x'].full().reshape(self.voxels[0, :, :, :].shape)
