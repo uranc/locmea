@@ -167,7 +167,7 @@ class data_out(object):
         """
         data = self.data
         self.fig = plt.figure(figsize=(20, 10))
-        cmax = 1e-3
+        cmax = 1e-5
         t_ind = self.t_ind
         # mask reconstruction volume
         vx, vy, vz = self.voxels
