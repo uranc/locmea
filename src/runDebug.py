@@ -10,7 +10,7 @@ import casadi as ca
 import numpy as np
 import matplotlib.pyplot as plt
 # Data path/filename
-t_ind = 35
+t_ind = 1
 data_path = '../data/'
 # file_name = data_path + 'data_sim_l8e3.hdf5'
 file_name = data_path + 'data_sim_low.hdf5'  # morphology
@@ -22,14 +22,15 @@ data = data_in(file_name, flag_cell=True, flag_electode=False)
 #loc.generate_figure_morphology()
 
 # optimize
-opt = opt_out(data, p_vres=10, p_jlen=0, p_maxd=55)
+opt = opt_out(data, p_vres=20, p_jlen=0, p_maxd=55)
 #wform = opt.optimize_waveform()
 #wform = ca.DM(wform).full().flatten()
 #plt.plot(wform)
-#opt.solve_ipopt_slack_cost()
 #opt.solve_ipopt_reformulate()
 opt.solve_ipopt_multi_measurement()
-#opt.generate_figure_morphology()
+opt.xress = opt.xres
+opt.xres = opt.xress[:,:,:,t_ind]
+opt.generate_figure_morphology()
 #fwd = opt.cmp_fwd_matrix(opt.electrode_pos, opt.voxels)
 #dw = opt.cmp_weight_matrix(fwd)
 #nn = np.diag(dw).reshape(opt.voxels[0,:,:,:].shape)

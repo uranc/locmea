@@ -169,7 +169,6 @@ class data_out(object):
         self.fig = plt.figure(figsize=(20, 10))
         cmax = 1e-3
         t_ind = self.t_ind
-        t_int = self.t_int
         # mask reconstruction volume
         vx, vy, vz = self.voxels
         rx, ry, rz = vx, vy, vz
@@ -231,9 +230,9 @@ class data_out(object):
                                        data.electrode_pos[:, 2],
                                        color='b',
                                        marker='.'))  # electrodes
-        self.recPlot.append(ax.scatter(rx[resn_ind, t_int],
-                                       ry[resn_ind, t_int],
-                                       rz[resn_ind, t_int],
+        self.recPlot.append(ax.scatter(rx[resn_ind],
+                                       ry[resn_ind],
+                                       rz[resn_ind],
                                        c=resn[resn_ind],
                                        cmap='RdBu',
                                        marker='o'))  # midpoints
