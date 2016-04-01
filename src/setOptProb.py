@@ -164,10 +164,10 @@ class opt_out(data_out):
                                 ca.sumRows(self.cmp_dy(i, j, k, t, h))**2 +
                                 ca.sumRows(self.cmp_dz(i, j, k, t, h))**2)
                         else:
-                            grad_mtr = ca.vertcat([grad_mtr, ca.sumRows(
+                            grad_mtr = ca.vertcat(grad_mtr, ca.sumRows(
                                 ca.sumRows(self.cmp_dx(i, j, k, t, h))**2 +
                                 ca.sumRows(self.cmp_dy(i, j, k, t, h))**2 +
-                                ca.sumRows(self.cmp_dz(i, j, k, t, h))**2)])
+                                ca.sumRows(self.cmp_dz(i, j, k, t, h))**2))
         if flag_tmp_smooth:
             # compute temporal gradient
             print "Temporal smoothness enforced."
@@ -197,7 +197,7 @@ class opt_out(data_out):
         args["x0"] = r0
         args["lbx"] = ca.vertcat([-ca.inf, -ca.inf, -ca.inf])
         args["ubx"] = ca.vertcat([ca.inf, ca.inf, ca.inf])
-        res = root_solver(args)
+        res = root_solver(**args)
         return [F([res["x"], tlin[i]])[0] for i in range(fit_data.shape[0])]
 
     def solve_ipopt_reformulate(self):
@@ -258,14 +258,14 @@ class opt_out(data_out):
             self.ubx.append(ca.inf)
             self.ubx.append(ca.inf)
         # sigma bound
-        self.w = ca.vertcat([self.ys, self.xs, self.x])
-        self.g = ca.vertcat(self.g)
-        self.lbg = ca.vertcat(self.lbg)
-        self.ubg = ca.vertcat(self.ubg)
-        self.lbx = ca.vertcat(self.lbx)
-        self.ubx = ca.vertcat(self.ubx)
+        self.w = ca.vertcat(self.ys, self.xs, self.x)
+        self.g = ca.vertcat(*self.g)
+        self.lbg = ca.vertcat(*self.lbg)
+        self.ubg = ca.vertcat(*self.ubg)
+        self.lbx = ca.vertcat(*self.lbx)
+        self.ubx = ca.vertcat(*self.ubx)
         # Initialize
-        self.w0 = ca.vertcat([np.zeros(self.w.shape[0])])
+        self.w0 = ca.vertcat(np.zeros(self.w.shape[0]))
         # Create NLP
         self.nlp = {"x": self.w, "f": self.f, "g": self.g}
         # NLP solver options
@@ -345,20 +345,20 @@ class opt_out(data_out):
                 self.lbg.append(-ca.inf)
                 self.lbg.append(-ca.inf)
                 self.lbg.append(-ca.inf)
-                self.ubg.append(0)
-                self.ubg.append(0)
-                self.ubg.append(0)
+                self.ubg.append(0.)
+                self.ubg.append(0.)
+                self.ubg.append(0.)
                 self.lbx.append(-ca.inf)
                 self.ubx.append(ca.inf)
             self.lbx.append(-ca.inf)
             self.ubx.append(ca.inf)
-        self.g = ca.vertcat(self.g)
-        self.lbg = ca.vertcat(self.lbg)
-        self.ubg = ca.vertcat(self.ubg)
-        self.lbx = ca.vertcat(self.lbx)
-        self.ubx = ca.vertcat(self.ubx)
+        self.g = ca.vertcat(*self.g)
+        self.lbg = ca.vertcat(*self.lbg)
+        self.ubg = ca.vertcat(*self.ubg)
+        self.lbx = ca.vertcat(*self.lbx)
+        self.ubx = ca.vertcat(*self.ubx)
         # Initialize
-        self.w0 = ca.vertcat([np.zeros(self.w.shape[0])])
+        self.w0 = ca.vertcat(np.zeros(self.w.shape[0]))
         # Create NLP
         self.nlp = {"x": self.w, "f": self.f, "g": self.g}
         # NLP solver options
@@ -376,7 +376,7 @@ class opt_out(data_out):
         self.args["ubx"] = self.ubx
         self.args["lbg"] = self.lbg
         self.args["ubg"] = self.ubg
-        self.res = self.solver(self.args)
+        self.res = self.solver(**self.args)
         self.xres = self.res["x"].full()[self.y_size+self.xs.shape[0]:].\
             reshape((self.voxels[0, :, :, :].shape[0],
                      self.voxels[0, :, :, :].shape[1],
@@ -448,13 +448,13 @@ class opt_out(data_out):
                 self.ubx.append(ca.inf)
             self.lbx.append(-ca.inf)
             self.ubx.append(ca.inf)
-        self.g = ca.vertcat(self.g)
-        self.lbg = ca.vertcat(self.lbg)
-        self.ubg = ca.vertcat(self.ubg)
-        self.lbx = ca.vertcat(self.lbx)
-        self.ubx = ca.vertcat(self.ubx)
+        self.g = ca.vertcat(*self.g)
+        self.lbg = ca.vertcat(*self.lbg)
+        self.ubg = ca.vertcat(*self.ubg)
+        self.lbx = ca.vertcat(*self.lbx)
+        self.ubx = ca.vertcat(*self.ubx)
         # Initialize
-        self.w0 = ca.vertcat([np.zeros(self.w.shape[0])])
+        self.w0 = ca.vertcat(np.zeros(self.w.shape[0]))
         # Create NLP
         self.nlp = {"x": self.w, "f": self.f, "g": self.g}
         # NLP solver options
@@ -472,7 +472,7 @@ class opt_out(data_out):
         self.args["ubx"] = self.ubx
         self.args["lbg"] = self.lbg
         self.args["ubg"] = self.ubg
-        self.res = self.solver(self.args)
+        self.res = self.solver(**self.args)
         self.xres = self.res["x"].full()[self.y_size+self.xs.shape[0]:].\
             reshape((self.voxels[0, :, :, :].shape[0],
                      self.voxels[0, :, :, :].shape[1],
@@ -541,14 +541,14 @@ class opt_out(data_out):
             self.lbg.append(0)
             self.ubg.append(5)
         # sigma bound
-        self.w = ca.vertcat([self.ys, self.xs, self.x])
-        self.g = ca.vertcat(self.g)
-        self.lbg = ca.vertcat(self.lbg)
-        self.ubg = ca.vertcat(self.ubg)
-        self.lbx = ca.vertcat(self.lbx)
-        self.ubx = ca.vertcat(self.ubx)
+        self.w = ca.vertcat(self.ys, self.xs, self.x)
+        self.g = ca.vertcat(*self.g)
+        self.lbg = ca.vertcat(*self.lbg)
+        self.ubg = ca.vertcat(*self.ubg)
+        self.lbx = ca.vertcat(*self.lbx)
+        self.ubx = ca.vertcat(*self.ubx)
         # Initialize
-        self.w0 = ca.vertcat([np.zeros(self.w.shape[0])])
+        self.w0 = ca.vertcat(np.zeros(self.w.shape[0]))
         # Create NLP
         self.nlp = {"x": self.w, "f": self.f, "g": self.g}
         # NLP solver options
@@ -566,6 +566,6 @@ class opt_out(data_out):
         self.args["ubx"] = self.ubx
         self.args["lbg"] = self.lbg
         self.args["ubg"] = self.ubg
-        self.res = self.solver(self.args)
+        self.res = self.solver(**self.args)
         self.xres = self.res["x"].full()[self.ys.shape[0]+self.xs.shape[0]:].\
             reshape(self.voxels[0, :, :, :].shape)

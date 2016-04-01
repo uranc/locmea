@@ -22,17 +22,17 @@ data = data_in(file_name, flag_cell=True, flag_electode=False)
 #loc.generate_figure_morphology()
 
 # optimize
-opt = opt_out(data, p_vres=10, p_jlen=0, p_maxd=55)
+opt = opt_out(data, p_vres=20, p_jlen=0, p_maxd=55)
 # wform = opt.optimize_waveform()
 # wform = ca.DM(wform).full().flatten()
 # plt.plot(wform)
 # opt.solve_ipopt_reformulate()
-# opt.solve_ipopt_multi_measurement()
+opt.solve_ipopt_multi_measurement()
 # opt.xress = opt.xres
 # opt.xres = opt.xress[:,:,:,t_ind]
 
 # active set
-opt.solve_ipopt_reformulate_tv()
+#opt.solve_ipopt_reformulate_tv()
 
 
 # constraint functions checks.
