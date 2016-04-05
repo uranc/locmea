@@ -4,6 +4,7 @@ Module for loading data from various files
 # Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
 # License:
 import h5py
+import pickle
 
 
 class data_in(object):
@@ -24,6 +25,7 @@ class data_in(object):
     Functions
     ---------
     """
+
     def __init__(self, *args, **kwargs):
         self.f_name = args[0]
         self.flag_cell = kwargs.get('flag_cell')
@@ -52,37 +54,33 @@ class data_in(object):
         else:
             return f['data'][:], f['srate'][()]
 
+    def LoadPickledData(self, f_name):
+        """
+        load h5py data
+        optionally cell and electrode positions
+        """
+
     def filter_bpass_data(self):
         """
         filter raw data
         """
+
     def car_data(self):
         """
         common average reference
         """
+
     def epoch_data(self):
         """
         threshold to get spike time points
         (can be overwritten)
         """
+
     def cmp_cov_sensor(self):
         """
         compute the covariance matrix for sensors
         """
-    def visualize_data(self):
-        """
-        visualize recordings, epochs, etc..
-        frq., power (can be extra function)
-        """
-    def visualize_cell(self):
-        """
-        visualize morphology
-        frq. power ( can be extra)
-        """
-    def visualize_cov(self):
-        """
-        visualize covariance matrix
-        """
+
     def cmp_pca_ica(self):
         """
         compute pca, ica, dimensionality reduction

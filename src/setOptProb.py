@@ -175,7 +175,7 @@ class opt_out(data_out):
 
     def optimize_waveform(self):
         """
-        fit waveform to a biphasic alpha function
+        fit waveform to a bimodal alpha function
         """
         srate = self.data.srate
         fit_data = self.data.cell_csd[0, 30:]
@@ -200,7 +200,7 @@ class opt_out(data_out):
         res = root_solver(**args)
         return [F([res["x"], tlin[i]])[0] for i in range(fit_data.shape[0])]
 
-    def solve_ipopt_reformulate(self):
+    def solve_ipopt_single_measurement(self):
         # ######################## #
         #    Problem parameters    #
         # ######################## #
@@ -363,7 +363,7 @@ class opt_out(data_out):
         self.nlp = {"x": self.w, "f": self.f, "g": self.g}
         # NLP solver options
         self.opts = {"ipopt.max_iter": 100000,
-                     #"ipopt.linear_solver": 'MA97',
+                     # "ipopt.linear_solver": 'MA97',
                      "ipopt.hessian_approximation": "limited-memory"}
         # "iteration_callback_step": self.plotUpdateSteps}
         # Create solver
@@ -383,7 +383,7 @@ class opt_out(data_out):
                      self.voxels[0, :, :, :].shape[2],
                      self.t_int))
 
-    def solve_ipopt_mmv_2p_trick(self):
+    def solve_ipopt_mmv_2p(self):
         # ######################## #
         #    Problem parameters    #
         # ######################## #
@@ -473,99 +473,23 @@ class opt_out(data_out):
         self.args["lbg"] = self.lbg
         self.args["ubg"] = self.ubg
         self.res = self.solver(**self.args)
-        self.xres = self.res["x"].full()[self.y_size+self.xs.shape[0]:].\
+        self.xress = self.res["x"].full()[self.y_size+self.xs.shape[0]:].\
             reshape((self.voxels[0, :, :, :].shape[0],
                      self.voxels[0, :, :, :].shape[1],
                      self.voxels[0, :, :, :].shape[2],
                      self.t_int))
 
-    def solve_ipopt_reformulate_tv(self):
-        # ######################## #
-        #    Problem parameters    #
-        # ######################## #
-        self.t_ind = 30
-        self.t_int = 1
-        # ######################## #
-        #   Optimization problems  #
-        # ######################## #
-        self.method = "grad"
-        # ######################## #
-        #  Optimization variables  #
-        # ######################## #
-        self.ys = ca.MX.sym("ys", self.data.electrode_rec[
-                            :, self.t_ind:self.t_ind+self.t_int].shape)
-        self.y = self.data.electrode_rec[:, self.t_ind:self.t_ind+self.t_int]
-        self.x = ca.MX.sym("x", self.voxels[0, :].flatten().shape[0])
-        self.xs = ca.MX.sym("xs", self.voxels[0, :].flatten().shape[0])
-        fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
-        dw = self.cmp_weight_matrix(fwd)
-        self.fwd = np.dot(fwd, dw)
-        #self.fwd = fwd
-        self.sigma = 1e-4
+    def addGradientConstraints(self):
         self.grad = self.cmp_gradient()
         # ################## #
         # Objective function #
         # ################## #
-        self.f = 0
-        self.w = []
         self.g = []
         # bounds
         self.lbg = []
         self.ubg = []
-        self.lbx = []
-        self.ubx = []
-        for i in range(self.y.shape[0]):
-            self.f += (self.y[i] - self.ys[i])**2
-            self.g.append(self.ys[i] - ca.dot(self.fwd[i, :], self.x))
-            self.lbg.append(0)
-            self.ubg.append(0)
-            self.lbx.append(-ca.inf)
-            self.ubx.append(ca.inf)
         for j in range(self.x.shape[0]):
-            self.f += self.sigma*(self.xs[j])
-            self.g.append(-self.xs[j]-self.x[j])
-            self.g.append(-self.xs[j]+self.x[j])
-            self.g.append(-self.xs[j])
-            self.lbg.append(-ca.inf)
-            self.lbg.append(-ca.inf)
-            self.lbg.append(-ca.inf)
-            self.ubg.append(0)
-            self.ubg.append(0)
-            self.ubg.append(0)
-            self.lbx.append(-ca.inf)
-            self.lbx.append(-ca.inf)
-            self.ubx.append(ca.inf)
-            self.ubx.append(ca.inf)
             # gradient
             self.g.append(self.grad[j])
             self.lbg.append(0)
             self.ubg.append(5)
-        # sigma bound
-        self.w = ca.vertcat(self.ys, self.xs, self.x)
-        self.g = ca.vertcat(*self.g)
-        self.lbg = ca.vertcat(*self.lbg)
-        self.ubg = ca.vertcat(*self.ubg)
-        self.lbx = ca.vertcat(*self.lbx)
-        self.ubx = ca.vertcat(*self.ubx)
-        # Initialize
-        self.w0 = ca.vertcat(np.zeros(self.w.shape[0]))
-        # Create NLP
-        self.nlp = {"x": self.w, "f": self.f, "g": self.g}
-        # NLP solver options
-        self.opts = {"ipopt.max_iter": 100000,
-                     # "ipopt.linear_solver": 'pardisos',
-                     "ipopt.hessian_approximation": "limited-memory"}
-        # "iteration_callback_step": self.plotUpdateSteps}
-        # Create solver
-        print "Initializing the solver"
-        self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
-        # Solve NLP
-        self.args = {}
-        self.args["x0"] = self.w0
-        self.args["lbx"] = self.lbx
-        self.args["ubx"] = self.ubx
-        self.args["lbg"] = self.lbg
-        self.args["ubg"] = self.ubg
-        self.res = self.solver(**self.args)
-        self.xres = self.res["x"].full()[self.ys.shape[0]+self.xs.shape[0]:].\
-            reshape(self.voxels[0, :, :, :].shape)
