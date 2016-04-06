@@ -25,13 +25,12 @@ class visualize(object):
     """
 
     def __init__(self, *args, **kwargs):
-        print "Visualization"
-        print kwargs.keys()
+        print "Visualization of:"
         for key in kwargs.keys():
         	print key
-        #self.data = kwargs[0]
-        #self.xres = kwargs[1].xres
-        #self.voxels = kwargs[1].voxels
+        self.data = kwargs['data']
+        self.xres = kwargs['loc'].xres
+        self.voxels = kwargs['loc'].voxels
         #self.t_ind = args[1].t_ind
         self.t_ind = 0
 

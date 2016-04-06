@@ -6,17 +6,118 @@ Create attributes for the optimization problem
 from setInvProb import data_out
 import casadi as ca
 import numpy as np
-
+from casadi.tools import struct_symMX, entry, repeated
 
 class opt_out(data_out):
     """
     Class for the optimization problem
     Child of inverse problem
     """
-
     def __init__(self, *args, **kwargs):
+        # ######################## #
+        # Options for optimization #
+        # ######################## #
         data_out.__init__(self, *args, **kwargs)
-
+        self.opt_opt = {'solver': 'ipopt', 'datafile_name': 'output_file.dat', 'callback_steps': 5,
+                        'method': 'grad','t_ind': 30, 't_int': 1, 'flag_depthweighted': True, 'sigma': 0.1}
+        self.opt_opt.update(kwargs)
+        self.solver = self.opt_opt['solver']
+        self.datafile_name = self.opt_opt['datafile_name']
+        self.callback_steps = self.opt_opt['callback_steps']
+        self.t_ind = self.opt_opt['t_ind']
+        self.t_int = self.opt_opt['t_int']
+        self.sigma = self.opt_opt['sigma']
+        self.method = self.opt_opt['method']
+        self.flag_depthweighted = self.opt_opt['flag_depthweighted']
+        # ######################## #
+        #     Problem  setup       #
+        # ######################## #
+        print self.opt_opt
+        self.y = self.data.electrode_rec[:, self.t_ind:self.t_ind+self.t_int]
+        self.y_size = self.y.flatten().shape[0]
+        self.x_size = self.voxels[0, :].flatten().shape[0]
+        # ######################## #
+        # Optimization variables   #
+        # ######################## #
+        self.w = struct_symMX([entry("x", shape=(self.x_size, self.t_int)),
+                               entry("xs", shape=(self.x_size)),
+                               entry("ys", shape=(self.y.shape))])
+        self.x, self.xs, self.ys = self.w[...]
+        self.g = []
+        self.lbg = []
+        self.ubg = []
+        self.f = 0
+        self.lbx = self.w(-ca.inf)
+        self.ubx = self.w(ca.inf)
+        fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
+        if self.flag_depthweighted:
+            dw = self.cmp_weight_matrix(fwd)
+            self.fwd = np.dot(fwd, dw)
+        else:
+            self.fwd = ca.MX(fwd)
+    def minimize_function(self):
+        """
+        Function where the NLP is initialized and solved
+        Regardless of the model made
+        """
+        self.g = ca.vertcat(*self.g)
+        self.lbg = ca.vertcat(*self.lbg)
+        self.ubg = ca.vertcat(*self.ubg)
+        # Initialize at 0
+        self.w0 = self.w(0)
+        # Create NLP
+        self.nlp = {"x": self.w, "f": self.f, "g": self.g}
+        # NLP solver options
+        self.opts = {"ipopt.max_iter": 100000,
+                     # "ipopt.linear_solver": 'MA97',
+                     "ipopt.hessian_approximation": "limited-memory"}
+        # "iteration_callback_step": self.plotUpdateSteps}
+        # Create solver
+        print "Initializing the solver"
+        self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
+        # Solve NLP
+        self.args = {}
+        self.args["x0"] = self.w0
+        self.args["lbx"] = self.lbx
+        self.args["ubx"] = self.ubx
+        self.args["lbg"] = self.lbg
+        self.args["ubg"] = self.ubg
+        self.res = self.solver(**self.args)
+        self.xres = self.res["x"].full()[:self.x_size*self.t_int].\
+            reshape((self.voxels[0, :, :, :].shape[0],
+                     self.voxels[0, :, :, :].shape[1],
+                     self.voxels[0, :, :, :].shape[2],
+                     self.t_int))
+    def compute_objective_fcn(self):
+        """
+        Computes objective function f
+        With lifting variable ys constraints
+        """
+        for i in range(self.y.shape[0]):
+            for ti in range(self.t_int):
+                self.f += (self.y[i, ti] - self.ys[i, ti])**2
+                self.g.append(self.ys[i, ti] -
+                              ca.dot(self.fwd[i, :], self.x[:, ti]))
+                self.lbg.append(0)
+                self.ubg.append(0)
+    def add_costs_constraints_slack_l1(self):
+        """
+        add slack l1 constraints with lifting variables
+        """
+        for j in range(self.w['xs'].shape[0]):
+            tmp = 0
+            for tj in range(self.t_int):
+                tmp += self.w['x'][j,tj]**2
+            self.f += self.sigma*(self.xs[j])
+            self.g.append(-self.xs[j]-tmp)
+            self.g.append(-self.xs[j]+tmp)
+            self.g.append(-self.xs[j])
+            self.lbg.append(-ca.inf)
+            self.lbg.append(-ca.inf)
+            self.lbg.append(-ca.inf)
+            self.ubg.append(0.)
+            self.ubg.append(0.)
+            self.ubg.append(0.)
     def cmp_dx(self, i, j, k, t, h=1.):
         """
         cmp_dx
@@ -200,286 +301,69 @@ class opt_out(data_out):
         res = root_solver(**args)
         return [F([res["x"], tlin[i]])[0] for i in range(fit_data.shape[0])]
 
-    def solve_ipopt_single_measurement(self):
-        # ######################## #
-        #    Problem parameters    #
-        # ######################## #
-        self.t_ind = 30
-        self.t_int = 1
-        # ######################## #
-        #   Optimization problems  #
-        # ######################## #
-        self.method = "grad"
-        # ######################## #
-        #  Optimization variables  #
-        # ######################## #
-        self.ys = ca.MX.sym("ys", self.data.electrode_rec[
-                            :, self.t_ind:self.t_ind+self.t_int].shape)
-        self.y = self.data.electrode_rec[:, self.t_ind:self.t_ind+self.t_int]
-        self.x = ca.MX.sym("x", self.voxels[0, :].flatten().shape[0])
-        self.xs = ca.MX.sym("xs", self.voxels[0, :].flatten().shape[0])
-        fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
-        dw = self.cmp_weight_matrix(fwd)
-        self.fwd = np.dot(fwd, dw)
-        self.sigma = 0
-        # self.grad = self.cmp_gradient()
-        # ################## #
-        # Objective function #
-        # ################## #
-        self.f = 0
-        self.w = []
+    def solve_ipopt_multi_measurement(self):
+        """
+        MMV L1 
+        """
+        self.compute_objective_fcn()
+        self.add_costs_constraints_slack_l1()
+        #self.add_gradient_constraints()
+        self.minimize_function()
+
+    def set_2p_variables(self):
+        """
+        x is divided into negative and positive elements
+        this function overwrites the initialized optimization variables
+        """
+        self.w = struct_symMX([entry("x", shape=(self.x_size*2, self.t_int)),
+                               entry("xs_pos", shape=(self.x_size*2)),
+                               entry("xs_neg", shape=(self.x_size*2)),
+                               entry("ys", shape=(self.y.shape))])
+        self.x, self.xs_pos, self.xs_neg, self.ys = self.w[...]
         self.g = []
-        # bounds
         self.lbg = []
         self.ubg = []
-        self.lbx = []
-        self.ubx = []
-        for i in range(self.y.shape[0]):
-            self.f += (self.y[i] - self.ys[i])**2
-            self.g.append(self.ys[i] - ca.dot(self.fwd[i, :], self.x))
-            self.lbg.append(0)
-            self.ubg.append(0)
-            # self.w.append(self.ys[i])
-            self.lbx.append(-ca.inf)
-            self.ubx.append(ca.inf)
-        for j in range(self.x.shape[0]):
+        self.f = 0
+        self.lbx = self.w(-ca.inf)
+        self.ubx = self.w(ca.inf)
+        fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
+        if self.flag_depthweighted:
+            dw = self.cmp_weight_matrix(fwd)
+            self.fwd = np.dot(fwd, dw)
+        else:
+            self.fwd = ca.MX(fwd)
+        # forward matrix for 2p sources
+        self.fwd = ca.horzcat(self.fwd,self.fwd)
+    
+    def add_costs_constraints_2p(self):
+        """
+        add slack l1 constraints with lifting variables
+        """
+        for j in range(self.w['xs'].shape[0]):
+            tmp = 0
+            for tj in range(self.t_int):
+                tmp += self.w['x'][j,tj]**2
             self.f += self.sigma*(self.xs[j])
-            self.g.append(-self.xs[j]-self.x[j])
-            self.g.append(-self.xs[j]+self.x[j])
+            self.g.append(-self.xs[j]-tmp)
+            self.g.append(-self.xs[j]+tmp)
             self.g.append(-self.xs[j])
             self.lbg.append(-ca.inf)
             self.lbg.append(-ca.inf)
             self.lbg.append(-ca.inf)
-            self.ubg.append(0)
-            self.ubg.append(0)
-            self.ubg.append(0)
-            self.lbx.append(-ca.inf)
-            self.lbx.append(-ca.inf)
-            self.ubx.append(ca.inf)
-            self.ubx.append(ca.inf)
-        # sigma bound
-        self.w = ca.vertcat(self.ys, self.xs, self.x)
-        self.g = ca.vertcat(*self.g)
-        self.lbg = ca.vertcat(*self.lbg)
-        self.ubg = ca.vertcat(*self.ubg)
-        self.lbx = ca.vertcat(*self.lbx)
-        self.ubx = ca.vertcat(*self.ubx)
-        # Initialize
-        self.w0 = ca.vertcat(np.zeros(self.w.shape[0]))
-        # Create NLP
-        self.nlp = {"x": self.w, "f": self.f, "g": self.g}
-        # NLP solver options
-        self.opts = {"ipopt.max_iter": 100000,
-                     # "ipopt.linear_solver": 'pardisos',
-                     "ipopt.hessian_approximation": "limited-memory"}
-        # "iteration_callback_step": self.plotUpdateSteps}
-        # Create solver
-        print "Initializing the solver"
-        self.solver = ca.nlpsol("solver", "ipopt", self.nlp)
-        # Solve NLP
-        self.args = {}
-        self.args["x0"] = self.w0
-        self.args["lbx"] = self.lbx
-        self.args["ubx"] = self.ubx
-        self.args["lbg"] = self.lbg
-        self.args["ubg"] = self.ubg
-        self.res = self.solver(self.args)
-        self.xres = self.res["x"].full()[self.ys.shape[0]+self.xs.shape[0]:].\
-            reshape(self.voxels[0, :, :, :].shape)
+            self.ubg.append(0.)
+            self.ubg.append(0.)
+            self.ubg.append(0.)
 
-    def solve_ipopt_multi_measurement(self):
-        # ######################## #
-        #    Problem parameters    #
-        # ######################## #
-        self.t_ind = 30
-        self.t_int = 1
-        self.x_size = self.voxels[0, :].flatten().shape[0]
-        # ######################## #
-        #   Optimization problems  #
-        # ######################## #
-        self.method = "grad"
-        # ######################## #
-        #  Optimization variables  #
-        # ######################## #
-        self.y = self.data.electrode_rec[:, self.t_ind:self.t_ind+self.t_int]
-        self.y_size = self.y.flatten().shape[0]
-        self.w = ca.MX.sym("w", self.x_size * (self.t_int + 1) + self.y_size)
-        self.ys = self.w[0:self.y_size].reshape((self.y.shape))
-        self.xs = self.w[self.y_size:self.y_size +
-                         self.x_size].reshape((self.x_size, 1))
-        self.x = self.w[self.y_size +
-                        self.x_size:].reshape((self.x_size, self.t_int))
-        fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
-        dw = self.cmp_weight_matrix(fwd)
-        self.fwd = np.dot(fwd, dw)
-        self.sigma = 0
-        # self.grad = self.cmp_gradient()
-        # ################## #
-        # Objective function #
-        # ################## #
-        self.f = 0
-        self.g = []
-        # bounds
-        self.lbg = []
-        self.ubg = []
-        self.lbx = []
-        self.ubx = []
-        for i in range(self.y.shape[0]):
-            for ti in range(self.t_int):
-                self.f += (self.y[i, ti] - self.ys[i, ti])**2
-                self.g.append(self.ys[i, ti] -
-                              ca.dot(self.fwd[i, :], self.x[:, ti]))
-                self.lbg.append(0)
-                self.ubg.append(0)
-                self.lbx.append(-ca.inf)
-                self.ubx.append(ca.inf)
-        for j in range(self.x.nz[:].shape[0]):
-            tmp = 0
-            if j < (self.xs.shape[0]):
-                for tj in range(self.t_int):
-                    tmp += self.x.nz[:][tj*self.x_size+j]**2
-                self.f += self.sigma*(self.xs[j])
-                self.g.append(-self.xs[j]-tmp)
-                self.g.append(-self.xs[j]+tmp)
-                self.g.append(-self.xs[j])
-                self.lbg.append(-ca.inf)
-                self.lbg.append(-ca.inf)
-                self.lbg.append(-ca.inf)
-                self.ubg.append(0.)
-                self.ubg.append(0.)
-                self.ubg.append(0.)
-                self.lbx.append(-ca.inf)
-                self.ubx.append(ca.inf)
-            self.lbx.append(-ca.inf)
-            self.ubx.append(ca.inf)
-        self.g = ca.vertcat(*self.g)
-        self.lbg = ca.vertcat(*self.lbg)
-        self.ubg = ca.vertcat(*self.ubg)
-        self.lbx = ca.vertcat(*self.lbx)
-        self.ubx = ca.vertcat(*self.ubx)
-        # Initialize
-        self.w0 = ca.vertcat(np.zeros(self.w.shape[0]))
-        # Create NLP
-        self.nlp = {"x": self.w, "f": self.f, "g": self.g}
-        # NLP solver options
-        self.opts = {"ipopt.max_iter": 100000,
-                     # "ipopt.linear_solver": 'MA97',
-                     "ipopt.hessian_approximation": "limited-memory"}
-        # "iteration_callback_step": self.plotUpdateSteps}
-        # Create solver
-        print "Initializing the solver"
-        self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
-        # Solve NLP
-        self.args = {}
-        self.args["x0"] = self.w0
-        self.args["lbx"] = self.lbx
-        self.args["ubx"] = self.ubx
-        self.args["lbg"] = self.lbg
-        self.args["ubg"] = self.ubg
-        self.res = self.solver(**self.args)
-        self.xres = self.res["x"].full()[self.y_size+self.xs.shape[0]:].\
-            reshape((self.voxels[0, :, :, :].shape[0],
-                     self.voxels[0, :, :, :].shape[1],
-                     self.voxels[0, :, :, :].shape[2],
-                     self.t_int))
+    def solve_ipopt_multi_measurement_2p(self):
+        """
+        Reform source space x as the difference of x+ - x-
+        """
+        self.set_2p_variables()
+        self.compute_objective_fcn()
+        self.add_costs_constraints_2p()
+        self.minimize_function()
 
-    def solve_ipopt_mmv_2p(self):
-        # ######################## #
-        #    Problem parameters    #
-        # ######################## #
-        self.t_ind = 30
-        self.t_int = 1
-        self.x_size = self.voxels[0, :].flatten().shape[0]
-        # ######################## #
-        #   Optimization problems  #
-        # ######################## #
-        self.method = "grad"
-        # ######################## #
-        #  Optimization variables  #
-        # ######################## #
-        self.y = self.data.electrode_rec[:, self.t_ind:self.t_ind+self.t_int]
-        self.y_size = self.y.flatten().shape[0]
-        self.w = ca.MX.sym("w", self.x_size * (self.t_int + 1) + self.y_size)
-        self.ys = self.w[0:self.y_size].reshape((self.y.shape))
-        self.xs = self.w[self.y_size:self.y_size +
-                         self.x_size].reshape((self.x_size, 1))
-        self.x = self.w[self.y_size +
-                        self.x_size:].reshape((self.x_size, self.t_int))
-        fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
-        dw = self.cmp_weight_matrix(fwd)
-        self.fwd = np.dot(fwd, dw)
-        self.sigma = 0
-        # self.grad = self.cmp_gradient()
-        # ################## #
-        # Objective function #
-        # ################## #
-        self.f = 0
-        self.g = []
-        # bounds
-        self.lbg = []
-        self.ubg = []
-        self.lbx = []
-        self.ubx = []
-        for i in range(self.y.shape[0]):
-            for ti in range(self.t_int):
-                self.f += (self.y[i, ti] - self.ys[i, ti])**2
-                self.g.append(self.ys[i, ti] -
-                              ca.dot(self.fwd[i, :], self.x[:, ti]))
-                self.lbg.append(0)
-                self.ubg.append(0)
-                self.lbx.append(-ca.inf)
-                self.ubx.append(ca.inf)
-        for j in range(self.x.nz[:].shape[0]):
-            tmp = 0
-            if j < (self.xs.shape[0]):
-                for tj in range(self.t_int):
-                    tmp += self.x.nz[:][tj*self.x_size+j]**2
-                self.f += self.sigma*(self.xs[j])
-                self.g.append(-self.xs[j]-tmp)
-                self.g.append(-self.xs[j]+tmp)
-                self.g.append(-self.xs[j])
-                self.lbg.append(-ca.inf)
-                self.lbg.append(-ca.inf)
-                self.lbg.append(-ca.inf)
-                self.ubg.append(0)
-                self.ubg.append(0)
-                self.ubg.append(0)
-                self.lbx.append(-ca.inf)
-                self.ubx.append(ca.inf)
-            self.lbx.append(-ca.inf)
-            self.ubx.append(ca.inf)
-        self.g = ca.vertcat(*self.g)
-        self.lbg = ca.vertcat(*self.lbg)
-        self.ubg = ca.vertcat(*self.ubg)
-        self.lbx = ca.vertcat(*self.lbx)
-        self.ubx = ca.vertcat(*self.ubx)
-        # Initialize
-        self.w0 = ca.vertcat(np.zeros(self.w.shape[0]))
-        # Create NLP
-        self.nlp = {"x": self.w, "f": self.f, "g": self.g}
-        # NLP solver options
-        self.opts = {"ipopt.max_iter": 100000,
-                     #"ipopt.linear_solver": 'MA97',
-                     "ipopt.hessian_approximation": "limited-memory"}
-        # "iteration_callback_step": self.plotUpdateSteps}
-        # Create solver
-        print "Initializing the solver"
-        self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
-        # Solve NLP
-        self.args = {}
-        self.args["x0"] = self.w0
-        self.args["lbx"] = self.lbx
-        self.args["ubx"] = self.ubx
-        self.args["lbg"] = self.lbg
-        self.args["ubg"] = self.ubg
-        self.res = self.solver(**self.args)
-        self.xress = self.res["x"].full()[self.y_size+self.xs.shape[0]:].\
-            reshape((self.voxels[0, :, :, :].shape[0],
-                     self.voxels[0, :, :, :].shape[1],
-                     self.voxels[0, :, :, :].shape[2],
-                     self.t_int))
-
-    def addGradientConstraints(self):
+    def add_gradient_constraints(self):
         self.grad = self.cmp_gradient()
         # ################## #
         # Objective function #
@@ -493,3 +377,10 @@ class opt_out(data_out):
             self.g.append(self.grad[j])
             self.lbg.append(0)
             self.ubg.append(5)
+
+    # waveform optimization
+    @ca.pycallback
+    def alternating_optimization(self, f):
+        x = f.getOutput("x")[:self.x_size*self.t_int]
+        self.optimize_waveform()
+        return 0
