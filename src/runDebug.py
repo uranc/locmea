@@ -25,27 +25,39 @@ loc = data_out(data, **localization_options)
 
 loc.cmp_sloreta()
 loc.xres = loc.res[:, t_ind]
-
+inds = loc.evaluate_localization()
 # Optimize
-optimization_options = {'p_vres':20, 'p_jlen':0, 'p_erad': 5,
-                        'solver': 'ipopt', 'method': 'grad',
-                        't_ind': 30, 't_int': 2, 'sigma': 6}
-opt = opt_out(data, **optimization_options)
+# optimization_options = {'p_vres':20, 'p_jlen':0, 'p_erad': 5,
+#                         'solver': 'ipopt', 'method': 'grad',
+#                         't_ind': 30, 't_int': 1, 'sigma': 1, 'flag_depthweighted': True}
+# opt = opt_out(data, **optimization_options)
 # wform = opt.optimize_waveform()
 # wform = ca.DM(wform).full().flatten()
 # plt.plot(wform)
-opt.solve_ipopt_multi_measurement()
-opt.xress = opt.xres
-opt.xres = opt.xress[:,:,:,t_ind]
 
-# active set
-#opt.solve_ipopt_reformulate_tv()
+# slack
+#opt.solve_ipopt_multi_measurement()
+# opt.xres = opt.res["x"].full()[:opt.x_size*opt.t_int].\
+#             reshape((opt.voxels[0, :, :, :].shape[0],
+#                      opt.voxels[0, :, :, :].shape[1],
+#                      opt.voxels[0, :, :, :].shape[2],
+#                      opt.t_int))
+# opt.xress = opt.xres
+# opt.xres = opt.xress[:,:,:,t_ind]
 
+# 2p
+# opt.solve_ipopt_multi_measurement_2p()
+# opt.xres_pos = opt.res["x"].full()[:opt.x_size*2*opt.t_int]
+# opt.xres_neg = opt.res["x"].full()[opt.x_size*2*opt.t_int:opt.x_size*4*opt.t_int]
+# opt.xress = ca.vertcat(opt.xres_pos[:opt.x_size*opt.t_int] - 
+# 	                  opt.xres_neg[opt.x_size*opt.t_int:opt.x_size*opt.t_int*2])
+# opt.xress = opt.xress.full().reshape((opt.voxels[0, :, :, :].shape[0],
+#                      		 opt.voxels[0, :, :, :].shape[1],
+#                      		 opt.voxels[0, :, :, :].shape[2],
+#                      		 opt.t_int))
+# opt.xres = opt.xress[:,:,:,t_ind]
 
-# constraint functions checks.
-#opt.solve_ipopt_reformulate_tv_mmv()
-#opt.solve_ipopt_reformulate_tv()
 
 # visualize
-vis = visualize(data=data, loc=opt)
-vis.VisualizeSingleFrame()
+# vis = visualize(data=data, loc=opt)
+# vis.show_snapshot()

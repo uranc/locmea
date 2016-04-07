@@ -34,7 +34,7 @@ class visualize(object):
         #self.t_ind = args[1].t_ind
         self.t_ind = 0
 
-    def VisualizeSingleFrame(self):
+    def show_snapshot(self):
         """
         Initialize the figure
         """
@@ -115,7 +115,7 @@ class visualize(object):
         self.fig.tight_layout()
         plt.show()
 
-    def AnimateActivation(self):
+    def show_movie(self):
         """
         Initialize the figure
         """

@@ -152,6 +152,13 @@ class data_out(object):
         """
         Calculate the column(depth) normalization matrix given by
         (1./sum(a_i^2))^depth_par - column norm for fwd_matrix[:,i]
+        
+        :param      self:        { description }
+        :param      fwd_matrix:  { description }
+        :param      inv_matrix:  { description }
+        :type       self:        { type_description }
+        :type       fwd_matrix:  { type_description }
+        :type       inv_matrix:  { type_description }
         """
         return np.dot(inv_matrix, fwd_matrix)
 
@@ -159,3 +166,17 @@ class data_out(object):
         """
         evaluate the localization
         """
+        data = self.data
+        # mask reconstruction volume
+        vx, vy, vz = self.voxels
+        rx, ry, rz = vx, vy, vz
+        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()
+        # result
+        xmin, xmax = np.min(vx), np.max(vx)
+        ymin, ymax = np.min(vy), np.max(vy)
+        zmin, zmax = np.min(vz), np.max(vz)
+        ind = ((xmin <= data.cell_pos[:, 0]) & (xmax >= data.cell_pos[:, 0]) &
+               (ymin <= data.cell_pos[:, 1]) & (ymax >= data.cell_pos[:, 1]) &
+               (zmin <= data.cell_pos[:, 2]) & (zmax >= data.cell_pos[:, 2]))
+        inds.nonzero()[0].shape
+        return ind

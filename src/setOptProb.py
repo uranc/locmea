@@ -36,9 +36,16 @@ class opt_out(data_out):
         self.y = self.data.electrode_rec[:, self.t_ind:self.t_ind+self.t_int]
         self.y_size = self.y.flatten().shape[0]
         self.x_size = self.voxels[0, :].flatten().shape[0]
-        # ######################## #
-        # Optimization variables   #
-        # ######################## #
+        fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
+        if self.flag_depthweighted:
+            dw = self.cmp_weight_matrix(fwd)
+            self.fwd = np.dot(fwd, dw)
+        else:
+            self.fwd = ca.MX(fwd)
+    def set_optimization_variables_slack(self):
+        """
+        Variables for the lifted version
+        """
         self.w = struct_symMX([entry("x", shape=(self.x_size, self.t_int)),
                                entry("xs", shape=(self.x_size)),
                                entry("ys", shape=(self.y.shape))])
@@ -49,12 +56,7 @@ class opt_out(data_out):
         self.f = 0
         self.lbx = self.w(-ca.inf)
         self.ubx = self.w(ca.inf)
-        fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
-        if self.flag_depthweighted:
-            dw = self.cmp_weight_matrix(fwd)
-            self.fwd = np.dot(fwd, dw)
-        else:
-            self.fwd = ca.MX(fwd)
+
     def minimize_function(self):
         """
         Function where the NLP is initialized and solved
@@ -69,12 +71,14 @@ class opt_out(data_out):
         self.nlp = {"x": self.w, "f": self.f, "g": self.g}
         # NLP solver options
         self.opts = {"ipopt.max_iter": 100000,
+                     # "compute_red_hessian": "yes",
                      # "ipopt.linear_solver": 'MA97',
                      "ipopt.hessian_approximation": "limited-memory"}
         # "iteration_callback_step": self.plotUpdateSteps}
         # Create solver
         print "Initializing the solver"
         self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
+        #self.solver = ca.qpsol("solver", "qpoases", self.nlp,{'sparse':True})
         # Solve NLP
         self.args = {}
         self.args["x0"] = self.w0
@@ -83,12 +87,8 @@ class opt_out(data_out):
         self.args["lbg"] = self.lbg
         self.args["ubg"] = self.ubg
         self.res = self.solver(**self.args)
-        self.xres = self.res["x"].full()[:self.x_size*self.t_int].\
-            reshape((self.voxels[0, :, :, :].shape[0],
-                     self.voxels[0, :, :, :].shape[1],
-                     self.voxels[0, :, :, :].shape[2],
-                     self.t_int))
-    def compute_objective_fcn(self):
+
+    def add_data_costs_constraints_slack(self):
         """
         Computes objective function f
         With lifting variable ys constraints
@@ -100,7 +100,7 @@ class opt_out(data_out):
                               ca.dot(self.fwd[i, :], self.x[:, ti]))
                 self.lbg.append(0)
                 self.ubg.append(0)
-    def add_costs_constraints_slack_l1(self):
+    def add_l1_costs_constraints_slack(self):
         """
         add slack l1 constraints with lifting variables
         """
@@ -305,65 +305,71 @@ class opt_out(data_out):
         """
         MMV L1 
         """
-        self.compute_objective_fcn()
-        self.add_costs_constraints_slack_l1()
-        #self.add_gradient_constraints()
+        self.set_optimization_variables_slack()
+        self.add_data_costs_constraints_slack()
+        self.add_l1_costs_constraints_slack()
+        #self.add_gradient_costs_constraints()
         self.minimize_function()
 
-    def set_2p_variables(self):
+    def set_optimization_variables_2p(self):
         """
         x is divided into negative and positive elements
         this function overwrites the initialized optimization variables
         """
-        self.w = struct_symMX([entry("x", shape=(self.x_size*2, self.t_int)),
-                               entry("xs_pos", shape=(self.x_size*2)),
-                               entry("xs_neg", shape=(self.x_size*2)),
+        self.w = struct_symMX([entry("xs_pos", shape=(self.x_size*2,self.t_int)),
+                               entry("xs_neg", shape=(self.x_size*2,self.t_int)),
                                entry("ys", shape=(self.y.shape))])
-        self.x, self.xs_pos, self.xs_neg, self.ys = self.w[...]
+        self.xs_pos, self.xs_neg, self.ys = self.w[...]
         self.g = []
         self.lbg = []
         self.ubg = []
         self.f = 0
         self.lbx = self.w(-ca.inf)
         self.ubx = self.w(ca.inf)
-        fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
-        if self.flag_depthweighted:
-            dw = self.cmp_weight_matrix(fwd)
-            self.fwd = np.dot(fwd, dw)
-        else:
-            self.fwd = ca.MX(fwd)
-        # forward matrix for 2p sources
-        self.fwd = ca.horzcat(self.fwd,self.fwd)
-    
-    def add_costs_constraints_2p(self):
+        print "New measurement matrix"
+        self.fwd = ca.horzcat(self.fwd, self.fwd)
+
+    def add_data_costs_constraints_2p(self):
+        """
+        Computes objective function f
+        With lifting variable ys constraints
+        """
+        for i in range(self.y.shape[0]):
+            for ti in range(self.t_int):
+                self.f += (self.y[i, ti] - self.ys[i, ti])**2
+                self.g.append(self.ys[i, ti] -
+                              ca.dot(self.fwd[i, :], (self.xs_pos[:, ti]-self.xs_neg[:, ti]).T))
+                self.lbg.append(0)
+                self.ubg.append(0)
+
+    def add_l1_costs_constraints_2p(self):
         """
         add slack l1 constraints with lifting variables
         """
-        for j in range(self.w['xs'].shape[0]):
-            tmp = 0
+        for j in range(self.xs_pos.shape[0]):
+            tmp_pos = 0
+            tmp_neg = 0
             for tj in range(self.t_int):
-                tmp += self.w['x'][j,tj]**2
-            self.f += self.sigma*(self.xs[j])
-            self.g.append(-self.xs[j]-tmp)
-            self.g.append(-self.xs[j]+tmp)
-            self.g.append(-self.xs[j])
-            self.lbg.append(-ca.inf)
-            self.lbg.append(-ca.inf)
-            self.lbg.append(-ca.inf)
-            self.ubg.append(0.)
-            self.ubg.append(0.)
-            self.ubg.append(0.)
+                if j < self.xs_pos.shape[0]/2:
+                    tmp_pos += self.xs_pos[j,tj]**2
+                    tmp_neg += self.xs_neg[j,tj]**2
+                self.g.append(-self.xs_pos[j,tj])
+                self.g.append(-self.xs_neg[j,tj])
+                self.lbg.append(-ca.inf)
+                self.lbg.append(-ca.inf)
+                self.ubg.append(0.)
+                self.ubg.append(0.)
+            self.f += self.sigma*(tmp_pos+tmp_neg)
 
     def solve_ipopt_multi_measurement_2p(self):
         """
         Reform source space x as the difference of x+ - x-
         """
-        self.set_2p_variables()
-        self.compute_objective_fcn()
-        self.add_costs_constraints_2p()
+        self.set_optimization_variables_2p()
+        self.add_data_costs_constraints_2p()
+        self.add_l1_costs_constraints_2p()
         self.minimize_function()
-
-    def add_gradient_constraints(self):
+    def add_gradient_costs_constraints(self):
         self.grad = self.cmp_gradient()
         # ################## #
         # Objective function #
@@ -377,10 +383,16 @@ class opt_out(data_out):
             self.g.append(self.grad[j])
             self.lbg.append(0)
             self.ubg.append(5)
-
-    # waveform optimization
+    def initialization(self):
+        """
+        initialization for the optimization problem
+        """
+        self.g.append()
     @ca.pycallback
-    def alternating_optimization(self, f):
+    def alternating_optimization(self):
+        '''
+        hello there
+        '''
         x = f.getOutput("x")[:self.x_size*self.t_int]
         self.optimize_waveform()
         return 0
