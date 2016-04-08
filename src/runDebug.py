@@ -12,7 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Data path/filename
-t_ind = 0
+t_ind = 38
 data_path = '../data/'
 file_name = data_path + 'data_sim_low.hdf5'
 
@@ -20,17 +20,19 @@ data_options = {'flag_cell': True, 'flag_electode': False}
 data = data_in(file_name, **data_options)
 
 # Inverse solution
-localization_options = {'p_vres':20, 'p_jlen':0, 'p_erad': 5}
-loc = data_out(data, **localization_options)
+# localization_options = {'p_vres':20, 'p_jlen':0, 'p_erad': 5, 't_ind': 38}
+# loc = data_out(data, **localization_options)
 
-loc.cmp_sloreta()
-loc.xres = loc.res[:, t_ind]
-inds = loc.evaluate_localization()
+# loc.cmp_sloreta()
+# loc.xres = loc.res[:, t_ind]
+# ccell = loc.evaluate_localization()
 # Optimize
-# optimization_options = {'p_vres':20, 'p_jlen':0, 'p_erad': 5,
-#                         'solver': 'ipopt', 'method': 'grad',
-#                         't_ind': 30, 't_int': 1, 'sigma': 1, 'flag_depthweighted': True}
-# opt = opt_out(data, **optimization_options)
+optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 5,
+                        'solver': 'ipopt', 'method': 'grad',
+                        't_ind': 30, 't_int': 1, 'sigma': 1, 'flag_depthweighted': True}
+opt = opt_out(data, **optimization_options)
+opt.set_optimization_variables_thesis()
+opt.add_tv_mask_costs_constraints()
 # wform = opt.optimize_waveform()
 # wform = ca.DM(wform).full().flatten()
 # plt.plot(wform)

@@ -4,6 +4,7 @@ Create attributes for the localization framework
 # Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
 # License:
 import numpy as np
+from scipy.spatial.distance import cdist
 
 
 class data_out(object):
@@ -21,8 +22,10 @@ class data_out(object):
                         'p_jlen': 2,
                         'p_erad': 5,
                         'p_maxd': 55,
+                        't_ind': 0,
                         }
         self.options.update(kwargs)
+        self.t_ind = self.options['t_ind']
         print 'Parameter options:', self.options
         if kwargs.get('voxels') is not None:
             self.voxels = kwargs.get('voxels')
@@ -166,6 +169,10 @@ class data_out(object):
         """
         evaluate the localization
         """
+        if not self.res.any():
+            "You don't have a reconstruction!"
+        if not self.data.cell_pos.any():
+            "You don't have a ground truth (data.cell_pos)!"
         data = self.data
         # mask reconstruction volume
         vx, vy, vz = self.voxels
@@ -175,8 +182,12 @@ class data_out(object):
         xmin, xmax = np.min(vx), np.max(vx)
         ymin, ymax = np.min(vy), np.max(vy)
         zmin, zmax = np.min(vz), np.max(vz)
-        ind = ((xmin <= data.cell_pos[:, 0]) & (xmax >= data.cell_pos[:, 0]) &
-               (ymin <= data.cell_pos[:, 1]) & (ymax >= data.cell_pos[:, 1]) &
-               (zmin <= data.cell_pos[:, 2]) & (zmax >= data.cell_pos[:, 2]))
-        inds.nonzero()[0].shape
-        return ind
+        ind_cell = ((xmin <= data.cell_pos[:, 0]) & (xmax >= data.cell_pos[:, 0]) &
+                   (ymin <= data.cell_pos[:, 1]) & (ymax >= data.cell_pos[:, 1]) &
+                   (zmin <= data.cell_pos[:, 2]) & (zmax >= data.cell_pos[:, 2]))
+        vis_cell_pos = data.cell_pos[ind_cell.nonzero()[0],:]
+        ind_rec = self.xres.nonzero()[0]
+        rec_pos = self.voxels.reshape(3,-1).T[ind_rec,:]
+        closest_ind_to_cell = np.argmin(cdist(vis_cell_pos,rec_pos),1)
+        closest_ind_to_rec = np.argmin(cdist(vis_cell_pos,rec_pos),0)
+        return self.xres[closest_ind_to_cell]-data.cell_csd[ind_cell,self.t_ind]

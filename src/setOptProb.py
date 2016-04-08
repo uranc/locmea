@@ -42,6 +42,7 @@ class opt_out(data_out):
             self.fwd = np.dot(fwd, dw)
         else:
             self.fwd = ca.MX(fwd)
+
     def set_optimization_variables_slack(self):
         """
         Variables for the lifted version
@@ -100,6 +101,7 @@ class opt_out(data_out):
                               ca.dot(self.fwd[i, :], self.x[:, ti]))
                 self.lbg.append(0)
                 self.ubg.append(0)
+
     def add_l1_costs_constraints_slack(self):
         """
         add slack l1 constraints with lifting variables
@@ -118,11 +120,12 @@ class opt_out(data_out):
             self.ubg.append(0.)
             self.ubg.append(0.)
             self.ubg.append(0.)
-    def cmp_dx(self, i, j, k, t, h=1.):
+
+    def cmp_dx(self, smooth_entity, i, j, k, t, h=1.):
         """
         cmp_dx
         """
-        x = self.x
+        x = smooth_entity
         vx, vy, vz = self.voxels
         ni, nj, nk = vx.shape
         ind0 = np.ravel_multi_index((i, j, k), vx.shape)
@@ -156,11 +159,11 @@ class opt_out(data_out):
                   1*(x[ind2, t] - x[ind_2, t]))/(12*h)
         return dx
 
-    def cmp_dy(self, i, j, k, t, h=1.):
+    def cmp_dy(self, smooth_entity, i, j, k, t, h=1.):
         """
         cmp_dy
         """
-        x = self.x
+        x = smooth_entity
         vx, vy, vz = self.voxels
         ni, nj, nk = vx.shape
         ind0 = np.ravel_multi_index((i, j, k), vx.shape)
@@ -201,11 +204,11 @@ class opt_out(data_out):
                       1*(x[ind2, t] - x[ind_2, t]))/(12*h)
         return dy
 
-    def cmp_dz(self, i, j, k, t, h=1.):
+    def cmp_dz(self, smooth_entity, i, j, k, t, h=1.):
         """
         cmp_dz
         """
-        x = self.x
+        x = smooth_entity
         vx, vy, vz = self.voxels
         ni, nj, nk = vx.shape
         ind0 = np.ravel_multi_index((i, j, k), vx.shape)
@@ -239,12 +242,12 @@ class opt_out(data_out):
                   1*(x[ind2, t] - x[ind_2, t]))/(12*h)
         return dz
 
-    def cmp_gradient(self, flag_tmp_smooth=False, h=1., flag_second=True):
+    def cmp_gradient(self, smooth_entity, flag_tmp_smooth=False, h=1., flag_second=True):
         """
         <F7>cmp_gradient
         """
         # initials
-        x = self.x
+        x = smooth_entity
         vx, vy, vz = self.voxels
         ni, nj, nk = vx.shape
         nv = ni * nj * nk
@@ -260,15 +263,14 @@ class opt_out(data_out):
                     for k in range(nk):
                         ind = np.ravel_multi_index((i, j, k), vx.shape)
                         if ind == 0:
-                            grad_mtr = ca.sumRows(
-                                ca.sumRows(self.cmp_dx(i, j, k, t, h))**2 +
-                                ca.sumRows(self.cmp_dy(i, j, k, t, h))**2 +
-                                ca.sumRows(self.cmp_dz(i, j, k, t, h))**2)
+                            grad_mtr = sum([sum([self.cmp_dx(smooth_entity, i, j, k, t, h)])**2 +
+                                           sum([self.cmp_dy(smooth_entity, i, j, k, t, h)])**2 +
+                                           sum([self.cmp_dz(smooth_entity, i, j, k, t, h)])**2])
                         else:
-                            grad_mtr = ca.vertcat(grad_mtr, ca.sumRows(
-                                ca.sumRows(self.cmp_dx(i, j, k, t, h))**2 +
-                                ca.sumRows(self.cmp_dy(i, j, k, t, h))**2 +
-                                ca.sumRows(self.cmp_dz(i, j, k, t, h))**2))
+                            grad_mtr = ca.vertcat(grad_mtr, sum([
+                                sum([self.cmp_dx(smooth_entity, i, j, k, t, h)])**2 +
+                                sum([self.cmp_dy(smooth_entity, i, j, k, t, h)])**2 +
+                                sum([self.cmp_dz(smooth_entity, i, j, k, t, h)])**2]))
         if flag_tmp_smooth:
             # compute temporal gradient
             print "Temporal smoothness enforced."
@@ -369,25 +371,94 @@ class opt_out(data_out):
         self.add_data_costs_constraints_2p()
         self.add_l1_costs_constraints_2p()
         self.minimize_function()
-    def add_gradient_costs_constraints(self):
-        self.grad = self.cmp_gradient()
-        # ################## #
-        # Objective function #
-        # ################## #
+
+    def set_optimization_variables_thesis(self):
+        """
+        thesis implementation
+        """
+        self.w = struct_symMX([entry("a", shape=(self.x_size,self.t_int)),
+                               entry("m", shape=(self.x_size)),
+                               entry("s", shape=(self.x_size,3)),
+                               entry("ys", shape=(self.y.shape))])
+        self.a, self.m, self.s, self.ys = self.w[...]
         self.g = []
-        # bounds
         self.lbg = []
         self.ubg = []
-        for j in range(self.x.shape[0]):
-            # gradient
-            self.g.append(self.grad[j])
+        self.f = 0
+        self.lbx = self.w(-ca.inf)
+        self.ubx = self.w(ca.inf)
+        self.lbx['m'] = 0
+        self.ubx['m'] = 1
+
+    def add_data_costs_constraints_thesis(self):
+        """
+        Computes objective function f
+        With lifting variable ys constraints
+        """
+        for i in range(self.y.shape[0]):
+            for ti in range(self.t_int):
+                self.f += (self.y[i, ti] - self.ys[i, ti])**2
+                self.g.append(self.ys[i, ti] -
+                              ca.dot(self.fwd[i, :], (self.a[:, ti]).T))
+                self.lbg.append(0)
+                self.ubg.append(0)
+
+    def add_l1_costs_constraints(self):
+        """
+        add slack l1 constraints with lifting variables
+        """
+        for j in range(self.m.shape[0]):
+            self.f += self.sigma*(self.m[j])
+
+    def add_background_costs_constraints(self):
+        """
+        add background constraints with lifting variables
+        """
+        for b in range(self.m.shape[0]):
+            tmp = 0
+            for tb in range(self.t_int):
+                    tmp += self.a[b,tb]**2
+            self.g.append(tmp*self.m[b])
+            self.lbg.append(0)
+            self.ubg.append(0)
+
+    def add_tv_mask_costs_constraints(self):
+        """
+        add smoothness constraints with lifting variables
+        """
+        grad_m = ca.sqrt(self.cmp_gradient(self.m))
+        for cm in range(self.m.shape[0]):
+            self.g.append(grad_m[cm])
             self.lbg.append(0)
             self.ubg.append(5)
+
+    def add_smoothness_costs_constraints(self):
+        """
+        add smoothness constraints with lifting variables
+        """
+        for b in range(self.m.shape[0]):
+            tmp = 0
+            for tb in range(self.t_int):
+                    tmp += self.a[b,tb]**2
+            self.g.append(tmp*self.m[b])
+            self.lbg.append(0)
+            self.ubg.append(5)
+
+    def solve_ipopt_multi_measurement_thesis(self):
+        """
+        Reform source space x as the difference of x+ - x-
+        """
+        self.set_optimization_variables_thesis()
+        self.add_data_costs_constraints_thesis()
+        self.add_l1_costs_constraints_thesis()
+        self.minimize_function()
+
     def initialization(self):
         """
         initialization for the optimization problem
         """
         self.g.append()
+
     @ca.pycallback
     def alternating_optimization(self):
         '''
