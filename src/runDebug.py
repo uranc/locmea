@@ -32,7 +32,9 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 5,
                         't_ind': 30, 't_int': 1, 'sigma': 1, 'flag_depthweighted': True}
 opt = opt_out(data, **optimization_options)
 opt.set_optimization_variables_thesis()
-opt.add_tv_mask_costs_constraints()
+#opt.add_tv_mask_costs_constraints()
+#opt.add_smoothness_costs_constraints()
+opt.add_smoothness_costs_constraints()
 # wform = opt.optimize_waveform()
 # wform = ca.DM(wform).full().flatten()
 # plt.plot(wform)

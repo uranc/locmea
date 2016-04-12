@@ -7,7 +7,6 @@ from setInvProb import data_out
 import casadi as ca
 import numpy as np
 from casadi.tools import struct_symMX, entry, repeated
-
 class opt_out(data_out):
     """
     Class for the optimization problem
@@ -263,14 +262,14 @@ class opt_out(data_out):
                     for k in range(nk):
                         ind = np.ravel_multi_index((i, j, k), vx.shape)
                         if ind == 0:
-                            grad_mtr = sum([sum([self.cmp_dx(smooth_entity, i, j, k, t, h)])**2 +
-                                           sum([self.cmp_dy(smooth_entity, i, j, k, t, h)])**2 +
-                                           sum([self.cmp_dz(smooth_entity, i, j, k, t, h)])**2])
+                            grad_mtr = [sum([self.cmp_dx(smooth_entity, i, j, k, t, h)]),
+                                        sum([self.cmp_dy(smooth_entity, i, j, k, t, h)]),
+                                        sum([self.cmp_dz(smooth_entity, i, j, k, t, h)])]
                         else:
-                            grad_mtr = ca.vertcat(grad_mtr, sum([
-                                sum([self.cmp_dx(smooth_entity, i, j, k, t, h)])**2 +
-                                sum([self.cmp_dy(smooth_entity, i, j, k, t, h)])**2 +
-                                sum([self.cmp_dz(smooth_entity, i, j, k, t, h)])**2]))
+                            grad_mtr = ca.horzcat(grad_mtr, 
+                                ca.vertcat(sum([self.cmp_dx(smooth_entity, i, j, k, t, h)]),
+                                sum([self.cmp_dy(smooth_entity, i, j, k, t, h)]),
+                                sum([self.cmp_dz(smooth_entity, i, j, k, t, h)])))
         if flag_tmp_smooth:
             # compute temporal gradient
             print "Temporal smoothness enforced."
@@ -426,23 +425,43 @@ class opt_out(data_out):
         """
         add smoothness constraints with lifting variables
         """
-        grad_m = ca.sqrt(self.cmp_gradient(self.m))
+        grad_m = self.cmp_gradient(self.m)
         for cm in range(self.m.shape[0]):
-            self.g.append(grad_m[cm])
+            self.g.append(ca.sqrt(ca.dot(grad_m[:,cm],grad_m[:,cm])))
             self.lbg.append(0)
             self.ubg.append(5)
 
     def add_smoothness_costs_constraints(self):
         """
         add smoothness constraints with lifting variables
+        """ 
+        for tb in range(self.t_int):
+            tmp = self.cmp_gradient(self.a[:,tb])
+            for b in range(self.x_size):
+                self.g.append(ca.dot(self.s[b,:].T,tmp[:,b])*self.m[b])
+                self.lbg.append(0)
+                self.ubg.append(5)
+
+    def add_s_magnitude_costs_constraints(self):
         """
-        for b in range(self.m.shape[0]):
-            tmp = 0
-            for tb in range(self.t_int):
-                    tmp += self.a[b,tb]**2
-            self.g.append(tmp*self.m[b])
-            self.lbg.append(0)
-            self.ubg.append(5)
+        add smoothness constraints with lifting variables
+        """
+        for b in range(self.x_size):
+            self.g.append(ca.dot(self.s[b,:],self.s[b,:])-1)
+            self.lbg.append(1)
+            self.ubg.append(1)
+
+    def add_s_smooth_costs_constraints(self):
+        """
+        add smoothness constraints with lifting variables
+        """
+        grad_s = 0
+        for s in range(self.s.shape[1]):
+            grad_s += self.cmp_gradient[:,s]
+        for b in range(self.s.shape[0]):
+        self.g.append(ca.dot(self.s[b,:],self.s[b,:])-1)
+        self.lbg.append(1)
+        self.ubg.append(1)
 
     def solve_ipopt_multi_measurement_thesis(self):
         """
