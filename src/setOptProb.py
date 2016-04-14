@@ -459,7 +459,7 @@ class opt_out(data_out):
         for s in range(self.s.shape[1]):
             grad_s += self.cmp_gradient[:,s]
         for b in range(self.s.shape[0]):
-        self.g.append(ca.dot(self.s[b,:],self.s[b,:])-1)
+            self.g.append(ca.dot(self.s[b,:],self.s[b,:])-1)
         self.lbg.append(1)
         self.ubg.append(1)
 
