@@ -27,14 +27,14 @@ data = data_in(file_name, **data_options)
 # loc.xres = loc.res[:, t_ind]
 # ccell = loc.evaluate_localization()
 # Optimize
-optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 5,
+optimization_options = {'p_vres':20, 'p_jlen':0, 'p_erad': 5,
                         'solver': 'ipopt', 'method': 'grad',
-                        't_ind': 30, 't_int': 1, 'sigma': 1, 'flag_depthweighted': True}
+                        't_ind': 1, 't_int': 1, 'sigma': 1, 'flag_depthweighted': True}
 opt = opt_out(data, **optimization_options)
-opt.set_optimization_variables_thesis()
+#opt.set_optimization_variables_thesis()
 #opt.add_tv_mask_costs_constraints()
 #opt.add_smoothness_costs_constraints()
-opt.add_smoothness_costs_constraints()
+#opt.add_smoothness_costs_constraints()
 # wform = opt.optimize_waveform()
 # wform = ca.DM(wform).full().flatten()
 # plt.plot(wform)
@@ -50,7 +50,7 @@ opt.add_smoothness_costs_constraints()
 # opt.xres = opt.xress[:,:,:,t_ind]
 
 # 2p
-# opt.solve_ipopt_multi_measurement_2p()
+opt.solve_ipopt_multi_measurement_slack()
 # opt.xres_pos = opt.res["x"].full()[:opt.x_size*2*opt.t_int]
 # opt.xres_neg = opt.res["x"].full()[opt.x_size*2*opt.t_int:opt.x_size*4*opt.t_int]
 # opt.xress = ca.vertcat(opt.xres_pos[:opt.x_size*opt.t_int] - 

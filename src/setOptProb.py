@@ -302,7 +302,7 @@ class opt_out(data_out):
         res = root_solver(**args)
         return [F([res["x"], tlin[i]])[0] for i in range(fit_data.shape[0])]
 
-    def solve_ipopt_multi_measurement(self):
+    def solve_ipopt_multi_measurement_slack(self):
         """
         MMV L1 
         """
@@ -455,9 +455,9 @@ class opt_out(data_out):
         """
         add smoothness constraints with lifting variables
         """
-        grad_s = 0
+        grad_s = []
         for s in range(self.s.shape[1]):
-            grad_s += self.cmp_gradient[:,s]
+            grad_s = ca.vertcat(grad_s, self.cmp_gradient[:,s])
         for b in range(self.s.shape[0]):
             self.g.append(ca.dot(self.s[b,:],self.s[b,:])-1)
         self.lbg.append(1)
