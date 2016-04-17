@@ -17,7 +17,7 @@ class opt_out(data_out):
         # Options for optimization #
         # ######################## #
         data_out.__init__(self, *args, **kwargs)
-        self.opt_opt = {'solver': 'ipopt', 'datafile_name': 'output_file.dat', 'callback_steps': 5,
+        self.opt_opt = {'solver': 'ipopt', 'datafile_name': 'output_file.dat', 'callback_steps': 1,
                         'method': 'grad','t_ind': 30, 't_int': 1, 'flag_depthweighted': True, 'sigma': 0.1}
         self.opt_opt.update(kwargs)
         self.solver = self.opt_opt['solver']
@@ -74,7 +74,6 @@ class opt_out(data_out):
                      # "compute_red_hessian": "yes",
                      # "ipopt.linear_solver": 'MA97',
                      "ipopt.hessian_approximation": "limited-memory"}
-        # "iteration_callback_step": self.plotUpdateSteps}
         # Create solver
         print "Initializing the solver"
         self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
@@ -86,6 +85,8 @@ class opt_out(data_out):
         self.args["ubx"] = self.ubx
         self.args["lbg"] = self.lbg
         self.args["ubg"] = self.ubg
+        self.args["iteration_callback"] = self.alternating_optimization(self.nlp)
+        #self.args["iteration_callback_step"] = self.callback_steps
         self.res = self.solver(**self.args)
 
     def add_data_costs_constraints_slack(self):
@@ -275,14 +276,14 @@ class opt_out(data_out):
             print "Temporal smoothness enforced."
         return grad_mtr
 
-    def optimize_waveform(self):
+    def optimize_waveform(self, x):
         """
         fit waveform to a bimodal alpha function
         """
         srate = self.data.srate
-        fit_data = self.data.cell_csd[0, 30:]
-        tlin = ca.MX(np.linspace(
-                     0, (fit_data.shape[0]-1)/srate, fit_data.shape[0]))
+        #fit_data = self.data.cell_csd[0, 30:]
+        fit_data = x
+        tlin = np.linspace(0, (fit_data.shape[0]-1)/srate, fit_data.shape[0])
         t = ca.MX.sym("t")
         t1 = ca.MX.sym("t1")
         t2 = ca.MX.sym("t2")
@@ -290,9 +291,9 @@ class opt_out(data_out):
         r = ca.vertcat(t1, t2, a)
         f = (ca.exp(-t*t1)*t*t1*t1 - ca.exp(-t*t2)*t*t2*t2)*a
         F = ca.Function("F", [r, t], [f])
-        Y = [(fit_data[i]-F(r, tlin[i])[0])**2
+        Y = [(fit_data[i]-F(r, tlin[i]))**2
              for i in range(fit_data.shape[0])]
-        nlp_root = {"x": r, "f": sum(Y)**(1./2)}
+        nlp_root = {"x": r, "f": sum(Y)}
         root_solver = ca.nlpsol("solver", "ipopt", nlp_root)
         r0 = [1.e3, 2.e3, 1.]
         args = {}
@@ -482,10 +483,12 @@ class opt_out(data_out):
         self.g.append()
 
     @ca.pycallback
-    def alternating_optimization(self):
+    def alternating_optimization(self, f):
         '''
         hello there
         '''
-        x = f.getOutput("x")[:self.x_size*self.t_int]
-        self.optimize_waveform()
-        return 0
+        print 'hello'
+        # a_tmp = f.getOutput("x")[:self.x_size*self.t_int].reshape(self.s.shape)
+        # for px in range(self.a.shape[0]):
+        #     f.getOutput("x")[:self.x_size*self.t_int]
+        #     tmp_res = self.optimize_waveform(a_tmp[px, :])
