@@ -287,10 +287,10 @@ class opt_out(data_out):
         t1 = ca.MX.sym("t1")
         t2 = ca.MX.sym("t2")
         a = ca.MX.sym("a")
-        r = ca.vertcat([t1, t2, a])
+        r = ca.vertcat(t1, t2, a)
         f = (ca.exp(-t*t1)*t*t1*t1 - ca.exp(-t*t2)*t*t2*t2)*a
         F = ca.Function("F", [r, t], [f])
-        Y = [(fit_data[i]-F([r, tlin[i]])[0])**2
+        Y = [(fit_data[i]-F(r, tlin[i])[0])**2
              for i in range(fit_data.shape[0])]
         nlp_root = {"x": r, "f": sum(Y)**(1./2)}
         root_solver = ca.nlpsol("solver", "ipopt", nlp_root)
@@ -300,7 +300,7 @@ class opt_out(data_out):
         args["lbx"] = ca.vertcat([-ca.inf, -ca.inf, -ca.inf])
         args["ubx"] = ca.vertcat([ca.inf, ca.inf, ca.inf])
         res = root_solver(**args)
-        return [F([res["x"], tlin[i]])[0] for i in range(fit_data.shape[0])]
+        return [F(res["x"], tlin[i]) for i in range(fit_data.shape[0])]
 
     def solve_ipopt_multi_measurement_slack(self):
         """
@@ -429,7 +429,7 @@ class opt_out(data_out):
         for cm in range(self.m.shape[0]):
             self.g.append(ca.sqrt(ca.dot(grad_m[:,cm],grad_m[:,cm])))
             self.lbg.append(0)
-            self.ubg.append(5)
+            self.ubg.append(10)
 
     def add_smoothness_costs_constraints(self):
         """
@@ -440,7 +440,7 @@ class opt_out(data_out):
             for b in range(self.x_size):
                 self.g.append(ca.dot(self.s[b,:].T,tmp[:,b])*self.m[b])
                 self.lbg.append(0)
-                self.ubg.append(5)
+                self.ubg.append(10)
 
     def add_s_magnitude_costs_constraints(self):
         """
@@ -448,20 +448,23 @@ class opt_out(data_out):
         """
         for b in range(self.x_size):
             self.g.append(ca.dot(self.s[b,:],self.s[b,:])-1)
-            self.lbg.append(1)
-            self.ubg.append(1)
+            self.lbg.append(0)
+            self.ubg.append(0)
 
     def add_s_smooth_costs_constraints(self):
         """
         add smoothness constraints with lifting variables
         """
-        grad_s = []
-        for s in range(self.s.shape[1]):
-            grad_s = ca.vertcat(grad_s, self.cmp_gradient[:,s])
+        grad = []
+        grad_x = self.cmp_gradient(self.s[:,0])
+        grad_y = self.cmp_gradient(self.s[:,1])
+        grad_z = self.cmp_gradient(self.s[:,2])
         for b in range(self.s.shape[0]):
-            self.g.append(ca.dot(self.s[b,:],self.s[b,:])-1)
-        self.lbg.append(1)
-        self.ubg.append(1)
+            self.g.append(ca.sqrt(ca.dot(grad_x[:, b],grad_x[:, b])+
+                                  ca.dot(grad_y[:, b],grad_y[:, b])+
+                                  ca.dot(grad_z[:, b],grad_z[:, b])))
+            self.lbg.append(0)
+            self.ubg.append(10)
 
     def solve_ipopt_multi_measurement_thesis(self):
         """
