@@ -16,6 +16,49 @@ from casadi.tools import struct_symMX, entry, repeated
 #         sol = f.getOutput("x")
 
 
+class MyCallback(ca.Callback):
+    def __init__(self, name, nx, ng, np, opts={}):
+        ca.Callback.__init__(self)
+
+        self.nx = nx
+        self.ng = ng
+        self.np = np
+
+        opts['input_scheme'] = ca.nlpsol_out()
+        opts['output_scheme'] = ['ret'] 
+        self.construct(name, opts)       
+    def get_n_in(self): return ca.nlpsol_n_out()
+    def get_n_out(self): return 1   
+    
+    def get_sparsity_in(self, i):
+        n = ca.nlpsol_out(i)
+        if n=='f':
+            return ca.Sparsity. scalar()
+        elif n in ('x', 'lam_x'):
+            return ca.Sparsity.dense(self.nx)
+        elif n in ('g', 'lam_g'):
+            return ca.Sparsity.dense(self.ng)
+        else:
+            return ca.Sparsity(0,0)
+
+    def eval(self, arg):
+        print 'hello'
+        darg = {}
+        for (i,s) in enumerate(ca.nlpsol_out()): darg[s] = arg[i]
+        sol = darg['x']
+        print sol
+    # def __call__(self, f):
+    #     '''
+    #     hello there
+    #     '''
+    #     print 'hellosss'
+    #     #print f.getOutput("x")
+        # a_tmp = f.getOutput("x")[:self.x_size*self.t_int].reshape(self.s.shape)
+        # for px in range(self.a.shape[0]):
+        #     f.getOutput("x")[:self.x_size*self.t_int]
+        #     tmp_res = self.optimize_waveform(a_tmp[px, :])
+        return [0]
+
 class opt_out(data_out):
     """
     Class for the optimization problem
@@ -27,7 +70,7 @@ class opt_out(data_out):
         # ######################## #
         data_out.__init__(self, *args, **kwargs)
         self.opt_opt = {'solver': 'ipopt', 'datafile_name': 'output_file.dat', 'callback_steps': 1,
-                        'method': 'grad','t_ind': 30, 't_int': 1, 'flag_depthweighted': True, 'sigma': 0.1,
+                        'method': 'not_thesis','t_ind': 30, 't_int': 1, 'flag_depthweighted': True, 'sigma': 0.1,
                         'flag_lift_mask': True}
         self.opt_opt.update(kwargs)
         self.solver = self.opt_opt['solver']
@@ -35,7 +78,7 @@ class opt_out(data_out):
         self.callback_steps = self.opt_opt['callback_steps']
         self.t_ind = self.opt_opt['t_ind']
         self.t_int = self.opt_opt['t_int']
-        self.sigma = self.opt_opt['sigma']
+        self.sigma_value = self.opt_opt['sigma']
         self.method = self.opt_opt['method']
         self.flag_depthweighted = self.opt_opt['flag_depthweighted']
         self.flag_lift_mask = self.opt_opt['flag_lift_mask']
@@ -53,17 +96,44 @@ class opt_out(data_out):
         else:
             self.fwd = ca.MX(fwd)
 
-    @ca.pycallback
-    def alternating_optimization(self, f):
-        '''
-        hello there
-        '''
-        print 'hello'
-        # a_tmp = f.getOutput("x")[:self.x_size*self.t_int].reshape(self.s.shape)
-        # for px in range(self.a.shape[0]):
-        #     f.getOutput("x")[:self.x_size*self.t_int]
-        #     tmp_res = self.optimize_waveform(a_tmp[px, :])
-        return 0
+    def minimize_function(self):
+        """
+        Function where the NLP is initialized and solved
+        Regardless of the model made
+        """
+        self.g = ca.vertcat(*self.g)
+        self.lbg = ca.vertcat(*self.lbg)
+        self.ubg = ca.vertcat(*self.ubg)
+        # Initialize at 0
+        self.w0 = self.w(0)
+        if self.method == 'thesis':
+            self.w0['sigma'] = self.sigma_value
+        # Create NLP
+        if self.method == 'thesis':
+            self.nlp = {"x": self.w, "f": self.f, "g": self.g}
+        else:
+            self.nlp = {"x": self.w, "f": self.f, "g": self.g}
+        # NLP solver options
+        self.mycallback = MyCallback('mycallback', self.w.shape[0], self.g.shape[0], 0)
+        self.opts = {"ipopt.max_iter": 100000,
+                     # "compute_red_hessian": "yes",
+                     # "ipopt.linear_solver": 'MA97',
+                     "iteration_callback": self.mycallback,
+                     # "iteration_callback": self.alternating_optimization,
+                     "iteration_callback_step": self.callback_steps,
+                     "ipopt.hessian_approximation": "limited-memory"}
+        # Create solver
+        print "Initializing the solver"
+        self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
+        #self.solver = ca.qpsol("solver", "qpoases", self.nlp,{'sparse':True})
+        # Solve NLP
+        self.args = {}
+        self.args["x0"] = self.w0
+        self.args["lbx"] = self.lbx
+        self.args["ubx"] = self.ubx
+        self.args["lbg"] = self.lbg
+        self.args["ubg"] = self.ubg
+        self.res = self.solver(**self.args)
 
     def set_optimization_variables_slack(self):
         """
@@ -79,39 +149,6 @@ class opt_out(data_out):
         self.f = 0
         self.lbx = self.w(-ca.inf)
         self.ubx = self.w(ca.inf)
-
-    def minimize_function(self):
-        """
-        Function where the NLP is initialized and solved
-        Regardless of the model made
-        """
-        self.g = ca.vertcat(*self.g)
-        self.lbg = ca.vertcat(*self.lbg)
-        self.ubg = ca.vertcat(*self.ubg)
-        # Initialize at 0
-        self.w0 = self.w(0)
-        # Create NLP
-        self.nlp = {"x": self.w, "f": self.f, "g": self.g}
-        # NLP solver options
-        self.opts = {"ipopt.max_iter": 100000,
-                     # "compute_red_hessian": "yes",
-                     # "ipopt.linear_solver": 'MA97',
-                     #"iteration_callback": MyCallback(),
-                     # "iteration_callback": self.alternating_optimization,
-                     # "iteration_callback_step": self.callback_steps,
-                     "ipopt.hessian_approximation": "limited-memory"}
-        # Create solver
-        print "Initializing the solver"
-        self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
-        #self.solver = ca.qpsol("solver", "qpoases", self.nlp,{'sparse':True})
-        # Solve NLP
-        self.args = {}
-        self.args["x0"] = self.w0
-        self.args["lbx"] = self.lbx
-        self.args["ubx"] = self.ubx
-        self.args["lbg"] = self.lbg
-        self.args["ubg"] = self.ubg
-        self.res = self.solver(**self.args)
 
     def add_data_costs_constraints_slack(self):
         """
@@ -134,7 +171,7 @@ class opt_out(data_out):
             tmp = 0
             for tj in range(self.t_int):
                 tmp += self.w['x'][j,tj]**2
-            self.f += self.sigma*(self.xs[j])
+            self.f += self.sigma_value*(self.xs[j])
             self.g.append(-self.xs[j]-tmp)
             self.g.append(-self.xs[j]+tmp)
             self.g.append(-self.xs[j])
@@ -403,8 +440,28 @@ class opt_out(data_out):
         self.w = struct_symMX([entry("a", shape=(self.x_size,self.t_int)),
                                entry("m", shape=(self.x_size)),
                                entry("s", shape=(self.x_size,3)),
-                               entry("ys", shape=(self.y.shape))])
-        self.a, self.m, self.s, self.ys = self.w[...]
+                               entry("ys", shape=(self.y.shape)),
+                               entry("sigma",shape=(1,1))])
+        self.a, self.m, self.s, self.ys, self.sigma = self.w[...]
+        self.g = []
+        self.lbg = []
+        self.ubg = []
+        self.f = 0
+        self.lbx = self.w(-ca.inf)
+        self.ubx = self.w(ca.inf)
+        if not self.flag_lift_mask:
+            self.lbx['m'] = 0
+            self.ubx['m'] = 1
+
+    def set_optimization_variables_only_mask_thesis(self):
+        """
+        thesis implementation
+        """
+        self.w = struct_symMX([entry("a", shape=(self.x_size,self.t_int)),
+                               entry("m", shape=(self.x_size)),
+                               entry("ys", shape=(self.y.shape)),
+                               entry("sigma",shape=(1,1))])
+        self.a, self.m, self.ys, self.sigma = self.w[...]
         self.g = []
         self.lbg = []
         self.ubg = []
@@ -424,7 +481,7 @@ class opt_out(data_out):
             for ti in range(self.t_int):
                 self.f += (self.y[i, ti] - self.ys[i, ti])**2
                 self.g.append(self.ys[i, ti] -
-                              ca.dot(self.fwd[i, :], (self.a[:, ti])))
+                              ca.dot(self.fwd[i, :], (self.a[:, ti]*self.m)))
                 self.lbg.append(0)
                 self.ubg.append(0)
 
@@ -438,6 +495,9 @@ class opt_out(data_out):
                 self.g.append(self.m[j]*(1-self.m[j]))
                 self.lbg.append(0)
                 self.ubg.append(0)
+            self.g.append(self.sigma)
+            self.lbg.append(self.sigma_value)
+            self.ubg.append(self.sigma_value)
 
     def add_background_costs_constraints_thesis(self):
         """
@@ -459,7 +519,7 @@ class opt_out(data_out):
         for cm in range(self.m.shape[0]):
             self.g.append(ca.sqrt(ca.dot(grad_m[:,cm],grad_m[:,cm])))
             self.lbg.append(0)
-            self.ubg.append(10)
+            self.ubg.append(50)
 
     def add_smoothness_costs_constraints_thesis(self):
         """
@@ -470,16 +530,16 @@ class opt_out(data_out):
             for b in range(self.x_size):
                 self.g.append(ca.dot(self.s[b,:].T,tmp[:,b])*self.m[b])
                 self.lbg.append(0)
-                self.ubg.append(10)
+                self.ubg.append(50)
 
     def add_s_magnitude_costs_constraints_thesis(self):
         """
         add smoothness constraints with lifting variables
         """
         for b in range(self.x_size):
-            self.g.append(ca.dot(self.s[b,:],self.s[b,:])-1)
-            self.lbg.append(0)
-            self.ubg.append(0)
+            self.g.append(ca.dot(self.s[b,:],self.s[b,:]))
+            self.lbg.append(1)
+            self.ubg.append(1)
 
     def add_s_smooth_costs_constraints_thesis(self):
         """
@@ -494,20 +554,21 @@ class opt_out(data_out):
                                   ca.dot(grad_y[:, b],grad_y[:, b])+
                                   ca.dot(grad_z[:, b],grad_z[:, b])))
             self.lbg.append(0)
-            self.ubg.append(10)
+            self.ubg.append(50)
 
     def solve_ipopt_multi_measurement_thesis(self):
         """
         Reform source space x as the difference of x+ - x-
         """
-        self.set_optimization_variables_thesis()
+        self.set_optimization_variables_only_mask_thesis()
+        #self.set_optimization_variables_thesis()
         self.add_data_costs_constraints_thesis()
         self.add_l1_costs_constraints_thesis()
         self.add_background_costs_constraints_thesis()
         self.add_tv_mask_costs_constraints_thesis()
-        self.add_smoothness_costs_constraints_thesis()
-        self.add_s_magnitude_costs_constraints_thesis()
-        self.add_s_smooth_costs_constraints_thesis()
+        #self.add_smoothness_costs_constraints_thesis()
+        #self.add_s_magnitude_costs_constraints_thesis()
+        #self.add_s_smooth_costs_constraints_thesis()
         self.minimize_function()
 
     def initialization(self):

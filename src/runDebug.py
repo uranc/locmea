@@ -29,7 +29,7 @@ data = data_in(file_name, **data_options)
 # Optimize
 optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 5,
                         'solver': 'ipopt', 'method': 'grad',
-                        't_ind': 30, 't_int': 2, 'sigma': 1e-2, 'flag_depthweighted': True}
+                        't_ind': 30, 't_int': 1, 'sigma': 1e-2, 'flag_depthweighted': True}
 opt = opt_out(data, **optimization_options)
 # opt.set_optimization_variables_thesis()
 #grd = opt.add_s_smooth_costs_constraints()
@@ -52,8 +52,8 @@ opt = opt_out(data, **optimization_options)
 # opt.xres = opt.xress[:,:,:,t_ind]
 
 # 2p
-#opt.solve_ipopt_multi_measurement_slack()
-opt.solve_ipopt_multi_measurement_thesis()
+opt.solve_ipopt_multi_measurement_slack()
+# opt.solve_ipopt_multi_measurement_thesis()
 # opt.xres_pos = opt.res["x"].full()[:opt.x_size*2*opt.t_int]
 # opt.xres_neg = opt.res["x"].full()[opt.x_size*2*opt.t_int:opt.x_size*4*opt.t_int]
 # opt.xress = ca.vertcat(opt.xres_pos[:opt.x_size*opt.t_int] - 
@@ -66,5 +66,5 @@ opt.solve_ipopt_multi_measurement_thesis()
 
 
 # visualize
-vis = visualize(data=data, loc=opt)
-vis.show_snapshot()
+# vis = visualize(data=data, loc=opt)
+# vis.show_snapshot()
