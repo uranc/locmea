@@ -95,8 +95,8 @@ class opt_out(data_out):
                      # "compute_red_hessian": "yes",
                      # "ipopt.linear_solver": 'MA97',
                      #"iteration_callback": MyCallback(),
-                     "iteration_callback": self.alternating_optimization,
-                     "iteration_callback_step": self.callback_steps,
+                     # "iteration_callback": self.alternating_optimization,
+                     # "iteration_callback_step": self.callback_steps,
                      "ipopt.hessian_approximation": "limited-memory"}
         # Create solver
         print "Initializing the solver"
@@ -287,12 +287,12 @@ class opt_out(data_out):
                         if ind == 0:
                             grad_mtr = [sum([self.cmp_dx(smooth_entity, i, j, k, t, h)]),
                                         sum([self.cmp_dy(smooth_entity, i, j, k, t, h)]),
-                                        sum([self.cmp_dz(smooth_entity, i, j, k, t, h)])]
+                                        sum([self.cmp_dz(smooth_entity, i, j, k, t, h)])]+1e-20
                         else:
                             grad_mtr = ca.horzcat(grad_mtr, 
                                 ca.vertcat(sum([self.cmp_dx(smooth_entity, i, j, k, t, h)]),
                                 sum([self.cmp_dy(smooth_entity, i, j, k, t, h)]),
-                                sum([self.cmp_dz(smooth_entity, i, j, k, t, h)])))
+                                sum([self.cmp_dz(smooth_entity, i, j, k, t, h)]))+1e-20)
         if flag_tmp_smooth:
             # compute temporal gradient
             print "Temporal smoothness enforced."
@@ -421,7 +421,7 @@ class opt_out(data_out):
             for ti in range(self.t_int):
                 self.f += (self.y[i, ti] - self.ys[i, ti])**2
                 self.g.append(self.ys[i, ti] -
-                              ca.dot(self.fwd[i, :], (self.a[:, ti]).T))
+                              ca.dot(self.fwd[i, :], (self.a[:, ti])))
                 self.lbg.append(0)
                 self.ubg.append(0)
 

@@ -29,7 +29,7 @@ data = data_in(file_name, **data_options)
 # Optimize
 optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 5,
                         'solver': 'ipopt', 'method': 'grad',
-                        't_ind': 1, 't_int': 1, 'sigma': 1, 'flag_depthweighted': True}
+                        't_ind': 30, 't_int': 2, 'sigma': 1, 'flag_depthweighted': True}
 opt = opt_out(data, **optimization_options)
 # opt.set_optimization_variables_thesis()
 #grd = opt.add_s_smooth_costs_constraints()
