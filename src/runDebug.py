@@ -52,7 +52,8 @@ opt = opt_out(data, **optimization_options)
 # opt.xres = opt.xress[:,:,:,t_ind]
 
 # 2p
-opt.solve_ipopt_multi_measurement_slack()
+#opt.solve_ipopt_multi_measurement_slack()
+opt.solve_ipopt_multi_measurement_thesis()
 # opt.xres_pos = opt.res["x"].full()[:opt.x_size*2*opt.t_int]
 # opt.xres_neg = opt.res["x"].full()[opt.x_size*2*opt.t_int:opt.x_size*4*opt.t_int]
 # opt.xress = ca.vertcat(opt.xres_pos[:opt.x_size*opt.t_int] - 

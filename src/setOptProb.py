@@ -7,6 +7,15 @@ from setInvProb import data_out
 import casadi as ca
 import numpy as np
 from casadi.tools import struct_symMX, entry, repeated
+
+# @ca.pycallback
+# class MyCallback:
+#     def __init__(self):
+#         print 'hellooo'
+#     def __call__(self,f,*args):
+#         sol = f.getOutput("x")
+
+
 class opt_out(data_out):
     """
     Class for the optimization problem
@@ -42,6 +51,18 @@ class opt_out(data_out):
         else:
             self.fwd = ca.MX(fwd)
 
+    @ca.pycallback
+    def alternating_optimization(self, f):
+        '''
+        hello there
+        '''
+        print 'hello'
+        # a_tmp = f.getOutput("x")[:self.x_size*self.t_int].reshape(self.s.shape)
+        # for px in range(self.a.shape[0]):
+        #     f.getOutput("x")[:self.x_size*self.t_int]
+        #     tmp_res = self.optimize_waveform(a_tmp[px, :])
+        return 0
+
     def set_optimization_variables_slack(self):
         """
         Variables for the lifted version
@@ -73,6 +94,9 @@ class opt_out(data_out):
         self.opts = {"ipopt.max_iter": 100000,
                      # "compute_red_hessian": "yes",
                      # "ipopt.linear_solver": 'MA97',
+                     #"iteration_callback": MyCallback(),
+                     "iteration_callback": self.alternating_optimization,
+                     "iteration_callback_step": self.callback_steps,
                      "ipopt.hessian_approximation": "limited-memory"}
         # Create solver
         print "Initializing the solver"
@@ -85,8 +109,6 @@ class opt_out(data_out):
         self.args["ubx"] = self.ubx
         self.args["lbg"] = self.lbg
         self.args["ubg"] = self.ubg
-        self.args["iteration_callback"] = self.alternating_optimization(self.nlp)
-        #self.args["iteration_callback_step"] = self.callback_steps
         self.res = self.solver(**self.args)
 
     def add_data_costs_constraints_slack(self):
@@ -403,14 +425,14 @@ class opt_out(data_out):
                 self.lbg.append(0)
                 self.ubg.append(0)
 
-    def add_l1_costs_constraints(self):
+    def add_l1_costs_constraints_thesis(self):
         """
         add slack l1 constraints with lifting variables
         """
         for j in range(self.m.shape[0]):
             self.f += self.sigma*(self.m[j])
 
-    def add_background_costs_constraints(self):
+    def add_background_costs_constraints_thesis(self):
         """
         add background constraints with lifting variables
         """
@@ -422,7 +444,7 @@ class opt_out(data_out):
             self.lbg.append(0)
             self.ubg.append(0)
 
-    def add_tv_mask_costs_constraints(self):
+    def add_tv_mask_costs_constraints_thesis(self):
         """
         add smoothness constraints with lifting variables
         """
@@ -432,7 +454,7 @@ class opt_out(data_out):
             self.lbg.append(0)
             self.ubg.append(10)
 
-    def add_smoothness_costs_constraints(self):
+    def add_smoothness_costs_constraints_thesis(self):
         """
         add smoothness constraints with lifting variables
         """ 
@@ -443,7 +465,7 @@ class opt_out(data_out):
                 self.lbg.append(0)
                 self.ubg.append(10)
 
-    def add_s_magnitude_costs_constraints(self):
+    def add_s_magnitude_costs_constraints_thesis(self):
         """
         add smoothness constraints with lifting variables
         """
@@ -452,7 +474,7 @@ class opt_out(data_out):
             self.lbg.append(0)
             self.ubg.append(0)
 
-    def add_s_smooth_costs_constraints(self):
+    def add_s_smooth_costs_constraints_thesis(self):
         """
         add smoothness constraints with lifting variables
         """
@@ -474,6 +496,11 @@ class opt_out(data_out):
         self.set_optimization_variables_thesis()
         self.add_data_costs_constraints_thesis()
         self.add_l1_costs_constraints_thesis()
+        self.add_background_costs_constraints_thesis()
+        self.add_tv_mask_costs_constraints_thesis()
+        self.add_smoothness_costs_constraints_thesis()
+        self.add_s_magnitude_costs_constraints_thesis()
+        self.add_s_smooth_costs_constraints_thesis()
         self.minimize_function()
 
     def initialization(self):
@@ -481,14 +508,3 @@ class opt_out(data_out):
         initialization for the optimization problem
         """
         self.g.append()
-
-    @ca.pycallback
-    def alternating_optimization(self, f):
-        '''
-        hello there
-        '''
-        print 'hello'
-        # a_tmp = f.getOutput("x")[:self.x_size*self.t_int].reshape(self.s.shape)
-        # for px in range(self.a.shape[0]):
-        #     f.getOutput("x")[:self.x_size*self.t_int]
-        #     tmp_res = self.optimize_waveform(a_tmp[px, :])
