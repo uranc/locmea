@@ -27,7 +27,8 @@ class opt_out(data_out):
         # ######################## #
         data_out.__init__(self, *args, **kwargs)
         self.opt_opt = {'solver': 'ipopt', 'datafile_name': 'output_file.dat', 'callback_steps': 1,
-                        'method': 'grad','t_ind': 30, 't_int': 1, 'flag_depthweighted': True, 'sigma': 0.1}
+                        'method': 'grad','t_ind': 30, 't_int': 1, 'flag_depthweighted': True, 'sigma': 0.1,
+                        'flag_lift_mask': True}
         self.opt_opt.update(kwargs)
         self.solver = self.opt_opt['solver']
         self.datafile_name = self.opt_opt['datafile_name']
@@ -37,6 +38,7 @@ class opt_out(data_out):
         self.sigma = self.opt_opt['sigma']
         self.method = self.opt_opt['method']
         self.flag_depthweighted = self.opt_opt['flag_depthweighted']
+        self.flag_lift_mask = self.opt_opt['flag_lift_mask']
         # ######################## #
         #     Problem  setup       #
         # ######################## #
@@ -285,9 +287,9 @@ class opt_out(data_out):
                     for k in range(nk):
                         ind = np.ravel_multi_index((i, j, k), vx.shape)
                         if ind == 0:
-                            grad_mtr = [sum([self.cmp_dx(smooth_entity, i, j, k, t, h)]),
-                                        sum([self.cmp_dy(smooth_entity, i, j, k, t, h)]),
-                                        sum([self.cmp_dz(smooth_entity, i, j, k, t, h)])]+1e-20
+                            grad_mtr = [sum([self.cmp_dx(smooth_entity, i, j, k, t, h)])+1e-20,
+                                        sum([self.cmp_dy(smooth_entity, i, j, k, t, h)])+1e-20,
+                                        sum([self.cmp_dz(smooth_entity, i, j, k, t, h)])+1e-20]
                         else:
                             grad_mtr = ca.horzcat(grad_mtr, 
                                 ca.vertcat(sum([self.cmp_dx(smooth_entity, i, j, k, t, h)]),
@@ -409,8 +411,9 @@ class opt_out(data_out):
         self.f = 0
         self.lbx = self.w(-ca.inf)
         self.ubx = self.w(ca.inf)
-        self.lbx['m'] = 0
-        self.ubx['m'] = 1
+        if not self.flag_lift_mask:
+            self.lbx['m'] = 0
+            self.ubx['m'] = 1
 
     def add_data_costs_constraints_thesis(self):
         """
@@ -431,6 +434,10 @@ class opt_out(data_out):
         """
         for j in range(self.m.shape[0]):
             self.f += self.sigma*(self.m[j])
+            if self.flag_lift_mask:
+                self.g.append(self.m[j]*(1-self.m[j]))
+                self.lbg.append(0)
+                self.ubg.append(0)
 
     def add_background_costs_constraints_thesis(self):
         """
