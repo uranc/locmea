@@ -42,21 +42,9 @@ class MyCallback(ca.Callback):
             return ca.Sparsity(0,0)
 
     def eval(self, arg):
-        print 'hello'
         darg = {}
         for (i,s) in enumerate(ca.nlpsol_out()): darg[s] = arg[i]
-        sol = darg['x']
-        print sol
-    # def __call__(self, f):
-    #     '''
-    #     hello there
-    #     '''
-    #     print 'hellosss'
-    #     #print f.getOutput("x")
-        # a_tmp = f.getOutput("x")[:self.x_size*self.t_int].reshape(self.s.shape)
-        # for px in range(self.a.shape[0]):
-        #     f.getOutput("x")[:self.x_size*self.t_int]
-        #     tmp_res = self.optimize_waveform(a_tmp[px, :])
+        sol = darg['x']  
         return [0]
 
 class opt_out(data_out):
@@ -114,11 +102,11 @@ class opt_out(data_out):
         else:
             self.nlp = {"x": self.w, "f": self.f, "g": self.g}
         # NLP solver options
-        self.mycallback = MyCallback('mycallback', self.w.shape[0], self.g.shape[0], 0)
+        # self.mycallback = MyCallback('mycallback', self.w.shape[0], self.g.shape[0], 0)
         self.opts = {"ipopt.max_iter": 100000,
                      # "compute_red_hessian": "yes",
                      # "ipopt.linear_solver": 'MA97',
-                     "iteration_callback": self.mycallback,
+                     # "iteration_callback": self.mycallback,
                      # "iteration_callback": self.alternating_optimization,
                      "iteration_callback_step": self.callback_steps,
                      "ipopt.hessian_approximation": "limited-memory"}
@@ -337,31 +325,127 @@ class opt_out(data_out):
             print "Temporal smoothness enforced."
         return grad_mtr
 
+    def cmp_fwd_diff(self, smooth_entity, flag_tmp_smooth=False, h=1., flag_second=False):
+        """
+        <F7>cmp_gradient
+        """
+        # initials
+        x = smooth_entity
+        vx, vy, vz = self.voxels
+        ni, nj, nk = vx.shape
+        nv = ni * nj * nk
+        if x.shape[0] != nv:
+            nt = nv / x.shape[0]
+        else:
+            nt = 1
+        print "Time point(s): ", nt
+        # loop over the voxels
+        for t in range(nt):
+            for i in range(ni):
+                for j in range(nj):
+                    for k in range(nk):
+                        if i == j == k == 0:
+                            grad_fwd = ca.vertcat(sum([self.cmp_fwd_dx(smooth_entity, i, j, k, t, h)])+1e-20,
+                                                  sum([self.cmp_fwd_dy(smooth_entity, i, j, k, t, h)])+1e-20,
+                                                  sum([self.cmp_fwd_dz(smooth_entity, i, j, k, t, h)])+1e-20)
+                        else:
+                            grad_fwd = ca.horzcat(grad_fwd, 
+                                ca.vertcat(sum([self.cmp_fwd_dx(smooth_entity, i, j, k, t, h)]),
+                                sum([self.cmp_fwd_dy(smooth_entity, i, j, k, t, h)]),
+                                sum([self.cmp_fwd_dz(smooth_entity, i, j, k, t, h)]))+1e-20)
+        if flag_tmp_smooth:
+            # compute temporal gradient
+            print "Temporal smoothness enforced."
+        return grad_fwd
+
+    def cmp_fwd_dx(self, smooth_entity, i, j, k, t, h=1.):
+        """
+        cmp_dx
+        """
+        x = smooth_entity
+        vx, vy, vz = self.voxels
+        ni, nj, nk = vx.shape
+        ind0 = np.ravel_multi_index((i, j, k), vx.shape)
+        if i == ni - 1:
+            ind1 = np.ravel_multi_index((i-1, j, k), vx.shape)
+            ind0 = np.ravel_multi_index((i, j, k), vx.shape)
+        else:
+            ind1 = np.ravel_multi_index((i+1, j, k), vx.shape)
+            ind0 = np.ravel_multi_index((i, j, k), vx.shape)
+        dx = (x[ind1, t] - x[ind0, t])/h
+        return dx
+
+    def cmp_fwd_dy(self, smooth_entity, i, j, k, t, h=1.):
+        """
+        cmp_dy
+        """
+        x = smooth_entity
+        vx, vy, vz = self.voxels
+        ni, nj, nk = vx.shape
+        ind0 = np.ravel_multi_index((i, j, k), vx.shape)
+        if j == nj - 1:
+            ind1 = np.ravel_multi_index((i, j-1, k), vx.shape)
+            ind0 = np.ravel_multi_index((i, j, k), vx.shape)
+        else:
+            ind1 = np.ravel_multi_index((i, j+1, k), vx.shape)
+            ind0 = np.ravel_multi_index((i, j, k), vx.shape)
+        dy = (x[ind1, t] - x[ind0, t])/h
+        return dy
+
+    def cmp_fwd_dz(self, smooth_entity, i, j, k, t, h=1.):
+        """
+        cmp_dz
+        """
+        x = smooth_entity
+        vx, vy, vz = self.voxels
+        ni, nj, nk = vx.shape
+        ind0 = np.ravel_multi_index((i, j, k), vx.shape)
+        if k == nk - 1:
+            ind1 = np.ravel_multi_index((i, j, k-1), vx.shape)
+            ind0 = np.ravel_multi_index((i, j, k), vx.shape)
+        else:
+            ind1 = np.ravel_multi_index((i, j, k+1), vx.shape)
+            ind0 = np.ravel_multi_index((i, j, k), vx.shape)
+        dz = (x[ind1, t] - x[ind0, t])/h
+        return dz
+
     def optimize_waveform(self, x):
         """
         fit waveform to a bimodal alpha function
         """
-        srate = self.data.srate
-        #fit_data = self.data.cell_csd[0, 30:]
-        fit_data = x
-        tlin = np.linspace(0, (fit_data.shape[0]-1)/srate, fit_data.shape[0])
-        t = ca.MX.sym("t")
-        t1 = ca.MX.sym("t1")
-        t2 = ca.MX.sym("t2")
-        a = ca.MX.sym("a")
-        r = ca.vertcat(t1, t2, a)
-        f = (ca.exp(-t*t1)*t*t1*t1 - ca.exp(-t*t2)*t*t2*t2)*a
-        F = ca.Function("F", [r, t], [f])
-        Y = [(fit_data[i]-F(r, tlin[i]))**2
-             for i in range(fit_data.shape[0])]
-        nlp_root = {"x": r, "f": sum(Y)}
-        root_solver = ca.nlpsol("solver", "ipopt", nlp_root)
-        r0 = [1.e3, 2.e3, 1.]
-        args = {}
-        args["x0"] = r0
-        args["lbx"] = ca.vertcat([-ca.inf, -ca.inf, -ca.inf])
-        args["ubx"] = ca.vertcat([ca.inf, ca.inf, ca.inf])
-        res = root_solver(**args)
+        # check hessian
+        a = ca.MX.sym('a',1)
+        b = ca.MX.sym('b',1)
+        c = ca.MX.sym('c',1)
+        t = ca.MX.sym('t',1)
+        f = a*1e-5*(ca.exp(-1e-5*b)*b*b-ca.exp(-1e-5*c)*c*c)
+        x = ca.vertcat(b,c,a)
+        hf = ca.hessian(f, x)
+        HF = ca.Function('HF',[x],[hf[0]])
+        for i in range(100):
+            srate = self.data.srate
+            fit_data = self.data.cell_csd[i, 0:]
+            #fit_data = x
+            tlin = np.linspace(0, (fit_data.shape[0]-1)/srate, fit_data.shape[0])
+            t = ca.MX.sym("t")
+            t1 = ca.MX.sym("t1")
+            t2 = ca.MX.sym("t2")
+            a = ca.MX.sym("a")
+            r = ca.vertcat(t1, t2, a)
+            f = (ca.exp(-t*t1)*t*t1*t1 - ca.exp(-t*t2)*t*t2*t2)*a
+            F = ca.Function("F", [r, t], [f])
+            Y = [(fit_data[i]-F(r, tlin[i]))**2
+                 for i in range(fit_data.shape[0])]
+            nlp_root = {"x": r, "f": sum(Y)}
+            root_solver = ca.nlpsol("solver", "ipopt", nlp_root, 
+                {'ipopt.file_print_level': 0, 'ipopt.print_level': 0, 'ipopt.print_timing_statistics': 'no'})
+            r0 = [1.e3, 2.e3, 1.]
+            args = {}
+            args["x0"] = r0
+            args["lbx"] = ca.vertcat([-ca.inf, -ca.inf, -ca.inf])
+            args["ubx"] = ca.vertcat([ca.inf, ca.inf, ca.inf])
+            res = root_solver(**args)
+            print np.sign(np.linalg.eigvals(HF(ca.vertcat(res['x'])).full()))
         return [F(res["x"], tlin[i]) for i in range(fit_data.shape[0])]
 
     def solve_ipopt_multi_measurement_slack(self):
@@ -507,7 +591,7 @@ class opt_out(data_out):
             tmp = 0
             for tb in range(self.t_int):
                     tmp += self.a[b,tb]**2
-            self.g.append(tmp*self.m[b])
+            self.g.append(tmp*(1-self.m[b]))
             self.lbg.append(0)
             self.ubg.append(0)
 

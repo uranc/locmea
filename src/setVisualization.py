@@ -56,6 +56,7 @@ class visualize(object):
                (ymin <= data.cell_pos[:, 1]) & (ymax >= data.cell_pos[:, 1]) &
                (zmin <= data.cell_pos[:, 2]) & (zmax >= data.cell_pos[:, 2]))
         # csd plot
+        print data.cell_csd[ind, :].shape
         ax = self.fig.add_subplot(233)
         self.csdPlot = [ax.plot(data.cell_csd[ind, :].T, label='CSD')[0]]
         ax.set_ylabel('Transmembrane Current(nA)')
