@@ -7,19 +7,16 @@ from setInvProb import data_out
 import casadi as ca
 import numpy as np
 from casadi.tools import struct_symMX, entry, repeated
-
-# @ca.pycallback
-# class MyCallback:
-#     def __init__(self):
-#         print 'hellooo'
-#     def __call__(self,f,*args):
-#         sol = f.getOutput("x")
+import pickle as pc
 
 
 class MyCallback(ca.Callback):
     def __init__(self, name, nx, ng, np, opts={}):
         ca.Callback.__init__(self)
-
+        self.iter = 0
+        self.data_to_save = []
+        self.datafile_name = opts['filename']
+        opts['filename'] = None
         self.nx = nx
         self.ng = ng
         self.np = np
@@ -44,7 +41,23 @@ class MyCallback(ca.Callback):
     def eval(self, arg):
         darg = {}
         for (i,s) in enumerate(ca.nlpsol_out()): darg[s] = arg[i]
-        sol = darg['x']  
+        sol = darg['x']
+        self.data_to_save.append(self.iter)
+        self.data_to_save.append(sol)
+        if self.iter % 10 == 0:
+            fname = '../results/'+self.datafile_name+'iter_' + str(self.data_to_save[0])
+            # mkdir
+            if not os.path.exists(os.path.dirname(fname)):
+                try:
+                    os.makedirs(os.path.dirname(fname))
+                except OSError as exc: # Guard against race condition
+                    if exc.errno != errno.EEXIST:
+                        raise
+            print fname + ' written.'
+            with open(fname, 'wb') as f:
+                pc.dump(self.data_to_save, f)
+            self.data_to_save = []
+        self.iter = self.iter + 1
         return [0]
 
 class opt_out(data_out):
@@ -57,9 +70,9 @@ class opt_out(data_out):
         # Options for optimization #
         # ######################## #
         data_out.__init__(self, *args, **kwargs)
-        self.opt_opt = {'solver': 'ipopt', 'datafile_name': 'output_file.dat', 'callback_steps': 1,
+        self.opt_opt = {'solver': 'ipopt', 'datafile_name': 'output_file', 'callback_steps': 1,
                         'method': 'not_thesis','t_ind': 30, 't_int': 1, 'flag_depthweighted': True, 'sigma': 0.1,
-                        'flag_lift_mask': True}
+                        'flag_lift_mask': True, 'flag_write_output': True}
         self.opt_opt.update(kwargs)
         self.solver = self.opt_opt['solver']
         self.datafile_name = self.opt_opt['datafile_name']
@@ -102,14 +115,16 @@ class opt_out(data_out):
         else:
             self.nlp = {"x": self.w, "f": self.f, "g": self.g}
         # NLP solver options
-        # self.mycallback = MyCallback('mycallback', self.w.shape[0], self.g.shape[0], 0)
+        self.mycallback = MyCallback('mycallback', self.w.shape[0], self.g.shape[0], 0, opts={'filename': self.datafile_name})
         self.opts = {"ipopt.max_iter": 100000,
                      # "compute_red_hessian": "yes",
                      # "ipopt.linear_solver": 'MA97',
-                     # "iteration_callback": self.mycallback,
+                     "iteration_callback": self.mycallback,
                      # "iteration_callback": self.alternating_optimization,
                      "iteration_callback_step": self.callback_steps,
-                     "ipopt.hessian_approximation": "limited-memory"}
+                     "ipopt.hessian_approximation": "limited-memory"
+                     # "qpsol": "qpoases"
+                     }
         # Create solver
         print "Initializing the solver"
         self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
@@ -122,6 +137,8 @@ class opt_out(data_out):
         self.args["lbg"] = self.lbg
         self.args["ubg"] = self.ubg
         self.res = self.solver(**self.args)
+        if self.opt_opt['flag_write_output']:
+            self.write_with_pickle(self.res)
 
     def set_optimization_variables_slack(self):
         """
@@ -304,7 +321,7 @@ class opt_out(data_out):
             nt = nv / x.shape[0]
         else:
             nt = 1
-        print "Time point(s): ", nt
+        # print "Time point(s): ", nt
         # loop over the voxels
         for t in range(nt):
             for i in range(ni):
@@ -325,7 +342,7 @@ class opt_out(data_out):
             print "Temporal smoothness enforced."
         return grad_mtr
 
-    def cmp_fwd_diff(self, smooth_entity, flag_tmp_smooth=False, h=1., flag_second=False):
+    def cmp_fwd_diff(self, smooth_entity, flag_average, flag_tmp_smooth=False, h=1., flag_second=False):
         """
         <F7>cmp_gradient
         """
@@ -334,31 +351,34 @@ class opt_out(data_out):
         vx, vy, vz = self.voxels
         ni, nj, nk = vx.shape
         nv = ni * nj * nk
+        if flag_average:
+            epsilon = 0
+        else:
+            epsilon = 1e-20
         if x.shape[0] != nv:
             nt = nv / x.shape[0]
         else:
             nt = 1
-        print "Time point(s): ", nt
         # loop over the voxels
         for t in range(nt):
             for i in range(ni):
                 for j in range(nj):
                     for k in range(nk):
                         if i == j == k == 0:
-                            grad_fwd = ca.vertcat(sum([self.cmp_fwd_dx(smooth_entity, i, j, k, t, h)])+1e-20,
-                                                  sum([self.cmp_fwd_dy(smooth_entity, i, j, k, t, h)])+1e-20,
-                                                  sum([self.cmp_fwd_dz(smooth_entity, i, j, k, t, h)])+1e-20)
+                            grad_fwd = ca.vertcat(sum([self.cmp_fwd_dx(smooth_entity, flag_average, i, j, k, t, h)])+epsilon,
+                                                  sum([self.cmp_fwd_dy(smooth_entity, flag_average, i, j, k, t, h)])+epsilon,
+                                                  sum([self.cmp_fwd_dz(smooth_entity, flag_average, i, j, k, t, h)])+epsilon)
                         else:
                             grad_fwd = ca.horzcat(grad_fwd, 
-                                ca.vertcat(sum([self.cmp_fwd_dx(smooth_entity, i, j, k, t, h)]),
-                                sum([self.cmp_fwd_dy(smooth_entity, i, j, k, t, h)]),
-                                sum([self.cmp_fwd_dz(smooth_entity, i, j, k, t, h)]))+1e-20)
+                                ca.vertcat(sum([self.cmp_fwd_dx(smooth_entity, flag_average, i, j, k, t, h)]),
+                                sum([self.cmp_fwd_dy(smooth_entity, flag_average, i, j, k, t, h)]),
+                                sum([self.cmp_fwd_dz(smooth_entity, flag_average, i, j, k, t, h)]))+epsilon)
         if flag_tmp_smooth:
             # compute temporal gradient
             print "Temporal smoothness enforced."
         return grad_fwd
 
-    def cmp_fwd_dx(self, smooth_entity, i, j, k, t, h=1.):
+    def cmp_fwd_dx(self, smooth_entity, flag_average, i, j, k, t, h=1.):
         """
         cmp_dx
         """
@@ -372,10 +392,13 @@ class opt_out(data_out):
         else:
             ind1 = np.ravel_multi_index((i+1, j, k), vx.shape)
             ind0 = np.ravel_multi_index((i, j, k), vx.shape)
-        dx = (x[ind1, t] - x[ind0, t])/h
+        if flag_average:
+            dx = (x[ind1, t] + x[ind0, t])/2.
+        else:
+            dx = (x[ind1, t] - x[ind0, t])/h
         return dx
 
-    def cmp_fwd_dy(self, smooth_entity, i, j, k, t, h=1.):
+    def cmp_fwd_dy(self, smooth_entity, flag_average, i, j, k, t, h=1.):
         """
         cmp_dy
         """
@@ -389,10 +412,13 @@ class opt_out(data_out):
         else:
             ind1 = np.ravel_multi_index((i, j+1, k), vx.shape)
             ind0 = np.ravel_multi_index((i, j, k), vx.shape)
-        dy = (x[ind1, t] - x[ind0, t])/h
+        if flag_average:
+            dy = (x[ind1, t] + x[ind0, t])/2.
+        else:
+            dy = (x[ind1, t] - x[ind0, t])/h
         return dy
 
-    def cmp_fwd_dz(self, smooth_entity, i, j, k, t, h=1.):
+    def cmp_fwd_dz(self, smooth_entity, flag_average, i, j, k, t, h=1.):
         """
         cmp_dz
         """
@@ -406,7 +432,10 @@ class opt_out(data_out):
         else:
             ind1 = np.ravel_multi_index((i, j, k+1), vx.shape)
             ind0 = np.ravel_multi_index((i, j, k), vx.shape)
-        dz = (x[ind1, t] - x[ind0, t])/h
+        if flag_average:
+            dz = (x[ind1, t] + x[ind0, t])/2.
+        else:
+            dz = (x[ind1, t] - x[ind0, t])/h
         return dz
 
     def optimize_waveform(self, x):
@@ -525,12 +554,13 @@ class opt_out(data_out):
                                entry("m", shape=(self.x_size)),
                                entry("s", shape=(self.x_size,3)),
                                entry("ys", shape=(self.y.shape)),
-                               entry("sigma",shape=(1,1))])
-        self.a, self.m, self.s, self.ys, self.sigma = self.w[...]
+                              ])
+        self.a, self.m, self.s, self.ys = self.w[...]
         self.g = []
         self.lbg = []
         self.ubg = []
         self.f = 0
+        self.sigma = ca.MX.sym('sigma')
         self.lbx = self.w(-ca.inf)
         self.ubx = self.w(ca.inf)
         if not self.flag_lift_mask:
@@ -544,12 +574,13 @@ class opt_out(data_out):
         self.w = struct_symMX([entry("a", shape=(self.x_size,self.t_int)),
                                entry("m", shape=(self.x_size)),
                                entry("ys", shape=(self.y.shape)),
-                               entry("sigma",shape=(1,1))])
-        self.a, self.m, self.ys, self.sigma = self.w[...]
+                              ])
+        self.a, self.m, self.ys = self.w[...]
         self.g = []
         self.lbg = []
         self.ubg = []
         self.f = 0
+        self.sigma = ca.MX.sym('sigma')
         self.lbx = self.w(-ca.inf)
         self.ubx = self.w(ca.inf)
         if not self.flag_lift_mask:
@@ -599,7 +630,7 @@ class opt_out(data_out):
         """
         add smoothness constraints with lifting variables
         """
-        grad_m = self.cmp_gradient(self.m)
+        grad_m = self.cmp_fwd_diff(self.m, False)
         for cm in range(self.m.shape[0]):
             self.g.append(ca.sqrt(ca.dot(grad_m[:,cm],grad_m[:,cm])))
             self.lbg.append(0)
@@ -609,8 +640,12 @@ class opt_out(data_out):
         """
         add smoothness constraints with lifting variables
         """ 
+        average_mask = self.cmp_fwd_diff(self.m, True)
+        for sd in range(self.s.shape[1]):
+            average_s = self.cmp_fwd_diff(self.s[:, sd], True).T
+        print average_s.shape
         for tb in range(self.t_int):
-            tmp = self.cmp_gradient(self.a[:,tb])
+            tmp = self.cmp_fwd_diff(self.a[:,tb], False)
             for b in range(self.x_size):
                 self.g.append(ca.dot(self.s[b,:].T,tmp[:,b])*self.m[b])
                 self.lbg.append(0)
@@ -630,9 +665,9 @@ class opt_out(data_out):
         add smoothness constraints with lifting variables
         """
         grad = []
-        grad_x = self.cmp_gradient(self.s[:,0])
-        grad_y = self.cmp_gradient(self.s[:,1])
-        grad_z = self.cmp_gradient(self.s[:,2])
+        grad_x = self.cmp_fwd_diff(self.s[:,0], False)
+        grad_y = self.cmp_fwd_diff(self.s[:,1], False)
+        grad_z = self.cmp_fwd_diff(self.s[:,2], False)
         for b in range(self.s.shape[0]):
             self.g.append(ca.sqrt(ca.dot(grad_x[:, b],grad_x[:, b])+
                                   ca.dot(grad_y[:, b],grad_y[:, b])+
@@ -654,6 +689,19 @@ class opt_out(data_out):
         #self.add_s_magnitude_costs_constraints_thesis()
         #self.add_s_smooth_costs_constraints_thesis()
         self.minimize_function()
+
+    def write_with_pickle(self, data_to_save):
+        """
+        @brief      { writes the results in a file }
+        
+        @param      self  The object.
+        
+        @return     { description_of_the_return_value }
+        """
+        fname = self.datafile_name
+        print fname + ' written.'
+        with open(fname, 'wb') as f:
+            pc.dump(data_to_save, f)
 
     def initialization(self):
         """

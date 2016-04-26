@@ -10,7 +10,7 @@ from setVisualization import visualize
 import casadi as ca
 import numpy as np
 import matplotlib.pyplot as plt
-
+import pickle as pc
 # Data path/filename
 t_ind = 38
 data_path = '../data/'
@@ -32,21 +32,25 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 5,
                         't_ind': 30, 't_int': 1, 'sigma': 1e-2, 'flag_depthweighted': True}
 opt = opt_out(data, **optimization_options)
 opt.set_optimization_variables_thesis()
-opt.cmp_fwd_diff(opt.m)
-#grd = opt.add_s_smooth_costs_constraints()
-#opt.add_s_smooth_costs_constraints()
-# opt.optimize_waveform()
-#opt.add_smoothness_costs_constraints()
-#opt.add_smoothness_costs_constraints()
-opt.set_optimization_variables_thesis()
-#opt.add_data_costs_constraints_thesis()
-opt.add_background_costs_constraints_thesis()
+# # opt.cmp_fwd_diff(opt.m)
+# opt.add_l1_costs_constraints_thesis()
+# opt.add_data_costs_constraints_thesis()
+# opt.add_background_costs_constraints_thesis()
+opt.add_tv_mask_costs_constraints_thesis()
+# # opt.add_s_smooth_costs_constraints_thesis()
+# # opt.optimize_waveform()
+opt.add_smoothness_costs_constraints_thesis()
+# #opt.add_smoothness_costs_constraints()
+# # opt.set_optimization_variables_thesis()
+# #opt.add_data_costs_constraints_thesis()
+# # opt.add_background_costs_constraints_thesis()
 
-# hf,jf = ca.hessian(opt.g, opt.w)
-jf = ca.jacobian(ca.vertcat(*opt.g), opt.w)
+# hf,jf = ca.hessian(opt.f, opt.w)
+# # jf = ca.jacobian(ca.vertcat(*opt.g), opt.w)
+# # # HF = ca.Function('HF', [opt.w], [hf])
+# JF = ca.Function('JF', [opt.w], [jf])
 # HF = ca.Function('HF', [opt.w], [hf])
-JF = ca.Function('JF', [opt.w], [jf])
-w0 = opt.w(0)
+# w0 = opt.w(1)
 # a = ca.MX.sym('a',1)
 # b = ca.MX.sym('b',1)
 # c = ca.MX.sym('c',1)
