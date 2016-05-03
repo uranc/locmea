@@ -66,12 +66,13 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 5,
                         'solver': p_solver,
                         'hessian': p_hessian,
                         'linsol': p_linsol,
-                        't_ind': 30, 't_int': 1, 
+                        'method': p_method,
+                        't_ind': 35, 't_int': 3, 
                         'sigma': float(p_sparse),
                         'flag_depthweighted': bool(int(p_norm)),
                         'flag_parallel': False,
                         'datafile_name': 'output_file',
-                        'flag_lift_mask': False,
+                        'flag_lift_mask': True,
                         'p_dyn': float(p_dynamic)
                         }
 opt = opt_out(data, **optimization_options)
@@ -84,9 +85,10 @@ elif p_method == 'mask':
 # opt.solve_ipopt_multi_measurement_2p()
 
 # visualize
-# vis = visualize(data=data, loc=opt)
-# vis.show_snapshot()
-
+vis = visualize(data=data, loc=opt)
+vis.show_snapshot()
+# opt.set_optimization_variables_thesis()
+# opt.initialize_variables()
 # opt.set_optimization_variables_slack()
 # opt.w0 = opt.w(1)
 # opt.res = opt.w0['x']

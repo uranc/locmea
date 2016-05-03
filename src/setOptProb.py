@@ -116,8 +116,19 @@ class opt_out(data_out):
         @return     { description_of_the_return_value }
         """
         self.w0 = self.w(0)
-        print 'initialization: '
+        if self.method == 'thesis':
+            tmp_s0 = np.random.randn(self.s.shape[0],self.s.shape[1])
+            for i in range(self.s.shape[0]):
+                tmp_s0[i, :] = tmp_s0[i, :] / np.linalg.norm(tmp_s0[i, :])
+            self.w0['s'] = tmp_s0
+            print 'initialization: Thesis'
 
+        if self.method == 'thesis' or 'mask':
+            tmp_m0 = np.random.rand(self.m.shape[0])
+            tmp_a0 = np.random.randn(self.a.shape[0],self.a.shape[1])
+            self.w0['m'] = tmp_m0
+            self.w0['a'] = tmp_a0
+            print 'initialization: Thesis or Mask'
     def minimize_function(self):
         """
         Function where the NLP is initialized and solved
@@ -128,7 +139,7 @@ class opt_out(data_out):
         self.ubg = ca.vertcat(*self.ubg)
         # Initialize at 0
         self.initialize_variables()
-        # if self.method == 'thesis':
+        # if self.method == 'sigma_par':
         #     self.w0['sigma'] = self.sigma_value
         # Create NLP
         self.nlp = {"x": self.w, "f": self.f, "g": self.g}
@@ -141,6 +152,11 @@ class opt_out(data_out):
                          "iteration_callback_step": self.callback_steps,
                          "ipopt.hessian_approximation": self.p_hessian,
                          }
+            if self.p_linsol[:2] == 'MA':
+                print "###################"
+                print "Using linear solver"
+                print "###################"
+                self.opts["ipopt.linear_solver"] = self.p_linsol
         elif self.p_solver == 'sqp':
             self.opts = {"iteration_callback": self.mycallback,
                          "iteration_callback_step": self.callback_steps,
@@ -628,9 +644,8 @@ class opt_out(data_out):
         self.sigma = ca.MX.sym('sigma')
         self.lbx = self.w(-ca.inf)
         self.ubx = self.w(ca.inf)
-        if not self.flag_lift_mask:
-            self.lbx['m'] = 0
-            self.ubx['m'] = 1
+        self.lbx['m'] = 0
+        self.ubx['m'] = 1
 
     def add_data_costs_constraints_thesis(self):
         """
@@ -652,7 +667,7 @@ class opt_out(data_out):
         for j in range(self.m.shape[0]):
             self.f += self.sigma_value*(self.m[j])
             if self.flag_lift_mask:
-                self.g.append(self.m[j]*(1-self.m[j]))
+                self.g.append(self.m[j]-self.m[j]*self.m[j])
                 self.lbg.append(0)
                 self.ubg.append(0)
             # self.g.append(self.sigma)
@@ -679,7 +694,7 @@ class opt_out(data_out):
         for cm in range(self.m.shape[0]):
             self.g.append(ca.dot(grad_m[:,cm],grad_m[:,cm]))
             self.lbg.append(0)
-            self.ubg.append(50)
+            self.ubg.append(self.p_dyn)
 
     def add_smoothness_costs_constraints_thesis(self):
         """
@@ -697,7 +712,7 @@ class opt_out(data_out):
                                        average_mask[2,b]*average_sz[b])
                 self.g.append(ca.dot(average_s, tmp[:,b])**2)
                 self.lbg.append(0)
-                self.ubg.append(50)
+                self.ubg.append(self.p_dyn)
 
     def add_s_magnitude_costs_constraints_thesis(self):
         """
@@ -722,7 +737,7 @@ class opt_out(data_out):
                           average_mask[1, b]*ca.dot(grad_y[:, b],grad_y[:, b])+
                           average_mask[2, b]*ca.dot(grad_z[:, b],grad_z[:, b]))
             self.lbg.append(0)
-            self.ubg.append(50)
+            self.ubg.append(self.p_dyn)
 
     def solve_ipopt_multi_measurement_thesis(self):
         """
@@ -768,9 +783,8 @@ class opt_out(data_out):
         self.sigma = ca.MX.sym('sigma')
         self.lbx = self.w(-ca.inf)
         self.ubx = self.w(ca.inf)
-        if not self.flag_lift_mask:
-            self.lbx['m'] = 0
-            self.ubx['m'] = 1
+        self.lbx['m'] = 0
+        self.ubx['m'] = 1
 
     def solve_ipopt_multi_measurement_only_mask(self):
         """

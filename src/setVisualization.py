@@ -40,7 +40,8 @@ class visualize(object):
         """
         data = self.data
         self.fig = plt.figure(figsize=(20, 10))
-        cmax = 1e-5
+        cmax = 1e-1
+        # xres = self.xres
         t_ind = self.t_ind
         # mask reconstruction volume
         vx, vy, vz = self.voxels
