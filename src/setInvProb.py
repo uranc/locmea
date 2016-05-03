@@ -5,7 +5,8 @@ Create attributes for the localization framework
 # License:
 import numpy as np
 from scipy.spatial.distance import cdist
-
+import pickle as pc
+import os, os.path
 
 class data_out(object):
     """
@@ -165,14 +166,50 @@ class data_out(object):
         """
         return np.dot(inv_matrix, fwd_matrix)
 
+    def write_with_pickle(self, data_to_save):
+        """
+        @brief      { writes the results in a file }
+        
+        @param      self  The object.
+        
+        @return     { description_of_the_return_value }
+        """
+        fname = '../results/'+self.datafile_name + \
+                    '/' + self.datafile_name 
+        # mkdir
+        if not os.path.exists(os.path.dirname(fname)):
+            try:
+                os.makedirs(os.path.dirname(fname))
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+        print fname + ' written.'
+        with open(fname, 'wb') as f:
+            pc.dump(data_to_save, f)
+
+    def load_with_pickle(self, fname):
+        """
+        @brief      { function_description }
+        
+        @param      self   The object.
+        @param      fname  The fname
+        
+        @return     { description_of_the_return_value }
+        """
+        return pc.load(file(fname))
+
     def evaluate_localization(self):
         """
         evaluate the localization
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
-        if not self.res.any():
-            "You don't have a reconstruction!"
-        if not self.data.cell_pos.any():
-            "You don't have a ground truth (data.cell_pos)!"
+        # if not self.res.any():
+        #     "You don't have a reconstruction!"
+        # if not self.data.cell_pos.any():
+        #     "You don't have a ground truth (data.cell_pos)!"
         data = self.data
         # mask reconstruction volume
         vx, vy, vz = self.voxels

@@ -4,7 +4,7 @@ Module for loading data from various files
 # Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
 # License:
 import h5py
-import pickle
+import pickle as pc
 
 
 class data_in(object):
@@ -27,6 +27,13 @@ class data_in(object):
     """
 
     def __init__(self, *args, **kwargs):
+        """
+        @brief      { constructor_description }
+        
+        @param      self    The object
+        @param      args    The args
+        @param      kwargs  The kwargs
+        """
         self.f_name = args[0]
         self.flag_cell = kwargs.get('flag_cell')
         print args, kwargs
@@ -54,7 +61,7 @@ class data_in(object):
         else:
             return f['data'][:], f['srate'][()]
 
-    def LoadPickledData(self, f_name):
+    def load_with_pickle(self, f_name):
         """
         load h5py data
         optionally cell and electrode positions

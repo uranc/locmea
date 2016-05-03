@@ -74,8 +74,10 @@ class opt_out(data_out):
         # ######################## #
         data_out.__init__(self, *args, **kwargs)
         self.opt_opt = {'solver': 'ipopt', 'datafile_name': 'output_file', 'callback_steps': 1,
-                        'method': 'not_thesis','t_ind': 30, 't_int': 1, 'flag_depthweighted': True, 'sigma': 0.1,
-                        'flag_lift_mask': True, 'flag_write_output': True, 'flag_parallel': False}
+                        'method': 'not_thesis','t_ind': 30, 't_int': 1, 'flag_depthweighted': True,
+                        'sigma': 0.1, 'p_dyn': 10, 
+                        'flag_lift_mask': True, 'flag_write_output': True, 'flag_parallel': False,
+                        'solver': 'ipopt', 'hessian': 'exact', 'linsol': 'ma57'}
         self.opt_opt.update(kwargs)
         self.solver = self.opt_opt['solver']
         self.datafile_name = self.opt_opt['datafile_name']+'_'+str(time.time())
@@ -87,6 +89,10 @@ class opt_out(data_out):
         self.flag_depthweighted = self.opt_opt['flag_depthweighted']
         self.flag_lift_mask = self.opt_opt['flag_lift_mask']
         self.flag_parallel = self.opt_opt['flag_parallel']
+        self.p_solver = self.opt_opt['solver']
+        self.p_hessian = self.opt_opt['hessian']
+        self.p_linsol = self.opt_opt['linsol']
+        self.p_dyn = self.opt_opt['p_dyn']
         # ######################## #
         #     Problem  setup       #
         # ######################## #
@@ -97,7 +103,7 @@ class opt_out(data_out):
         fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
         if self.flag_depthweighted:
             dw = self.cmp_weight_matrix(fwd)
-            self.fwd = np.dot(fwd, dw)
+            self.fwd = ca.MX(np.dot(fwd, dw))
         else:
             self.fwd = ca.MX(fwd)
 
@@ -122,29 +128,30 @@ class opt_out(data_out):
         self.ubg = ca.vertcat(*self.ubg)
         # Initialize at 0
         self.initialize_variables()
-        if self.method == 'thesis':
-            self.w0['sigma'] = self.sigma_value
+        # if self.method == 'thesis':
+        #     self.w0['sigma'] = self.sigma_value
         # Create NLP
-        if self.method == 'thesis':
-            self.nlp = {"x": self.w, "f": self.f, "g": self.g}
-        else:
-            self.nlp = {"x": self.w, "f": self.f, "g": self.g}
+        self.nlp = {"x": self.w, "f": self.f, "g": self.g}
         # NLP solver options
         self.mycallback = MyCallback('mycallback', self.w.shape[0], self.g.shape[0], 0, 
                                      opts={'filename': self.datafile_name})
-        self.opts = {"ipopt.max_iter": 100000,
-                     # "compute_red_hessian": "yes",
-                     # "ipopt.linear_solver": 'MA97',
-                     "iteration_callback": self.mycallback,
-                     # "iteration_callback": self.alternating_optimization,
-                     "iteration_callback_step": self.callback_steps,
-                     "ipopt.hessian_approximation": "limited-memory"
-                     # "qpsol": "qpoases"
-                     }
+        if self.p_solver == 'ipopt':
+            self.opts = {"ipopt.max_iter": 100000,
+                         "iteration_callback": self.mycallback,
+                         "iteration_callback_step": self.callback_steps,
+                         "ipopt.hessian_approximation": self.p_hessian,
+                         }
+        elif self.p_solver == 'sqp':
+            self.opts = {"iteration_callback": self.mycallback,
+                         "iteration_callback_step": self.callback_steps,
+                         "qpsol": "qpoases"
+                         }  
         # Create solver
         print "Initializing the solver"
-        self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
-        #self.solver = ca.qpsol("solver", "qpoases", self.nlp,{'sparse':True})
+        if self.p_solver == 'ipopt':
+            self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
+        elif self.p_solver == 'sqp':    
+            self.solver = ca.qpsol("solver", "qpoases", self.nlp,{'sparse':True})
         # Solve NLP
         self.args = {}
         self.args["x0"] = self.w0
@@ -153,6 +160,7 @@ class opt_out(data_out):
         self.args["lbg"] = self.lbg
         self.args["ubg"] = self.ubg
         self.res = self.solver(**self.args)
+        self.res_struct = self.w(self.res['x'])
 
     def cmp_dx(self, smooth_entity, i, j, k, t, h=1.):
         """
@@ -411,26 +419,29 @@ class opt_out(data_out):
         else:
             return grad_fwd
 
-    def write_with_pickle(self, data_to_save):
+    def write_casadi_structure(self, struct_to_save):
         """
-        @brief      { writes the results in a file }
+        @brief      { function_description }
         
-        @param      self  The object.
+        @param      self            The object.
+        @param      struct_to_save  The struct to save
         
         @return     { description_of_the_return_value }
         """
         fname = '../results/'+self.datafile_name + \
-                    '/' + self.datafile_name 
-            # mkdir
-        if not os.path.exists(os.path.dirname(fname)):
-            try:
-                os.makedirs(os.path.dirname(fname))
-            except OSError as exc: # Guard against race condition
-                if exc.errno != errno.EEXIST:
-                    raise
-        print fname + ' written.'
-        with open(fname, 'wb') as f:
-            pc.dump(data_to_save, f)
+                    '/' + self.datafile_name + '_struct'
+        struct_to_save.save(fname)
+     
+    def load_casadi_structure(self, fname):
+        """
+        @brief      { function_description }
+        
+        @param      self   The object.
+        @param      fname  The fname
+        
+        @return     { description_of_the_return_value }
+        """
+        return ca.tools.struct_load(fname)
 
     def optimize_waveform(self, x):
         """
@@ -528,14 +539,16 @@ class opt_out(data_out):
             save_this['res'] = self.res
             save_this['opts'] = self.opt_opt
             self.write_with_pickle(save_this)
+            self.write_casadi_structure(self.res_struct)
+        self.xres = self.res_struct['x'].full()
 
     def set_optimization_variables_2p(self):
         """
         x is divided into negative and positive elements
         this function overwrites the initialized optimization variables
         """
-        self.w = struct_symMX([entry("xs_pos", shape=(self.x_size*2,self.t_int)),
-                               entry("xs_neg", shape=(self.x_size*2,self.t_int)),
+        self.w = struct_symMX([entry("xs_pos", shape=(self.x_size,self.t_int)),
+                               entry("xs_neg", shape=(self.x_size,self.t_int)),
                                entry("ys", shape=(self.y.shape))])
         self.xs_pos, self.xs_neg, self.ys = self.w[...]
         self.g = []
@@ -544,8 +557,6 @@ class opt_out(data_out):
         self.f = 0
         self.lbx = self.w(-ca.inf)
         self.ubx = self.w(ca.inf)
-        print "New measurement matrix"
-        self.fwd = ca.horzcat(self.fwd, self.fwd)
 
     def add_data_costs_constraints_2p(self):
         """
@@ -556,7 +567,7 @@ class opt_out(data_out):
             for ti in range(self.t_int):
                 self.f += (self.y[i, ti] - self.ys[i, ti])**2
                 self.g.append(self.ys[i, ti] -
-                              ca.dot(self.fwd[i, :], (self.xs_pos[:, ti]-self.xs_neg[:, ti]).T))
+                              ca.dot(self.fwd[i, :].T, (self.xs_pos[:, ti]-self.xs_neg[:, ti])))
                 self.lbg.append(0)
                 self.ubg.append(0)
 
@@ -568,9 +579,8 @@ class opt_out(data_out):
             tmp_pos = 0
             tmp_neg = 0
             for tj in range(self.t_int):
-                if j < self.xs_pos.shape[0]/2:
-                    tmp_pos += self.xs_pos[j,tj]**2
-                    tmp_neg += self.xs_neg[j,tj]**2
+                tmp_pos += self.xs_pos[j,tj]
+                tmp_neg += self.xs_neg[j,tj]
                 self.g.append(-self.xs_pos[j,tj])
                 self.g.append(-self.xs_neg[j,tj])
                 self.lbg.append(-ca.inf)
@@ -598,6 +608,8 @@ class opt_out(data_out):
             save_this['res'] = self.res
             save_this['opts'] = self.opt_opt
             self.write_with_pickle(save_this)
+            self.write_casadi_structure(self.res_struct)
+        self.xres = self.res_struct['xs_pos'].full() - self.res_struct['xs_neg'].full()
 
     def set_optimization_variables_thesis(self):
         """
@@ -629,7 +641,7 @@ class opt_out(data_out):
             for ti in range(self.t_int):
                 self.f += (self.y[i, ti] - self.ys[i, ti])**2
                 self.g.append(self.ys[i, ti] -
-                              ca.dot(self.fwd[i, :], (self.a[:, ti]*self.m)))
+                              ca.dot(self.fwd[i, :].T, (self.a[:, ti])))
                 self.lbg.append(0)
                 self.ubg.append(0)
 
@@ -665,7 +677,7 @@ class opt_out(data_out):
         """
         grad_m = self.cmp_fwd_diff(self.m, False)
         for cm in range(self.m.shape[0]):
-            self.g.append(ca.sqrt(ca.dot(grad_m[:,cm],grad_m[:,cm])))
+            self.g.append(ca.dot(grad_m[:,cm],grad_m[:,cm]))
             self.lbg.append(0)
             self.ubg.append(50)
 
@@ -737,8 +749,10 @@ class opt_out(data_out):
             save_this['res'] = self.res
             save_this['opts'] = self.opt_opt
             self.write_with_pickle(save_this)
+            self.write_casadi_structure(self.res_struct)
+        self.xres = self.res_struct['a'].full()
 
-    def set_optimization_variables_only_mask_thesis(self):
+    def set_optimization_variables_only_mask(self):
         """
         thesis implementation
         """
@@ -757,3 +771,41 @@ class opt_out(data_out):
         if not self.flag_lift_mask:
             self.lbx['m'] = 0
             self.ubx['m'] = 1
+
+    def solve_ipopt_multi_measurement_only_mask(self):
+        """
+        Reform source space x as the difference of x+ - x-
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
+        """
+        self.set_optimization_variables_only_mask()
+        t0 = time.time()
+        self.add_data_costs_constraints_thesis()
+        self.add_l1_costs_constraints_thesis()
+        self.add_background_costs_constraints_thesis()
+        self.add_tv_mask_costs_constraints_thesis()
+        t1 = time.time()
+        print "Set constraints in %.3f seconds" % (t1 - t0)
+        t0 = time.time()
+        self.minimize_function()
+        t1 = time.time()
+        print "Minimize in %.3f seconds" % (t1 - t0)
+        if self.opt_opt['flag_write_output']:
+            save_this = {}
+            save_this['res'] = self.res
+            save_this['opts'] = self.opt_opt
+            self.write_with_pickle(save_this)
+            self.write_casadi_structure(self.res_struct)
+        self.xres = self.res_struct['a'].full()
+
+    def get_ground_truth(self):
+        """
+        @brief      Get the ground truth.
+        
+        @param      self  The object
+        
+        @return     Ground truth.
+        """
+        self.cell_csd
