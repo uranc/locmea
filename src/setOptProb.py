@@ -76,7 +76,7 @@ class opt_out(data_out):
         self.opt_opt = {'solver': 'ipopt', 'datafile_name': 'output_file', 'callback_steps': 1,
                         'method': 'not_thesis','t_ind': 30, 't_int': 1, 'flag_depthweighted': True,
                         'sigma': 0.1, 'p_dyn': 10, 
-                        'flag_lift_mask': True, 'flag_write_output': True, 'flag_parallel': False,
+                        'flag_lift_mask': True, 'flag_data_mask': True, 'flag_write_output': True, 'flag_parallel': False,
                         'solver': 'ipopt', 'hessian': 'exact', 'linsol': 'ma57'}
         self.opt_opt.update(kwargs)
         self.solver = self.opt_opt['solver']
@@ -89,6 +89,7 @@ class opt_out(data_out):
         self.flag_depthweighted = self.opt_opt['flag_depthweighted']
         self.flag_lift_mask = self.opt_opt['flag_lift_mask']
         self.flag_parallel = self.opt_opt['flag_parallel']
+        self.flag_data_mask = self.opt_opt['flag_data_mask']
         self.p_solver = self.opt_opt['solver']
         self.p_hessian = self.opt_opt['hessian']
         self.p_linsol = self.opt_opt['linsol']
@@ -651,12 +652,16 @@ class opt_out(data_out):
         """
         Computes objective function f
         With lifting variable ys constraints
-        """
+        """ 
         for i in range(self.y.shape[0]):
             for ti in range(self.t_int):
                 self.f += (self.y[i, ti] - self.ys[i, ti])**2
-                self.g.append(self.ys[i, ti] -
-                              ca.dot(self.fwd[i, :].T, (self.a[:, ti])))
+                if self.flag_data_mask:
+                    self.g.append(self.ys[i, ti] -
+                                  ca.dot(self.fwd[i, :].T, self.a[:, ti]*self.m))
+                else:
+                    self.g.append(self.ys[i, ti] -
+                                  ca.dot(self.fwd[i, :].T, self.a[:, ti]))
                 self.lbg.append(0)
                 self.ubg.append(0)
 

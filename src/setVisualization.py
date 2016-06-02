@@ -30,6 +30,7 @@ class visualize(object):
         	print key
         self.data = kwargs['data']
         self.xres = kwargs['loc'].xres
+        self.sres = kwargs['loc'].sres
         self.voxels = kwargs['loc'].voxels
         #self.t_ind = args[1].t_ind
         self.t_ind = 0
@@ -40,7 +41,7 @@ class visualize(object):
         """
         data = self.data
         self.fig = plt.figure(figsize=(20, 10))
-        cmax = 1e-1
+        cmax = 1
         # xres = self.xres
         t_ind = self.t_ind
         # mask reconstruction volume
@@ -198,7 +199,95 @@ class visualize(object):
         self.fig.tight_layout()
         plt.show()
 
-    def VisualizeForwardMatrix(self, fwd):
+    def show_s_field(self):
+        """
+        @brief      { function_description }
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
+        """
+        """
+        Initialize the figure
+        """
+        data = self.data
+        self.fig = plt.figure(figsize=(20, 10))
+        cmax = 1
+        # xres = self.xres
+        t_ind = self.t_ind
+        # mask reconstruction volume
+        vx, vy, vz = self.voxels
+        rx, ry, rz = vx, vy, vz
+        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()
+        # result
+        ress = self.sres.reshape(rx.shape[0],rx.shape[1],rx.shape[2],3)
+        resn = self.xres.reshape(rx.shape)
+        resn_ind = np.abs(resn) > cmax
+        xmin, xmax = np.min(vx), np.max(vx)
+        ymin, ymax = np.min(vy), np.max(vy)
+        zmin, zmax = np.min(vz), np.max(vz)
+        ind = ((xmin <= data.cell_pos[:, 0]) & (xmax >= data.cell_pos[:, 0]) &
+               (ymin <= data.cell_pos[:, 1]) & (ymax >= data.cell_pos[:, 1]) &
+               (zmin <= data.cell_pos[:, 2]) & (zmax >= data.cell_pos[:, 2]))
+        # csd plot
+        # morphology
+        ax = self.fig.add_subplot(131, projection='3d')
+        self.morpPlot = []
+        self.morpPlot.append(ax.scatter(data.electrode_pos[:, 0],
+                                        data.electrode_pos[:, 1],
+                                        data.electrode_pos[:, 2],
+                                        color='b',
+                                        marker='.'))  # electrodes
+        self.morpPlot.append(ax.scatter(data.cell_pos[ind, 0],
+                                        data.cell_pos[ind, 1],
+                                        data.cell_pos[ind, 2],
+                                        c=data.cell_csd[ind, t_ind],
+                                        cmap='RdBu',
+                                        marker='o'))  # midpoints
+        ax.azim = 165 - 90
+        ax.elev = 20
+        # second morphology
+        ax = self.fig.add_subplot(132, projection='3d')  # , aspect='equal'
+        self.recPlot = []
+        self.recPlot.append(ax.scatter(data.electrode_pos[:, 0],
+                                       data.electrode_pos[:, 1],
+                                       data.electrode_pos[:, 2],
+                                       color='b',
+                                       marker='.'))  # electrodes
+        self.recPlot.append(ax.scatter(rx[resn_ind],
+                                       ry[resn_ind],
+                                       rz[resn_ind],
+                                       c=resn[resn_ind],
+                                       cmap='RdBu',
+                                       marker='o'))  # midpoints
+        ax.azim = 165 - 90
+        ax.elev = 20
+        # third morphology
+        ax = self.fig.add_subplot(133, projection='3d')  # , aspect='equal'
+        self.recPlot = []
+        self.recPlot.append(ax.scatter(data.electrode_pos[:, 0],
+                                      data.electrode_pos[:, 1],
+                                      data.electrode_pos[:, 2],
+                                      color='b',
+                                      marker='.'))  # electrodes
+        self.recPlot.append(ax.quiver(rx[resn_ind],
+                                      ry[resn_ind],
+                                      rz[resn_ind],
+                                      ress[resn_ind, 0],
+                                      ress[resn_ind, 1],
+                                      ress[resn_ind, 2],
+                                      cmap='RdBu',
+                                      length=5,
+                                      pivot='tail',
+                                      ))  # midpoints
+        ax.azim = 165 - 90
+        ax.elev = 20
+        # show all
+        self.fig.tight_layout()
+        plt.show()
+
+
+    def show_forward_matrix(self, fwd):
         """
         Visualize the exponential decay
         PSF and CTF functions

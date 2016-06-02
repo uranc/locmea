@@ -62,7 +62,7 @@ print 'Dynamics bound is ', float(p_dynamic)
 #python -i runDebug.py -m mask -s ipopt -p 0 -d 50 -n 1 -h limited-memory -l mums
 
 # Optimize
-optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 5,
+optimization_options = {'p_vres':5, 'p_jlen':0, 'p_erad': 5,
                         'solver': p_solver,
                         'hessian': p_hessian,
                         'linsol': p_linsol,
@@ -73,6 +73,7 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 5,
                         'flag_parallel': False,
                         'datafile_name': 'output_file',
                         'flag_lift_mask': True,
+                        'flag_data_mask': True,
                         'p_dyn': float(p_dynamic)
                         }
 opt = opt_out(data, **optimization_options)
@@ -83,13 +84,33 @@ elif p_method == 'mask':
 
 # opt.solve_ipopt_multi_measurement_slack()
 # opt.solve_ipopt_multi_measurement_2p()
-
 # visualize
-vis = visualize(data=data, loc=opt)
-vis.show_snapshot()
+# vis = visualize(data=data, loc=opt)
+# vis.show_snapshot()
 # opt.set_optimization_variables_thesis()
 # opt.initialize_variables()
-# opt.set_optimization_variables_slack()
+# 
+# 
+
+# opt.set_optimization_variables_thesis()
+# pname = '../results/'
+# fname = 'output_file_1462316213.92_iter_60'
+# a = opt.load_with_pickle(pname+fname)
+# st = ca.tools.struct_symMX([entry("a", shape=(8723,3)),
+#                                entry("m", shape=(8723)),
+#                                entry("s", shape=(8723,3)),
+#                                entry("ys", shape=(64,3)),
+#                               ])
+# print a[1].shape
+
+# # # print a[1]
+# aa = st(a[1])
+# # aa = st
+# opt.sres = aa['s'].full()
+# opt.xres = aa['a'].full()[:,0]
+# vis = visualize(data=data, loc=opt)
+# # # vis.show_snapshot()
+# vis.show_s_field()
 # opt.w0 = opt.w(1)
 # opt.res = opt.w0['x']
 # opt.xres = opt.w0['x']
