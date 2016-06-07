@@ -70,6 +70,7 @@ class MyCallback(ca.Callback):
         """
         Initialize the figure
         """
+        print fname
         fname = fname + '.png'
         data = self.data
         # self.fig = plt.figure(figsize=(20, 10))
@@ -151,7 +152,7 @@ class MyCallback(ca.Callback):
         self.mid_res = self.s_shape(sol)
         xres_mid = self.mid_res['a'].full()
         print xres_mid.shape
-        self.data_to_save = sol
+        self.data_to_save = self.mid_res
         # if self.iter % 1 == 0:
         fname = '../results/'+self.datafile_name + \
                     '/' + self.datafile_name + \
@@ -953,7 +954,6 @@ class opt_out(data_out):
             self.write_with_pickle(save_this)
             self.write_casadi_structure(self.res_struct)
         self.xres = self.res_struct['a'].full()
-        print self.xres.shape
 
     def get_ground_truth(self):
         """

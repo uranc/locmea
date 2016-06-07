@@ -76,7 +76,7 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 5,
                         'flag_data_mask': False,
                         'flag_callback': True,
                         'flag_callback_plot': True,
-                        'callback_steps': 3,
+                        'callback_steps': 40,
                         'p_dyn': float(p_dynamic)
                         }
 opt = opt_out(data, **optimization_options)
@@ -86,10 +86,10 @@ elif p_method == 'mask':
 	opt.solve_ipopt_multi_measurement_only_mask()
 
 # opt.solve_ipopt_multi_measurement_slack()
-opt.solve_ipopt_multi_measurement_2p()
+# opt.solve_ipopt_multi_measurement_2p()
 # visualize
 vis = visualize(data=data, loc=opt)
-vis.show_snapshot()
+vis.save_snapshot()
 # opt.set_optimization_variables_thesis()
 # opt.initialize_variables()
 # 

@@ -45,7 +45,8 @@ class visualize(object):
         for key in kwargs.keys():
         	print key
         self.data = kwargs['data']
-        self.xres = kwargs['loc'].xres
+        self.xres = kwargs['loc'].xres[:, 0]
+        self.datafile_name = kwargs['loc'].datafile_name
         print kwargs['loc'].method
         if kwargs['loc'].method == 'thesis':
             self.sres = kwargs['loc'].sres
@@ -54,15 +55,83 @@ class visualize(object):
         self.t_ind = 0
         self.norm = MidpointNormalize(midpoint=0)
 
-    def save_snapshot(self):
+    def save_snapshot(self, cmax = 1e-3, t_ind = 35):
         """
-        @brief      Saves a snapshot.
-        
-        @param      self  The object
-        
-        @return     { description_of_the_return_value }
+        Initialize the figure
         """
-        return 0
+        fname = '../results/'+self.datafile_name + \
+                    '/' + self.datafile_name + '_final.png'
+        data = self.data
+        # self.fig = plt.figure(figsize=(20, 10))
+        plt.figure(figsize=(20, 10))
+        # mask reconstruction volume
+        vx, vy, vz = self.voxels
+        rx, ry, rz = vx, vy, vz
+        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()
+        # result
+        n_depth = self.voxels.shape[2]
+        cs_width = n_depth/2
+        resn = self.xres.reshape(rx.shape)
+        resn_ind = np.abs(resn) > cmax
+        xmin, xmax = np.min(vx), np.max(vx)
+        ymin, ymax = np.min(vy), np.max(vy)
+        zmin, zmax = np.min(vz), np.max(vz)
+        ind = ((xmin <= data.cell_pos[:, 0]) & (xmax >= data.cell_pos[:, 0]) &
+               (ymin <= data.cell_pos[:, 1]) & (ymax >= data.cell_pos[:, 1]) &
+               (zmin <= data.cell_pos[:, 2]) & (zmax >= data.cell_pos[:, 2]))
+        # csd plot
+        sss = np.zeros(resn.shape)
+        sss[resn_ind] = resn[resn_ind]
+        # res_min = np.min(sss)
+        # res_max = np.max(sss)
+        # res_zero = 1 - res_max/(res_max + np.abs(res_min))
+        # orgcmap = mcm.RdBu
+        # shiftedcmap = self.shiftedColorMap(orgcmap, midpoint=res_zero, name='shifted')
+        for dl in range(n_depth):
+            ax1 = plt.subplot2grid((2,n_depth+cs_width*2),(0,dl+cs_width*2))  #  (2,n_depth+2,3+dl)
+            ax1.imshow(sss[:, dl, :].T, norm=self.norm, cmap=plt.cm.RdBu, interpolation='none', origin='lower')
+            # ax1.set_ylabel('Transmembrane (nA)')
+            # ax1.set_xlabel('Time (ms)')
+            # second plot
+            ax2 = plt.subplot2grid((2,n_depth+cs_width*2),(1,dl+cs_width*2))
+            ax2.imshow(sss[:, dl, :].T, norm=self.norm, cmap=plt.cm.RdBu, interpolation='none', origin='lower')
+            # ax2.set_ylabel('Electrode Potential(mV)')
+            # ax2.set_xlabel('Time (ms)')
+        # morphology
+        ax = plt.subplot2grid((2,n_depth+cs_width*2),(0,0), colspan=cs_width, rowspan=cs_width, projection='3d')
+        ax.scatter(data.electrode_pos[:, 0],
+                   data.electrode_pos[:, 1],
+                   data.electrode_pos[:, 2],
+                   color='b',
+                   marker='.')  # electrodes
+        ax.scatter(data.cell_pos[ind, 0],
+                   data.cell_pos[ind, 1],
+                   data.cell_pos[ind, 2],
+                   c=data.cell_csd[ind, t_ind],
+                   norm=self.norm,
+                   cmap='RdBu',
+                   marker='o')  # midpoints
+        ax.azim = 10
+        ax.elev = 7
+        # second morphology
+        ax = plt.subplot2grid((2,n_depth+cs_width*2),(0,cs_width), colspan=cs_width, rowspan=cs_width, projection='3d')
+        ax.scatter(data.electrode_pos[:, 0],
+                   data.electrode_pos[:, 1],
+                   data.electrode_pos[:, 2],
+                   color='b',
+                   marker='.')  # electrodes
+        ax.scatter(rx[resn_ind],
+                   ry[resn_ind],
+                   rz[resn_ind],
+                   c=resn[resn_ind],
+                   norm=self.norm,
+                   cmap='RdBu',
+                   marker='o')  # midpoints
+        ax.azim = 10
+        ax.elev = 7
+        # show all
+        # # self.fig.tight_layout()
+        plt.savefig(fname)
 
     def show_snapshot(self, cmax = 1e-3, t_ind = 35):
         """
