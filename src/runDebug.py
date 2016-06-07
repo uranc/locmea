@@ -62,18 +62,21 @@ print 'Dynamics bound is ', float(p_dynamic)
 #python -i runDebug.py -m mask -s ipopt -p 0 -d 50 -n 1 -h limited-memory -l mums
 
 # Optimize
-optimization_options = {'p_vres':5, 'p_jlen':0, 'p_erad': 5,
+optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 5,
                         'solver': p_solver,
                         'hessian': p_hessian,
                         'linsol': p_linsol,
                         'method': p_method,
-                        't_ind': 35, 't_int': 3, 
+                        't_ind': 35, 't_int': 2, 
                         'sigma': float(p_sparse),
                         'flag_depthweighted': bool(int(p_norm)),
                         'flag_parallel': False,
                         'datafile_name': 'output_file',
                         'flag_lift_mask': True,
-                        'flag_data_mask': True,
+                        'flag_data_mask': False,
+                        'flag_callback': True,
+                        'flag_callback_plot': True,
+                        'callback_steps': 3,
                         'p_dyn': float(p_dynamic)
                         }
 opt = opt_out(data, **optimization_options)
@@ -83,10 +86,10 @@ elif p_method == 'mask':
 	opt.solve_ipopt_multi_measurement_only_mask()
 
 # opt.solve_ipopt_multi_measurement_slack()
-# opt.solve_ipopt_multi_measurement_2p()
+opt.solve_ipopt_multi_measurement_2p()
 # visualize
-# vis = visualize(data=data, loc=opt)
-# vis.show_snapshot()
+vis = visualize(data=data, loc=opt)
+vis.show_snapshot()
 # opt.set_optimization_variables_thesis()
 # opt.initialize_variables()
 # 
