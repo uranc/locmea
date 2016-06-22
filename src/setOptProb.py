@@ -188,7 +188,7 @@ class opt_out(data_out):
                         'datafile_name': 'output_file',
                         'callback_steps': 100,
                         'method': 'not_thesis',
-                        't_ind': 30,
+                        't_ind': 35,
                         't_int': 1,
                         'flag_depthweighted': True,
                         'sigma': 0.1,
@@ -302,7 +302,7 @@ class opt_out(data_out):
         if self.p_solver == 'ipopt':
             self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
         elif self.p_solver == 'sqp':    
-            self.solver = ca.qpsol("solver", "qpoases", self.nlp,{'sparse':True})
+            self.solver = ca.qpsol("solver", "qpoases", self.nlp) # {'sparse':True}
         # Solve NLP
         self.args = {}
         self.args["x0"] = self.w0
@@ -963,4 +963,34 @@ class opt_out(data_out):
         
         @return     Ground truth.
         """
-        self.cell_csd
+        """
+        evaluate the localization
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
+        """
+        # if not self.res.any():
+        #     "You don't have a reconstruction!"
+        # if not self.data.cell_pos.any():
+        #     "You don't have a ground truth (data.cell_pos)!"
+        data = self.data
+        # mask reconstruction volume
+        vx, vy, vz = self.voxels
+        rx, ry, rz = vx, vy, vz
+        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()
+        voxel_width = self.options['p_vres']/2.
+        vx_min, vy_min, vz_min = vx-voxel_width, vy-voxel_width, vz-voxel_width
+        vx_max, vy_max, vz_max = vx+voxel_width, vy+voxel_width, vz+voxel_width
+
+        # result
+        xmin, xmax = np.min(vx), np.max(vx)
+        ymin, ymax = np.min(vy), np.max(vy)
+        zmin, zmax = np.min(vz), np.max(vz)
+        ind_cell = ((xmin <= data.cell_pos[:, 0]) & (xmax >= data.cell_pos[:, 0]) &
+                   (ymin <= data.cell_pos[:, 1]) & (ymax >= data.cell_pos[:, 1]) &
+                   (zmin <= data.cell_pos[:, 2]) & (zmax >= data.cell_pos[:, 2]))
+        vis_cell_pos = data.cell_pos[ind_cell.nonzero()[0],:]
+        vis_cell_csd = data.cell_csd[ind_cell.nonzero()[0],:]
+
+        return
