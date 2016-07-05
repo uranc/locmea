@@ -1,5 +1,0 @@
-# locmea
-
-Introduction 
-
-Framework

@@ -62,7 +62,7 @@ print 'Dynamics bound is ', float(p_dynamic)
 #python -i runDebug.py -m mask -s ipopt -p 0 -d 50 -n 1 -h limited-memory -l mums
 
 # Optimize
-optimization_options = {'p_vres':5, 'p_jlen':0, 'p_erad': 5,
+optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
                         'solver': p_solver,
                         'hessian': p_hessian,
                         'linsol': p_linsol,
@@ -92,7 +92,7 @@ elif p_method == 'mask':
 # vis = visualize(data=data, loc=opt)
 # vis.show_snapshot()
 # vis.save_snapshot()
-# opt.set_optimization_variables_thesis()
+opt.set_optimization_variables_thesis()
 # opt.initialize_variables()
 # 
 # 

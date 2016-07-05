@@ -982,7 +982,6 @@ class opt_out(data_out):
         voxel_width = self.options['p_vres']/2.
         vx_min, vy_min, vz_min = vx-voxel_width, vy-voxel_width, vz-voxel_width
         vx_max, vy_max, vz_max = vx+voxel_width, vy+voxel_width, vz+voxel_width
-
         # result
         xmin, xmax = np.min(vx), np.max(vx)
         ymin, ymax = np.min(vy), np.max(vy)
@@ -993,4 +992,4 @@ class opt_out(data_out):
         vis_cell_pos = data.cell_pos[ind_cell.nonzero()[0],:]
         vis_cell_csd = data.cell_csd[ind_cell.nonzero()[0],:]
 
-        return
+        return [vis_cell_pos, vis_cell_csd]
