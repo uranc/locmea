@@ -1,11 +1,14 @@
 # locMEA
 
 locMEA is a source localization framework for Micro Electrode Array recordings.
-Authors: Cem Uran(cem.uran@bcf.uni-freiburg.de), Prof. Stefan Rotter
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+```
+git clone https://github.com/uranc/locmea.git
+```
+
+Check the tutorials directory for different use cases and tutorials.
 
 ### Prerequisities
 
@@ -30,38 +33,22 @@ Currently the project is in developement, you can check the repo to have an idea
 git clone https://github.com/uranc/locmea.git
 ```
 
-
-End with an example of getting some data out of the system or using it for a little demo
+Check the tutorials directory for different use cases and tutorials.
 
 ## Running the tests
 
 Tests are not yet implemented.. 
 
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
 ### And coding style tests
 
 Explain what these tests test and why
 
-```
-Give an example
-```
+
 
 ## Deployment
 
 Add additional notes about how to deploy this on a live system
 
-## Built With
-
-* Dropwizard - Bla bla bla
-* Maven - Maybe
-* Atom - ergaerga
 
 ## Contributing
 
@@ -73,13 +60,14 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Cem Uran** - [uranc](https://github.com/uranc)
+* **Prof. Stefan Rotter** 
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3 - see the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
