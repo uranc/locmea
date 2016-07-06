@@ -68,6 +68,14 @@ class MyCallback(ca.Callback):
     def save_snapshot(self, xres_mid, fname, cmax = 1e-3, t_ind = 35):
         """
         Initialize the figure
+        
+        @param      self      The object
+        @param      xres_mid  The xres middle
+        @param      fname     The filename
+        @param      cmax      The cmax
+        @param      t_ind     The t ind
+        
+        @return     { description_of_the_return_value }
         """
         print fname
         fname = fname + '.png'
@@ -236,10 +244,6 @@ class opt_out(data_out):
     def initialize_variables(self):
         """
         initialization for the optimization problem
-        
-        @param      self  The object.
-        
-        @return     { description_of_the_return_value }
         """
         self.w0 = self.w(0)
         if self.method == 'thesis':
@@ -257,14 +261,6 @@ class opt_out(data_out):
             print 'initialization: Thesis or Mask'
 
     def minimize_function(self):
-        """
-        Function where the NLP is initialized and solved Regardless of the model
-        made
-        
-        @param      self  The object
-        
-        @return     { description_of_the_return_value }
-        """
         self.str_shape = self.w(0)
         self.g = ca.vertcat(*self.g)
         self.lbg = ca.vertcat(*self.lbg)

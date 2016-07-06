@@ -2,5 +2,8 @@ html/
 docs/
 data/
 results/
+src/Doxyfile
+src/latex/
+src/html/
 *.pyc
 *.hdf5
