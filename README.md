@@ -1,6 +1,7 @@
-# Project Title
+# locMEA
 
-One Paragraph of project description goes here
+locMEA is a source localization framework for Micro Electrode Array recordings.
+Authors: Cem Uran(cem.uran@bcf.uni-freiburg.de), Prof. Stefan Rotter
 
 ## Getting Started
 
@@ -8,33 +9,33 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisities
 
-What things you need to install the software and how to install them
+locMEA is developed in python. MATLAB extensions will eventually be.
+Minimum packages required are:
+
+Numpy
+Matplotlib (only for setVisualization)
+For optimization problems: CasADi
+Which requires more packages:
 
 ```
-Give examples
+https://github.com/casadi/casadi/wiki
 ```
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
+Currently the project is in developement, you can check the repo to have an idea.
 
-Stay what the step will be
-
-```
-Give the example
-```
-
-And repeat
 
 ```
-until finished
+git clone https://github.com/uranc/locmea.git
 ```
+
 
 End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+Tests are not yet implemented.. 
 
 ### Break down into end to end tests
 
