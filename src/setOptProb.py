@@ -1,8 +1,7 @@
 """
 Create attributes for the optimization problem
 """
-# Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
-# License:
+# Author: Cem Uran <cem.uran@uranus.uni-freiburg.de> License:
 from setInvProb import data_out
 import casadi as ca
 import numpy as np
@@ -176,8 +175,7 @@ class MyCallback(ca.Callback):
 
 class opt_out(data_out):
     """
-    Class for the optimization problem
-    Child of inverse problem
+    Class for the optimization problem Child of inverse problem
     """
     def __init__(self, *args, **kwargs):
         # ######################## #
@@ -260,8 +258,12 @@ class opt_out(data_out):
 
     def minimize_function(self):
         """
-        Function where the NLP is initialized and solved
-        Regardless of the model made
+        Function where the NLP is initialized and solved Regardless of the model
+        made
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         self.str_shape = self.w(0)
         self.g = ca.vertcat(*self.g)
@@ -316,6 +318,16 @@ class opt_out(data_out):
     def cmp_dx(self, smooth_entity, i, j, k, t, h=1.):
         """
         cmp_dx
+        
+        @param      self           The object
+        @param      smooth_entity  The smooth entity
+        @param      i              { parameter_description }
+        @param      j              { parameter_description }
+        @param      k              { parameter_description }
+        @param      t              { parameter_description }
+        @param      h              { parameter_description }
+        
+        @return     { description_of_the_return_value }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -354,6 +366,16 @@ class opt_out(data_out):
     def cmp_dy(self, smooth_entity, i, j, k, t, h=1.):
         """
         cmp_dy
+        
+        @param      self           The object
+        @param      smooth_entity  The smooth entity
+        @param      i              { parameter_description }
+        @param      j              { parameter_description }
+        @param      k              { parameter_description }
+        @param      t              { parameter_description }
+        @param      h              { parameter_description }
+        
+        @return     { description_of_the_return_value }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -399,6 +421,16 @@ class opt_out(data_out):
     def cmp_dz(self, smooth_entity, i, j, k, t, h=1.):
         """
         cmp_dz
+        
+        @param      self           The object
+        @param      smooth_entity  The smooth entity
+        @param      i              { parameter_description }
+        @param      j              { parameter_description }
+        @param      k              { parameter_description }
+        @param      t              { parameter_description }
+        @param      h              { parameter_description }
+        
+        @return     { description_of_the_return_value }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -437,6 +469,14 @@ class opt_out(data_out):
     def cmp_gradient(self, smooth_entity, flag_tmp_smooth=False, h=1., flag_second=True):
         """
         <F7>cmp_gradient
+        
+        @param      self             The object
+        @param      smooth_entity    The smooth entity
+        @param      flag_tmp_smooth  The flag temporary smooth
+        @param      h                { parameter_description }
+        @param      flag_second      The flag second
+        
+        @return     { description_of_the_return_value }
         """
         # initials
         x = smooth_entity
@@ -471,6 +511,17 @@ class opt_out(data_out):
     def cmp_fwd_dx(self, smooth_entity, flag_average, i, j, k, t, h=1.):
         """
         cmp_dx
+        
+        @param      self           The object
+        @param      smooth_entity  The smooth entity
+        @param      flag_average   The flag average
+        @param      i              { parameter_description }
+        @param      j              { parameter_description }
+        @param      k              { parameter_description }
+        @param      t              { parameter_description }
+        @param      h              { parameter_description }
+        
+        @return     { description_of_the_return_value }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -491,6 +542,17 @@ class opt_out(data_out):
     def cmp_fwd_dy(self, smooth_entity, flag_average, i, j, k, t, h=1.):
         """
         cmp_dy
+        
+        @param      self           The object
+        @param      smooth_entity  The smooth entity
+        @param      flag_average   The flag average
+        @param      i              { parameter_description }
+        @param      j              { parameter_description }
+        @param      k              { parameter_description }
+        @param      t              { parameter_description }
+        @param      h              { parameter_description }
+        
+        @return     { description_of_the_return_value }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -511,6 +573,17 @@ class opt_out(data_out):
     def cmp_fwd_dz(self, smooth_entity, flag_average, i, j, k, t, h=1.):
         """
         cmp_dz
+        
+        @param      self           The object
+        @param      smooth_entity  The smooth entity
+        @param      flag_average   The flag average
+        @param      i              { parameter_description }
+        @param      j              { parameter_description }
+        @param      k              { parameter_description }
+        @param      t              { parameter_description }
+        @param      h              { parameter_description }
+        
+        @return     { description_of_the_return_value }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -531,6 +604,15 @@ class opt_out(data_out):
     def cmp_fwd_diff(self, smooth_entity, flag_average=False, flag_tmp_smooth=False, h=1., flag_second=False):
         """
         <F7>cmp_gradient
+        
+        @param      self             The object
+        @param      smooth_entity    The smooth entity
+        @param      flag_average     The flag average
+        @param      flag_tmp_smooth  The flag temporary smooth
+        @param      h                { parameter_description }
+        @param      flag_second      The flag second
+        
+        @return     { description_of_the_return_value }
         """
         # initials
         x = smooth_entity
@@ -597,6 +679,11 @@ class opt_out(data_out):
     def optimize_waveform(self, x):
         """
         fit waveform to a bimodal alpha function
+        
+        @param      self  The object
+        @param      x     { parameter_description }
+        
+        @return     { description_of_the_return_value }
         """
         srate = self.data.srate
         fit_data = self.data.cell_csd[i, 36:]
@@ -627,6 +714,10 @@ class opt_out(data_out):
     def set_optimization_variables_slack(self):
         """
         Variables for the lifted version
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         self.w = struct_symMX([entry("x", shape=(self.x_size, self.t_int)),
                                entry("xs", shape=(self.x_size)),
@@ -641,8 +732,11 @@ class opt_out(data_out):
 
     def add_data_costs_constraints_slack(self):
         """
-        Computes objective function f
-        With lifting variable ys constraints
+        Computes objective function f With lifting variable ys constraints
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         for i in range(self.y.shape[0]):
             for ti in range(self.t_int):
@@ -655,6 +749,10 @@ class opt_out(data_out):
     def add_l1_costs_constraints_slack(self):
         """
         add slack l1 constraints with lifting variables
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         for j in range(self.w['xs'].shape[0]):
             tmp = 0
@@ -673,7 +771,11 @@ class opt_out(data_out):
     
     def solve_ipopt_multi_measurement_slack(self):
         """
-        MMV L1 
+        MMV L1
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         t0 = time.time()
         self.set_optimization_variables_slack()
@@ -695,8 +797,12 @@ class opt_out(data_out):
 
     def set_optimization_variables_2p(self):
         """
-        x is divided into negative and positive elements
-        this function overwrites the initialized optimization variables
+        x is divided into negative and positive elements this function
+        overwrites the initialized optimization variables
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         self.w = struct_symMX([entry("xs_pos", shape=(self.x_size,self.t_int)),
                                entry("xs_neg", shape=(self.x_size,self.t_int)),
@@ -711,8 +817,11 @@ class opt_out(data_out):
 
     def add_data_costs_constraints_2p(self):
         """
-        Computes objective function f
-        With lifting variable ys constraints
+        Computes objective function f With lifting variable ys constraints
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         for i in range(self.y.shape[0]):
             for ti in range(self.t_int):
@@ -725,6 +834,10 @@ class opt_out(data_out):
     def add_l1_costs_constraints_2p(self):
         """
         add slack l1 constraints with lifting variables
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         for j in range(self.xs_pos.shape[0]):
             tmp_pos = 0
@@ -743,6 +856,10 @@ class opt_out(data_out):
     def solve_ipopt_multi_measurement_2p(self):
         """
         Reform source space x as the difference of x+ - x-
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         t0 = time.time()
         self.set_optimization_variables_2p()
@@ -765,6 +882,10 @@ class opt_out(data_out):
     def set_optimization_variables_thesis(self):
         """
         thesis implementation
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         self.w = struct_symMX([entry("a", shape=(self.x_size,self.t_int)),
                                entry("m", shape=(self.x_size)),
@@ -784,9 +905,12 @@ class opt_out(data_out):
 
     def add_data_costs_constraints_thesis(self):
         """
-        Computes objective function f
-        With lifting variable ys constraints
-        """ 
+         Computes objective function f With lifting variable ys constraints
+         
+         @param      self  The object
+         
+         @return     { description_of_the_return_value }
+         """ 
         for i in range(self.y.shape[0]):
             for ti in range(self.t_int):
                 self.f += (self.y[i, ti] - self.ys[i, ti])**2
@@ -802,6 +926,10 @@ class opt_out(data_out):
     def add_l1_costs_constraints_thesis(self):
         """
         add slack l1 constraints with lifting variables
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         print self.sigma_value
         for j in range(self.m.shape[0]):
@@ -817,6 +945,10 @@ class opt_out(data_out):
     def add_background_costs_constraints_thesis(self):
         """
         add background constraints with lifting variables
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         for b in range(self.m.shape[0]):
             tmp = 0
@@ -829,6 +961,10 @@ class opt_out(data_out):
     def add_tv_mask_costs_constraints_thesis(self):
         """
         add smoothness constraints with lifting variables
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         grad_m = self.cmp_fwd_diff(self.m, False)
         for cm in range(self.m.shape[0]):
@@ -838,8 +974,12 @@ class opt_out(data_out):
 
     def add_smoothness_costs_constraints_thesis(self):
         """
-        add smoothness constraints with lifting variables
-        """ 
+         add smoothness constraints with lifting variables
+         
+         @param      self  The object
+         
+         @return     { description_of_the_return_value }
+         """ 
         average_mask = self.cmp_fwd_diff(self.m, True)
         average_sx = self.cmp_fwd_diff(self.s[:, 0], True)[0,:]
         average_sy = self.cmp_fwd_diff(self.s[:, 1], True)[1,:]
@@ -857,6 +997,10 @@ class opt_out(data_out):
     def add_s_magnitude_costs_constraints_thesis(self):
         """
         add smoothness constraints with lifting variables
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         for b in range(self.x_size):
             self.g.append(ca.dot(self.s[b,:], self.s[b,:]))
@@ -866,6 +1010,10 @@ class opt_out(data_out):
     def add_s_smooth_costs_constraints_thesis(self):
         """
         add smoothness constraints with lifting variables
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         grad = []
         grad_x = self.cmp_fwd_diff(self.s[:,0], False)
@@ -882,6 +1030,10 @@ class opt_out(data_out):
     def solve_ipopt_multi_measurement_thesis(self):
         """
         Reform source space x as the difference of x+ - x-
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         # self.set_optimization_variables_only_mask_thesis()
         self.set_optimization_variables_thesis()
@@ -911,6 +1063,10 @@ class opt_out(data_out):
     def set_optimization_variables_only_mask(self):
         """
         thesis implementation
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         self.w = struct_symMX([entry("a", shape=(self.x_size,self.t_int)),
                                entry("m", shape=(self.x_size)),

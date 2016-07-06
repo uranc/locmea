@@ -1,1 +1,6 @@
 html/
+docs/
+data/
+results/
+*.pyc
+*.hdf5

@@ -58,6 +58,12 @@ class visualize(object):
     def save_snapshot(self, cmax = 1e-3, t_ind = 35):
         """
         Initialize the figure
+        
+        @param      self   The object
+        @param      cmax   The cmax
+        @param      t_ind  The t ind
+        
+        @return     { description_of_the_return_value }
         """
         fname = '../results/'+self.datafile_name + \
                     '/' + self.datafile_name + '_final.png'
@@ -136,6 +142,12 @@ class visualize(object):
     def show_snapshot(self, cmax = 1e-3, t_ind = 35):
         """
         Initialize the figure
+        
+        @param      self   The object
+        @param      cmax   The cmax
+        @param      t_ind  The t ind
+        
+        @return     { description_of_the_return_value }
         """
         data = self.data
         # self.fig = plt.figure(figsize=(20, 10))
@@ -212,6 +224,10 @@ class visualize(object):
     def show_movie(self):
         """
         Initialize the figure
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
 
 
@@ -305,23 +321,37 @@ class visualize(object):
 
     def show_forward_matrix(self, fwd):
         """
-        Visualize the exponential decay
-        PSF and CTF functions
+        Visualize the exponential decay PSF and CTF functions
+        
+        @param      self  The object
+        @param      fwd   The forward
+        
+        @return     { description_of_the_return_value }
         """
 
     def visualize_data(self):
         """
-        visualize recordings, epochs, etc..
-        frq., power (can be extra function)
+        visualize recordings, epochs, etc.. frq., power (can be extra function)
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
 
     def visualize_cell(self):
         """
-        visualize morphology
-        frq. power ( can be extra)
+        visualize morphology frq. power ( can be extra)
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
 
     def visualize_cov(self):
         """
         visualize covariance matrix
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """

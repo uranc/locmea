@@ -9,21 +9,9 @@ import pickle as pc
 
 class data_in(object):
     """
-    Data class loaded from file
-    ---------
-    Arguments
-    ---------
-    f_name - filename
-    flag_cell - flag cell morphology information  #ASSUME TRUE
-    ---------
-    Attributes
-    ---------
-    srate
-    flag_pre
-    data
-    ---------
-    Functions
-    ---------
+    Data class loaded from file --------- Arguments --------- f_name - filename
+    flag_cell - flag cell morphology information  #ASSUME TRUE ---------
+    Attributes --------- srate flag_pre data --------- Functions ---------
     """
 
     def __init__(self, *args, **kwargs):
@@ -49,8 +37,13 @@ class data_in(object):
 
     def load_h5py_data(self, f_name, flag_cell):
         """
-        load h5py data
-        optionally cell and electrode positions
+        load h5py data optionally cell and electrode positions
+        
+        @param      self       The object
+        @param      f_name     The f name
+        @param      flag_cell  The flag cell
+        
+        @return     { description_of_the_return_value }
         """
         f = h5py.File(self.f_name, 'r')
         print "Cell data avaliable"
@@ -63,32 +56,55 @@ class data_in(object):
 
     def load_with_pickle(self, f_name):
         """
-        load h5py data
-        optionally cell and electrode positions
+        load h5py data optionally cell and electrode positions
+        
+        @param      self    The object
+        @param      f_name  The f name
+        
+        @return     { description_of_the_return_value }
         """
 
     def filter_bpass_data(self):
         """
         filter raw data
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
 
     def car_data(self):
         """
         common average reference
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
 
     def epoch_data(self):
         """
-        threshold to get spike time points
-        (can be overwritten)
+        threshold to get spike time points (can be overwritten)
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
 
     def cmp_cov_sensor(self):
         """
         compute the covariance matrix for sensors
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
 
     def cmp_pca_ica(self):
         """
         compute pca, ica, dimensionality reduction
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """

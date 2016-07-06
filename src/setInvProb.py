@@ -10,10 +10,7 @@ import os, os.path
 
 class data_out(object):
     """
-    Class of various reconstructions
-    ----------
-    Attributes
-    ----------
+    Class of various reconstructions ---------- Attributes ----------
     """
 
     def __init__(self, *args, **kwargs):
@@ -40,6 +37,10 @@ class data_out(object):
     def cmp_sloreta(self):
         """
         computes sloreta inverse solution
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         self.fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
         self.dw = self.cmp_weight_matrix(self.fwd)
@@ -50,16 +51,20 @@ class data_out(object):
                       el_radius=5, max_depth=55, p_jlen=2, flag_bound=False):
         """
         Create voxel space w.r.t. -m- electrode pos., 1 voxel larger margin
-        -------------
-        Arguments
-        -------------
-        electrode_pos - Vector valued neuron morphology position
-        param_res - Resolution in micrometer
-        elrad - Electrode radius
-        max_depth - max reconstruction depth
-        ------------
-        Returns
-        ------------
+        ------------- Arguments ------------- electrode_pos - Vector valued
+        neuron morphology position param_res - Resolution in micrometer elrad -
+        Electrode radius max_depth - max reconstruction depth ------------
+        Returns ------------
+        
+        @param      self           The object
+        @param      electrode_pos  The electrode position
+        @param      p_vres         The p vres
+        @param      el_radius      The el radius
+        @param      max_depth      The maximum depth
+        @param      p_jlen         The p jlen
+        @param      flag_bound     The flag bound
+        
+        @return     { description_of_the_return_value }
         """
         jitter_vector = np.random.random((3, )) * p_jlen   # iCSD Leski
         n_elx = np.unique(electrode_pos[:, 0]).shape[0]
@@ -93,12 +98,16 @@ class data_out(object):
     def cmp_fwd_matrix(self, electrode_pos, voxels, p_sigma=0.3):
         """
         Calculate the m-by-n forward matrix given by
-        1/(4*pi*sigma)*(1/(d(el_pos-vox_pos)^2)
-        ------------
-        Arguments
-        ------------
-        elx, ely, elz - Vector valued electrode positions
-        vx, vy, vz - Vector valued voxel positions
+        1/(4*pi*sigma)*(1/(d(el_pos-vox_pos)^2) ------------ Arguments
+        ------------ elx, ely, elz - Vector valued electrode positions vx, vy,
+        vz - Vector valued voxel positions
+        
+        @param      self           The object
+        @param      electrode_pos  The electrode position
+        @param      voxels         The voxels
+        @param      p_sigma        The p sigma
+        
+        @return     { description_of_the_return_value }
         """
         vx, vy, vz = voxels
         elx, ely, elz = electrode_pos.T
@@ -125,8 +134,16 @@ class data_out(object):
     def cmp_inv_matrix(self, fwd_matrix, depth_norm_matrix,
                        p_lmbda=1e-2, snr=5):
         """
-        Computes regularized inverse matrix in the given method
-        (Can be a class later on with multiple methods)
+        Computes regularized inverse matrix in the given method (Can be a class
+        later on with multiple methods)
+        
+        @param      self               The object
+        @param      fwd_matrix         The forward matrix
+        @param      depth_norm_matrix  The depth normalize matrix
+        @param      p_lmbda            The p lmbda
+        @param      snr                The snr
+        
+        @return     { description_of_the_return_value }
         """
         cov_n = np.eye(fwd_matrix.shape[0])
         p_lmbda = np.trace(np.dot(np.dot(fwd_matrix, depth_norm_matrix),
@@ -143,6 +160,12 @@ class data_out(object):
         """
         Calculate the column(depth) normalization matrix given by
         (1./sum(a_i^2))^depth_par - column norm for fwd_matrix[:,i]
+        
+        @param      self        The object
+        @param      fwd_matrix  The forward matrix
+        @param      p_depth     The p depth
+        
+        @return     { description_of_the_return_value }
         """
         def get_neighbors(self, voxels, i, j, k, d):
             """
