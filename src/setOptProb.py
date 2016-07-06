@@ -1143,5 +1143,19 @@ class opt_out(data_out):
                    (zmin <= data.cell_pos[:, 2]) & (zmax >= data.cell_pos[:, 2]))
         vis_cell_pos = data.cell_pos[ind_cell.nonzero()[0],:]
         vis_cell_csd = data.cell_csd[ind_cell.nonzero()[0],:]
-
+        ind_in_vox = []
+        for iv in range(vx_min.shape[0]):
+            ind_in_vox.append((vx_min[iv] <= vis_cell_pos[:,0]) & (vis_cell_pos[:,0] <= vx_max[iv]) &
+                        (vy_min[iv] <= vis_cell_pos[:, 1]) & (vy_max[iv] >= vis_cell_pos[:, 1]) &
+                        (vz_min[iv] <= vis_cell_pos[:, 2]) & (vz_max[iv] >= vis_cell_pos[:, 2]))
+        ind_in_vox = np.array(ind_in_vox)
+        nnz_ind_in_vox = np.nonzero(np.sum(ind_in_vox,1))[0]
+        vox_csd = np.zeros(vx.shape[0])
+        vox_pt = np.zeros(vx.shape[0])
+        for ivv in nnz_ind_in_vox:
+            vox_cell_pos = vis_cell_pos[ind_in_vox[ivv,:]]
+            vox_cell_csd = vis_cell_csd[ind_in_vox[ivv,:]]
+            vox_pos = [vx[ivv],vy[ivv],vz[ivv]]
+            vox_dis = 1./np.sum(np.abs(vox_cell_pos- vox_pos)**2,axis=-1)
+            vox_csd[ivv] = np.dot(vox_cell_csd[:,0],vox_dis)/np.sum(vox_dis)
         return [vis_cell_pos, vis_cell_csd]

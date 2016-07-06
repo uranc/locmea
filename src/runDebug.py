@@ -79,6 +79,26 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
                         'callback_steps': 40,
                         'p_dyn': float(p_dynamic)
                         }
+
+optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
+                        'solver':' ',
+                        'hessian': 'p_hessian',
+                        'linsol': 'p_linsol',
+                        'method': 'p_method',
+                        't_ind': 35, 't_int': 1, 
+                        'sigma': float(0),
+                        'flag_depthweighted': bool(int(0)),
+                        'flag_parallel': False,
+                        'datafile_name': 'output_file',
+                        'flag_lift_mask': False,
+                        'flag_data_mask': True,
+                        'flag_callback': True,
+                        'flag_callback_plot': True,
+                        'callback_steps': 40,
+                        'p_dyn': float(1)
+                        }
+
+
 opt = opt_out(data, **optimization_options)
 if p_method == 'thesis':
 	opt.solve_ipopt_multi_measurement_thesis()
