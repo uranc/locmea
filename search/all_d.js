@@ -5,7 +5,5 @@ var searchData=
   ['res',['res',['../classsetInvProb_1_1data__out.html#a94de837cb9b4d2ca189de9bc3aacf8c7',1,'setInvProb.data_out.res()'],['../classsetOptProb_1_1opt__out.html#a9c15f4813a0f8f9b8be438414cce9ed1',1,'setOptProb.opt_out.res()']]],
   ['res_5fstruct',['res_struct',['../classsetOptProb_1_1opt__out.html#acfc95389c2bcf1a75787c0b2fd97b603',1,'setOptProb::opt_out']]],
   ['rundebug',['runDebug',['../namespacerunDebug.html',1,'']]],
-  ['rundebug_2epy',['runDebug.py',['../runDebug_8py.html',1,'']]],
-  ['runframework',['runFramework',['../namespacerunFramework.html',1,'']]],
-  ['runframework_2epy',['runFramework.py',['../runFramework_8py.html',1,'']]]
+  ['rundebug_2epy',['runDebug.py',['../runDebug_8py.html',1,'']]]
 ];

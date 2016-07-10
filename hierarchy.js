@@ -1,8 +1,5 @@
 var hierarchy =
 [
-    [ "Callback", "classCallback.html", [
-      [ "callback_example.MyCallback", "classcallback__example_1_1MyCallback.html", null ]
-    ] ],
     [ "Callback", null, [
       [ "setOptProb.MyCallback", "classsetOptProb_1_1MyCallback.html", null ]
     ] ],

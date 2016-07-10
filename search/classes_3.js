@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['object',['object',['../classobject.html',1,'']]],
-  ['opt_5fout',['opt_out',['../classsetOptProb_1_1opt__out.html',1,'setOptProb']]]
+  ['param_5fopt',['param_opt',['../classsetParamOpt_1_1param__opt.html',1,'setParamOpt']]]
 ];

@@ -11,5 +11,5 @@ var searchData=
   ['add_5fs_5fsmooth_5fcosts_5fconstraints_5fthesis',['add_s_smooth_costs_constraints_thesis',['../classsetOptProb_1_1opt__out.html#acfa5906f45495e2b9bcd32a49e17ccea',1,'setOptProb::opt_out']]],
   ['add_5fsmoothness_5fcosts_5fconstraints_5fthesis',['add_smoothness_costs_constraints_thesis',['../classsetOptProb_1_1opt__out.html#aa3fabb5e736491a8e27888382f379b0c',1,'setOptProb::opt_out']]],
   ['add_5ftv_5fmask_5fcosts_5fconstraints_5fthesis',['add_tv_mask_costs_constraints_thesis',['../classsetOptProb_1_1opt__out.html#ac3bee59ce2412673b249c1e907373f76',1,'setOptProb::opt_out']]],
-  ['args',['args',['../classsetOptProb_1_1opt__out.html#a774b25433812db7e8960945a105f1b59',1,'setOptProb.opt_out.args()'],['../namespacemap__example.html#a22e92d35510ff68ac9700c38f767c21f',1,'map_example.args()']]]
+  ['args',['args',['../classsetOptProb_1_1opt__out.html#a774b25433812db7e8960945a105f1b59',1,'setOptProb::opt_out']]]
 ];

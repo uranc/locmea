@@ -1,9 +1,6 @@
 var dir_68267d1309a1af8e8297ef4c3efbcdba =
 [
-    [ "callback_example.py", "callback__example_8py.html", "callback__example_8py" ],
-    [ "map_example.py", "map__example_8py.html", "map__example_8py" ],
     [ "runDebug.py", "runDebug_8py.html", "runDebug_8py" ],
-    [ "runFramework.py", "runFramework_8py.html", "runFramework_8py" ],
     [ "setData.py", "setData_8py.html", [
       [ "data_in", "classsetData_1_1data__in.html", "classsetData_1_1data__in" ]
     ] ],

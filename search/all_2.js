@@ -1,8 +1,5 @@
 var searchData=
 [
-  ['callback',['Callback',['../classCallback.html',1,'']]],
-  ['callback_5fexample',['callback_example',['../namespacecallback__example.html',1,'']]],
-  ['callback_5fexample_2epy',['callback_example.py',['../callback__example_8py.html',1,'']]],
   ['callback_5fsteps',['callback_steps',['../classsetOptProb_1_1opt__out.html#a7ae2879d4e767f58dba465d93327eda4',1,'setOptProb::opt_out']]],
   ['car_5fdata',['car_data',['../classsetData_1_1data__in.html#a64b1671488841434b98d236d820574df',1,'setData::data_in']]],
   ['cmp_5fcov_5fsensor',['cmp_cov_sensor',['../classsetData_1_1data__in.html#a7a1dad9de9b4fd0f8fba8d3d62f90f0c',1,'setData::data_in']]],
