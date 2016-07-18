@@ -17,25 +17,25 @@ Minimum packages required are:
 
 There is 4 main modules of the framework with different functions.
 
-# getData
+#### getData
 Load the data, visualize, pre-process
  - Requierements - 
-numpy 
-h5py (Optional for hdf5 files)
-Pickle (Optional for pickle files)
+- numpy 
+- h5py (Optional for hdf5 files)
+- Pickle (Optional for pickle files)
 
 
-# setInverseProblem
+#### setInverseProblem
 Define the inverse source localization problem using the recordings and the electrode geometry.
 
-numpy
-scipy
+- numpy
+- scipy
 
-# setOptimizationProblem
+#### setOptimizationProblem
 
-numpy
-CasADi
-OpenMP (optional)
+- numpy
+- CasADi
+- OpenMP (optional)
 
 CasADi is an open-source symbolic framework for algorithmic (a.k.a. automatic) differentiation and numeric optimization.  requires more packages, check the website for installation details.
 
@@ -43,9 +43,8 @@ CasADi is an open-source symbolic framework for algorithmic (a.k.a. automatic) d
 https://github.com/casadi/casadi/wiki
 ```
 
-# getVisualization
-Matplotlib
-For optimization problems: CasADi
+#### getVisualization
+- Matplotlib
 
 ### Installing
 
@@ -81,7 +80,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-locMEA is an open-source tool, written in Python and built on top of the frameworks mentioned as earlier. It is developed by **Cem Uran** - [uranc](https://github.com/uranc) of the University of Freiburg under the supervision of **Prof. Stefan Rotter**  - [Bernstein Center Freiburg](https://www.bcf.uni-freiburg.de/people/details/rotter)
+locMEA is an open-source tool, written in Python and built on top of the frameworks mentioned as earlier. It is developed by **Cem Uran** - [uranc](https://github.com/uranc) of the University of Freiburg under the supervision of **Stefan Rotter**  - [Bernstein Center Freiburg](https://www.bcf.uni-freiburg.de/people/details/rotter)
 
 ## License
 
