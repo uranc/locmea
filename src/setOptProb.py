@@ -1,7 +1,17 @@
 """
+Copyright (C) This program is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your option)
+any later version. This program is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+License for more details.
+--------------------------------------------------------------------
+Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
+--------------------------------------------------------------------
 Create attributes for the optimization problem
+--------------------------------------------------------------------
 """
-# Author: Cem Uran <cem.uran@uranus.uni-freiburg.de> License:
 from setInvProb import data_out
 import casadi as ca
 import numpy as np

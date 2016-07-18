@@ -1,3 +1,18 @@
+"""
+Copyright (C) This program is free software: you can redistribute it and/or
+modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or (at your option)
+any later version. This program is distributed in the hope that it will be
+useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
+License for more details.
+--------------------------------------------------------------------
+Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
+--------------------------------------------------------------------
+Visualization module
+--------------------------------------------------------------------
+"""
+
 import numpy as np
 import matplotlib
 #matplotlib.use('TkAgg')
@@ -5,22 +20,6 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.axes_grid1 import AxesGrid
 from matplotlib.colors import Normalize
-"""
-Inverse optimizer example
-"""
-'''
-Copyright (C)
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-'''
-# Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
-# License:
 
 
 class MidpointNormalize(Normalize):
