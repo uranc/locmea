@@ -98,35 +98,44 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>Check the tutorials directory for different use cases and tutorials.</p>
 <h3>Prerequisities</h3>
 <p>locMEA is developed in python. MATLAB extensions will eventually be. Minimum packages required are:</p>
-<p>Numpy Matplotlib (only for <a class="el" href="namespacesetVisualization.html">setVisualization</a>) For optimization problems: CasADi Which requires more packages:</p>
+<p>There is 4 main modules of the framework with different functions.</p>
+<h1>getData</h1>
+<p>Load the data, visualize, pre-process</p>
+<ul>
+<li>Requierements - numpy h5py (Optional for hdf5 files) Pickle (Optional for pickle files)</li>
+</ul>
+<h1>setInverseProblem</h1>
+<p>Define the inverse source localization problem using the recordings and the electrode geometry.</p>
+<p>numpy scipy</p>
+<h1>setOptimizationProblem</h1>
+<p>numpy CasADi OpenMP (optional)</p>
+<p>CasADi is an open-source symbolic framework for algorithmic (a.k.a. automatic) differentiation and numeric optimization. requires more packages, check the website for installation details.</p>
 <p>``` <a href="https://github.com/casadi/casadi/wiki">https://github.com/casadi/casadi/wiki</a> ```</p>
+<h1>getVisualization</h1>
+<p>Matplotlib For optimization problems: CasADi</p>
 <h3>Installing</h3>
 <p>Currently the project is in developement, you can check the repo to have an idea.</p>
 <p>``` git clone <a href="https://github.com/uranc/locmea.git">https://github.com/uranc/locmea.git</a> ```</p>
-<p>Check the tutorials directory for different use cases and tutorials.</p>
+<p>Check the tutorials directory for different use cases and tutorials. PyPi package coming soon..</p>
 <h2>Running the tests</h2>
-<p>Tests are not yet implemented..</p>
-<h3>And coding style tests</h3>
-<p>Explain what these tests test and why</p>
+<p><em>Not yet</em> Tests are not yet implemented..</p>
 <h2>Deployment</h2>
-<p>Add additional notes about how to deploy this on a live system</p>
+<p>Using the CasADi framework, you can generate the C-code for developed algorithms which will be much faster and will allow hardware implementations.</p>
 <h2>Contributing</h2>
 <p>Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us.</p>
 <h2>Versioning</h2>
+<p><em>Not yet</em></p>
 <p>We use <a href="http://semver.org/">SemVer</a> for versioning. For the versions available, see the <a href="https://github.com/your/project/tags">tags on this repository</a>.</p>
 <h2>Authors</h2>
-<ul>
-<li><b>Cem Uran</b> - <a href="https://github.com/uranc">uranc</a></li>
-<li><b>Prof. Stefan Rotter</b></li>
-</ul>
-<p>See also the list of <a href="https://github.com/your/project/contributors">contributors</a> who participated in this project.</p>
+<p>locMEA is an open-source tool, written in Python and built on top of the frameworks mentioned as earlier. It is developed by <b>Cem Uran</b> - <a href="https://github.com/uranc">uranc</a> of the University of Freiburg under the supervision of <b>Prof. Stefan Rotter</b> - <a href="https://www.bcf.uni-freiburg.de/people/details/rotter">Bernstein Center Freiburg</a></p>
 <h2>License</h2>
-<p>This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3 - see the LICENSE.md file for details</p>
+<p>This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3, meaning the code can be used royalty-free even in commercial applications. See the LICENSE.md file for details.</p>
 <h2>Acknowledgments</h2>
 <ul>
-<li>Hat tip to anyone who's code was used</li>
-<li>Inspiration</li>
-<li>etc </li>
+<li>Thanks to all the great developers that are used in this framework.</li>
+<li>CasADi, LFPy, NEURON</li>
+<li>numpy, scipy, matplotlib, h5py, pickle, Doxygen</li>
+<li>Thanks to BWUniCluster for allowing the resources and the all computational power. </li>
 </ul>
 </div></div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.8-->
@@ -137,7 +146,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 11 2016 00:30:24 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 18 2016 14:54:44 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

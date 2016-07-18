@@ -114,65 +114,87 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;locMEA is developed in python. MATLAB extensions will eventually be.</div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;Minimum packages required are:</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;Numpy</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;Matplotlib (only <span class="keywordflow">for</span> setVisualization)</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;For optimization problems: CasADi</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;Which requires more packages:</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;```</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;https:<span class="comment">//github.com/casadi/casadi/wiki</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;```</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;There is 4 main modules of the framework with different functions.</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;# getData</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;Load the <a class="code" href="namespacerunDebug.html#a766620153f77d34cce908b28086076da">data</a>, visualize, pre-process</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; - Requierements - </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;numpy </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;h5py (Optional <span class="keywordflow">for</span> hdf5 files)</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;Pickle (Optional <span class="keywordflow">for</span> pickle files)</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">### Installing</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;Currently the project is in developement, you can check the repo to have an idea.</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor"># setInverseProblem</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor"></span>Define the inverse source localization problem <span class="keyword">using</span> the recordings and the electrode geometry.</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;```</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;git clone https:<span class="comment">//github.com/uranc/locmea.git</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;```</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;Check the tutorials directory <span class="keywordflow">for</span> different use cases and tutorials.</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;## Running the tests</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;numpy</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;scipy</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor"># setOptimizationProblem</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;numpy</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;CasADi</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;OpenMP (optional)</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;Tests are not yet implemented.. </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;CasADi is an open-source symbolic framework for algorithmic (a.k.a. automatic) differentiation and numeric optimization.  requires more packages, check the website for installation details.</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="preprocessor">### And coding style tests</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;Explain what these tests test and why</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;```</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;https:<span class="comment">//github.com/casadi/casadi/wiki</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;```</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">## Deployment</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;Add additional notes about how to deploy <span class="keyword">this</span> on a live system</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">## Contributing</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="preprocessor"></span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;Please read [CONTRIBUTING.md](CONTRIBUTING.md) <span class="keywordflow">for</span> details on our code of conduct, and the process <span class="keywordflow">for</span> submitting pull requests to us.</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;## Versioning</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor"># getVisualization</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor"></span>Matplotlib</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;For optimization problems: CasADi</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="preprocessor">### Installing</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor"></span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;Currently the project is in developement, you can check the repo to have an idea.</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;```</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;git clone https:<span class="comment">//github.com/uranc/locmea.git</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;```</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;We use [SemVer](http:<span class="comment">//semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). </span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;## Authors</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;* **Cem Uran** - [uranc](https:<span class="comment">//github.com/uranc)</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;* **Prof. Stefan Rotter** </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;See also the list of [contributors](https:<span class="comment">//github.com/your/project/contributors) who participated in this project.</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;Check the tutorials directory <span class="keywordflow">for</span> different use cases and tutorials.</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;PyPi <span class="keyword">package </span>coming soon..</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;## Running the tests</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;*Not yet* </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;Tests are not yet implemented.. </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;## License</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;## Deployment</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3 - see the [LICENSE.md](LICENSE.md) file <span class="keywordflow">for</span> details</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;Using the CasADi framework, you can generate the C-code for developed algorithms which will be much faster and will allow hardware implementations.</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;## Acknowledgments</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;## Contributing</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;* Hat tip to anyone who<span class="stringliteral">&#39;s code was used</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="stringliteral">* Inspiration</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;<span class="stringliteral">* etc</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;## Versioning</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;*Not yet* </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;We use [SemVer](http:<span class="comment">//semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). </span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;## Authors</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;locMEA is an open-source tool, written in Python and built on top of the frameworks mentioned as earlier. It is developed by **Cem Uran** - [uranc](https:<span class="comment">//github.com/uranc) of the University of Freiburg under the supervision of **Prof. Stefan Rotter**  - [Bernstein Center Freiburg](https://www.bcf.uni-freiburg.de/people/details/rotter)</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;## License</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3, meaning the code can be used royalty-free even in commercial applications. See the [LICENSE.md](LICENSE.md) file for details.</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;## Acknowledgments</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;* Thanks to all the great developers that are used in this framework. </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;- CasADi, LFPy, NEURON</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;- numpy, scipy, matplotlib, h5py, pickle, Doxygen</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;* Thanks to BWUniCluster for allowing the resources and the all computational power.</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;</div>
+<div class="ttc" id="namespacerunDebug_html_a766620153f77d34cce908b28086076da"><div class="ttname"><a href="namespacerunDebug.html#a766620153f77d34cce908b28086076da">runDebug.data</a></div><div class="ttdeci">tuple data</div><div class="ttdef"><b>Definition:</b> <a href="runDebug_8py_source.html#l00026">runDebug.py:26</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.8-->
 <!-- start footer part -->
@@ -182,7 +204,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 11 2016 00:30:23 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 18 2016 14:54:43 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
