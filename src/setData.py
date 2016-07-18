@@ -9,9 +9,7 @@ import pickle as pc
 
 class data_in(object):
     """
-    Data class loaded from file --------- Arguments --------- f_name - filename
-    flag_cell - flag cell morphology information  #ASSUME TRUE ---------
-    Attributes --------- srate flag_pre data --------- Functions ---------
+    Data class loaded from file
     """
 
     def __init__(self, *args, **kwargs):

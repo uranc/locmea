@@ -10,185 +10,208 @@ import pickle as pc
 import os, os.path
 import time
 from matplotlib.colors import Normalize
-
 try:
     import matplotlib.pyplot as plt
 except ImportError:
     raise ImportError('Matplotlib not found. Might cause problem.')
 
-class MidpointNormalize(Normalize):
-    def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
-        self.midpoint = midpoint
-        Normalize.__init__(self, vmin, vmax, clip)
-
-    def __call__(self, value, clip=None):
-        # I'm ignoring masked values and all kinds of edge cases to make a
-        # simple example...
-        x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
-        return np.ma.masked_array(np.interp(value, x, y))
-
-class MyCallback(ca.Callback):
-    def __init__(self, name, nx, ng, np, opts={}):
-        ca.Callback.__init__(self)
-        self.norm = MidpointNormalize(midpoint=0)
-        self.iter = 0
-        self.data_to_save = []
-        self.datafile_name = opts['filename']
-        self.flag_callback_plot = opts['flag_callback_plot']
-        self.s_shape = opts['str_shape']
-        self.data = opts['data_cb']
-        self.voxels = opts['voxels_cb']
-        opts['filename'] = None
-        opts['flag_callback_plot'] = None
-        opts['str_shape'] = None
-        opts['data_cb'] = None
-        opts['voxels_cb'] = None
-        # opts['w'] = None
-        self.nx = nx
-        self.ng = ng
-        self.np = np
-
-        opts['input_scheme'] = ca.nlpsol_out()
-        opts['output_scheme'] = ['ret']
-        self.construct(name, opts)
-    def get_n_in(self): return ca.nlpsol_n_out()
-    def get_n_out(self): return 1
-    
-    def get_sparsity_in(self, i):
-        n = ca.nlpsol_out(i)
-        if n=='f':
-            return ca.Sparsity. scalar()
-        elif n in ('x', 'lam_x'):
-            return ca.Sparsity.dense(self.nx)
-        elif n in ('g', 'lam_g'):
-            return ca.Sparsity.dense(self.ng)
-        else:
-            return ca.Sparsity(0,0)
-
-    def save_snapshot(self, xres_mid, fname, cmax = 1e-3, t_ind = 35):
-        """
-        Initialize the figure
-        
-        @param      self      The object
-        @param      xres_mid  The xres middle
-        @param      fname     The filename
-        @param      cmax      The cmax
-        @param      t_ind     The t ind
-        
-        @return     { description_of_the_return_value }
-        """
-        print fname
-        fname = fname + '.png'
-        data = self.data
-        # self.fig = plt.figure(figsize=(20, 10))
-        plt.figure(figsize=(20, 10))
-        # mask reconstruction volume
-        vx, vy, vz = self.voxels
-        rx, ry, rz = vx, vy, vz
-        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()
-        # result
-        n_depth = self.voxels.shape[2]
-        cs_width = n_depth/2
-        resn = xres_mid.reshape(rx.shape)
-        resn_ind = np.abs(resn) > cmax
-        xmin, xmax = np.min(vx), np.max(vx)
-        ymin, ymax = np.min(vy), np.max(vy)
-        zmin, zmax = np.min(vz), np.max(vz)
-        ind = ((xmin <= data.cell_pos[:, 0]) & (xmax >= data.cell_pos[:, 0]) &
-               (ymin <= data.cell_pos[:, 1]) & (ymax >= data.cell_pos[:, 1]) &
-               (zmin <= data.cell_pos[:, 2]) & (zmax >= data.cell_pos[:, 2]))
-        # csd plot
-        sss = np.zeros(resn.shape)
-        sss[resn_ind] = resn[resn_ind]
-        # res_min = np.min(sss)
-        # res_max = np.max(sss)
-        # res_zero = 1 - res_max/(res_max + np.abs(res_min))
-        # orgcmap = mcm.RdBu
-        # shiftedcmap = self.shiftedColorMap(orgcmap, midpoint=res_zero, name='shifted')
-        for dl in range(n_depth):
-            ax1 = plt.subplot2grid((2,n_depth+cs_width*2),(0,dl+cs_width*2))  #  (2,n_depth+2,3+dl)
-            ax1.imshow(sss[:, dl, :].T, norm=self.norm, cmap=plt.cm.RdBu, interpolation='none', origin='lower')
-            # ax1.set_ylabel('Transmembrane (nA)')
-            # ax1.set_xlabel('Time (ms)')
-            # second plot
-            ax2 = plt.subplot2grid((2,n_depth+cs_width*2),(1,dl+cs_width*2))
-            ax2.imshow(sss[:, dl, :].T, norm=self.norm, cmap=plt.cm.RdBu, interpolation='none', origin='lower')
-            # ax2.set_ylabel('Electrode Potential(mV)')
-            # ax2.set_xlabel('Time (ms)')
-        # morphology
-        ax = plt.subplot2grid((2,n_depth+cs_width*2),(0,0), colspan=cs_width, rowspan=cs_width, projection='3d')
-        ax.scatter(data.electrode_pos[:, 0],
-                   data.electrode_pos[:, 1],
-                   data.electrode_pos[:, 2],
-                   color='b',
-                   marker='.')  # electrodes
-        ax.scatter(data.cell_pos[ind, 0],
-                   data.cell_pos[ind, 1],
-                   data.cell_pos[ind, 2],
-                   c=data.cell_csd[ind, t_ind],
-                   norm=self.norm,
-                   cmap='RdBu',
-                   marker='o')  # midpoints
-        ax.azim = 10
-        ax.elev = 7
-        # second morphology
-        ax = plt.subplot2grid((2,n_depth+cs_width*2),(0,cs_width), colspan=cs_width, rowspan=cs_width, projection='3d')
-        ax.scatter(data.electrode_pos[:, 0],
-                   data.electrode_pos[:, 1],
-                   data.electrode_pos[:, 2],
-                   color='b',
-                   marker='.')  # electrodes
-        ax.scatter(rx[resn_ind],
-                   ry[resn_ind],
-                   rz[resn_ind],
-                   c=resn[resn_ind],
-                   norm=self.norm,
-                   cmap='RdBu',
-                   marker='o')  # midpoints
-        ax.azim = 10
-        ax.elev = 7
-        # show all
-        # # self.fig.tight_layout()
-        plt.savefig(fname)
-
-    def eval(self, arg):
-        darg = {}
-        for (i,s) in enumerate(ca.nlpsol_out()): darg[s] = arg[i]
-        sol = darg['x']
-        # print self.str_shape
-        self.mid_res = self.s_shape(sol)
-        xres_mid = self.mid_res['a'].full()
-        print xres_mid.shape
-        self.data_to_save = self.mid_res
-        # if self.iter % 1 == 0:
-        fname = '../results/'+self.datafile_name + \
-                    '/' + self.datafile_name + \
-                    '_iter_' + str(self.iter)
-        # mkdir
-        if not os.path.exists(os.path.dirname(fname)):
-            try:
-                os.makedirs(os.path.dirname(fname))
-            except OSError as exc: # Guard against race condition
-                if exc.errno != errno.EEXIST:
-                    raise
-        print fname + ' written.'
-        with open(fname, 'wb') as f:
-            pc.dump(self.data_to_save, f)
-        # self.data_to_save = []
-        # self.data_to_save.append(self.iter)
-            if self.flag_callback_plot:
-                self.save_snapshot(xres_mid[:, 0], fname)
-        self.iter = self.iter + 1
-        return [0]
 
 class opt_out(data_out):
     """
     Class for the optimization problem Child of inverse problem
     """
+    class MyCallback(ca.Callback):
+        """
+        Callback class
+        """
+        class MidpointNormalize(Normalize):
+            """
+            Normalize plot
+            """
+            def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
+                """
+                Requires
+                """
+                self.midpoint = midpoint
+                Normalize.__init__(self, vmin, vmax, clip)
+
+            def __call__(self, value, clip=None):
+                """
+                Call t
+                
+                @param      self   The object
+                @param      value  The value
+                @param      clip   The clip
+                
+                @return     { description_of_the_return_value }
+                """
+                x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
+                return np.ma.masked_array(np.interp(value, x, y))
+
+        def __init__(self, name, nx, ng, np, opts={}):
+            """
+            Callback class is used for the optimization
+            """
+            ca.Callback.__init__(self)
+            self.norm = self.MidpointNormalize(midpoint=0)
+            self.iter = 0
+            self.data_to_save = []
+            self.datafile_name = opts['filename']
+            self.flag_callback_plot = opts['flag_callback_plot']
+            self.s_shape = opts['str_shape']
+            self.data = opts['data_cb']
+            self.voxels = opts['voxels_cb']
+            opts['filename'] = None
+            opts['flag_callback_plot'] = None
+            opts['str_shape'] = None
+            opts['data_cb'] = None
+            opts['voxels_cb'] = None
+            # opts['w'] = None
+            self.nx = nx
+            self.ng = ng
+            self.np = np
+
+            opts['input_scheme'] = ca.nlpsol_out()
+            opts['output_scheme'] = ['ret']
+            self.construct(name, opts)
+        def get_n_in(self): return ca.nlpsol_n_out()
+        def get_n_out(self): return 1
+        
+        def get_sparsity_in(self, i):
+            n = ca.nlpsol_out(i)
+            if n=='f':
+                return ca.Sparsity. scalar()
+            elif n in ('x', 'lam_x'):
+                return ca.Sparsity.dense(self.nx)
+            elif n in ('g', 'lam_g'):
+                return ca.Sparsity.dense(self.ng)
+            else:
+                return ca.Sparsity(0,0)
+
+        def save_snapshot(self, xres_mid, fname, cmax = 1e-3, t_ind = 35):
+            """
+            Initialize the figure
+            
+            @param      self      The object
+            @param      xres_mid  The xres middle
+            @param      fname     The filename
+            @param      cmax      The cmax
+            @param      t_ind     The t ind
+            
+            @return     { description_of_the_return_value }
+            """
+            print fname
+            fname = fname + '.png'
+            data = self.data
+            # self.fig = plt.figure(figsize=(20, 10))
+            plt.figure(figsize=(20, 10))
+            # mask reconstruction volume
+            vx, vy, vz = self.voxels
+            rx, ry, rz = vx, vy, vz
+            vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()
+            # result
+            n_depth = self.voxels.shape[2]
+            cs_width = n_depth/2
+            resn = xres_mid.reshape(rx.shape)
+            resn_ind = np.abs(resn) > cmax
+            xmin, xmax = np.min(vx), np.max(vx)
+            ymin, ymax = np.min(vy), np.max(vy)
+            zmin, zmax = np.min(vz), np.max(vz)
+            ind = ((xmin <= data.cell_pos[:, 0]) & (xmax >= data.cell_pos[:, 0]) &
+                   (ymin <= data.cell_pos[:, 1]) & (ymax >= data.cell_pos[:, 1]) &
+                   (zmin <= data.cell_pos[:, 2]) & (zmax >= data.cell_pos[:, 2]))
+            # csd plot
+            sss = np.zeros(resn.shape)
+            sss[resn_ind] = resn[resn_ind]
+            # res_min = np.min(sss)
+            # res_max = np.max(sss)
+            # res_zero = 1 - res_max/(res_max + np.abs(res_min))
+            # orgcmap = mcm.RdBu
+            # shiftedcmap = self.shiftedColorMap(orgcmap, midpoint=res_zero, name='shifted')
+            for dl in range(n_depth):
+                ax1 = plt.subplot2grid((2,n_depth+cs_width*2),(0,dl+cs_width*2))  #  (2,n_depth+2,3+dl)
+                ax1.imshow(sss[:, dl, :].T, norm=self.norm, cmap=plt.cm.RdBu, interpolation='none', origin='lower')
+                # ax1.set_ylabel('Transmembrane (nA)')
+                # ax1.set_xlabel('Time (ms)')
+                # second plot
+                ax2 = plt.subplot2grid((2,n_depth+cs_width*2),(1,dl+cs_width*2))
+                ax2.imshow(sss[:, dl, :].T, norm=self.norm, cmap=plt.cm.RdBu, interpolation='none', origin='lower')
+                # ax2.set_ylabel('Electrode Potential(mV)')
+                # ax2.set_xlabel('Time (ms)')
+            # morphology
+            ax = plt.subplot2grid((2,n_depth+cs_width*2),(0,0), colspan=cs_width, rowspan=cs_width, projection='3d')
+            ax.scatter(data.electrode_pos[:, 0],
+                       data.electrode_pos[:, 1],
+                       data.electrode_pos[:, 2],
+                       color='b',
+                       marker='.')  # electrodes
+            ax.scatter(data.cell_pos[ind, 0],
+                       data.cell_pos[ind, 1],
+                       data.cell_pos[ind, 2],
+                       c=data.cell_csd[ind, t_ind],
+                       norm=self.norm,
+                       cmap='RdBu',
+                       marker='o')  # midpoints
+            ax.azim = 10
+            ax.elev = 7
+            # second morphology
+            ax = plt.subplot2grid((2,n_depth+cs_width*2),(0,cs_width), colspan=cs_width, rowspan=cs_width, projection='3d')
+            ax.scatter(data.electrode_pos[:, 0],
+                       data.electrode_pos[:, 1],
+                       data.electrode_pos[:, 2],
+                       color='b',
+                       marker='.')  # electrodes
+            ax.scatter(rx[resn_ind],
+                       ry[resn_ind],
+                       rz[resn_ind],
+                       c=resn[resn_ind],
+                       norm=self.norm,
+                       cmap='RdBu',
+                       marker='o')  # midpoints
+            ax.azim = 10
+            ax.elev = 7
+            # show all
+            # # self.fig.tight_layout()
+            plt.savefig(fname)
+
+        def eval(self, arg):
+            darg = {}
+            for (i,s) in enumerate(ca.nlpsol_out()): darg[s] = arg[i]
+            sol = darg['x']
+            # print self.str_shape
+            self.mid_res = self.s_shape(sol)
+            xres_mid = self.mid_res['a'].full()
+            print xres_mid.shape
+            self.data_to_save = self.mid_res
+            # if self.iter % 1 == 0:
+            fname = '../results/'+self.datafile_name + \
+                        '/' + self.datafile_name + \
+                        '_iter_' + str(self.iter)
+            # mkdir
+            if not os.path.exists(os.path.dirname(fname)):
+                try:
+                    os.makedirs(os.path.dirname(fname))
+                except OSError as exc: # Guard against race condition
+                    if exc.errno != errno.EEXIST:
+                        raise
+            print fname + ' written.'
+            with open(fname, 'wb') as f:
+                pc.dump(self.data_to_save, f)
+            # self.data_to_save = []
+            # self.data_to_save.append(self.iter)
+                if self.flag_callback_plot:
+                    self.save_snapshot(xres_mid[:, 0], fname)
+            self.iter = self.iter + 1
+            return [0]
+
     def __init__(self, *args, **kwargs):
-        # ######################## #
-        # Options for optimization #
-        # ######################## #
+            """
+            Options for optimization
+            
+            @param      self    The object
+            @param      args    The arguments
+            @param      kwargs  The kwargs
+            """
         data_out.__init__(self, *args, **kwargs)
         self.opt_opt = {'solver': 'ipopt',
                         'datafile_name': 'output_file',
@@ -209,6 +232,7 @@ class opt_out(data_out):
                         'hessian': 'exact',
                         'linsol': 'ma57'
                         }
+
         self.opt_opt.update(kwargs)
         self.solver = self.opt_opt['solver']
         self.datafile_name = self.opt_opt['datafile_name']+'_'+str(time.time())
@@ -244,6 +268,10 @@ class opt_out(data_out):
     def initialize_variables(self):
         """
         initialization for the optimization problem
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
         """
         self.w0 = self.w(0)
         if self.method == 'thesis':
@@ -261,6 +289,13 @@ class opt_out(data_out):
             print 'initialization: Thesis or Mask'
 
     def minimize_function(self):
+        """
+        Minimization routine
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
+        """
         self.str_shape = self.w(0)
         self.g = ca.vertcat(*self.g)
         self.lbg = ca.vertcat(*self.lbg)
@@ -276,6 +311,7 @@ class opt_out(data_out):
             self.opts = {"ipopt.max_iter": 100000,
                          "ipopt.hessian_approximation": self.p_hessian,
                          }
+            self.opts
             if self.p_linsol[:2] == 'MA':
                 print "###################"
                 print "Using linear solver"
@@ -286,7 +322,7 @@ class opt_out(data_out):
                          "qpsol": "qpoases"
                         }
         if self.flag_callback:
-            self.mycallback = MyCallback('mycallback', self.w.shape[0], self.g.shape[0], 0, 
+            self.mycallback = self.MyCallback('mycallback', self.w.shape[0], self.g.shape[0], 0, 
                                          opts={'filename': self.datafile_name,
                                                'flag_callback_plot': self.flag_callback_plot,
                                                'str_shape': self.str_shape,

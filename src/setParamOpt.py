@@ -12,14 +12,17 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 '''
-# Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
+# Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>, Stefan Rotter
 # License:
+from setOptProb import opt_out
 
 
-class param_opt(object):
+class param_opt(opt_out):
     """
     Nice class info
     """
     def __init__(self, *args, **kwargs):
-        # args should have casiopeia arguments
+        """
+        use data for parameter optimization
+        """
         print "hello"

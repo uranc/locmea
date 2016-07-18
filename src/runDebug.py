@@ -80,23 +80,23 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
                         'p_dyn': float(p_dynamic)
                         }
 
-optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
-                        'solver':' ',
-                        'hessian': 'p_hessian',
-                        'linsol': 'p_linsol',
-                        'method': 'p_method',
-                        't_ind': 35, 't_int': 1, 
-                        'sigma': float(0),
-                        'flag_depthweighted': bool(int(0)),
-                        'flag_parallel': False,
-                        'datafile_name': 'output_file',
-                        'flag_lift_mask': False,
-                        'flag_data_mask': True,
-                        'flag_callback': True,
-                        'flag_callback_plot': True,
-                        'callback_steps': 40,
-                        'p_dyn': float(1)
-                        }
+# optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
+#                         'solver':' ',
+#                         'hessian': 'p_hessian',
+#                         'linsol': 'p_linsol',
+#                         'method': 'p_method',
+#                         't_ind': 35, 't_int': 1, 
+#                         'sigma': float(0),
+#                         'flag_depthweighted': bool(int(0)),
+#                         'flag_parallel': False,
+#                         'datafile_name': 'output_file',
+#                         'flag_lift_mask': False,
+#                         'flag_data_mask': True,
+#                         'flag_callback': True,
+#                         'flag_callback_plot': True,
+#                         'callback_steps': 40,
+#                         'p_dyn': float(1)
+#                         }
 
 
 opt = opt_out(data, **optimization_options)
@@ -105,6 +105,7 @@ if p_method == 'thesis':
 elif p_method == 'mask':
 	opt.solve_ipopt_multi_measurement_only_mask()
 
+# 
 # opt.solve_ipopt_multi_measurement_slack()
 # opt.solve_ipopt_multi_measurement_2p()
 # ev = opt.evaluate_localization()
@@ -112,35 +113,7 @@ elif p_method == 'mask':
 # vis = visualize(data=data, loc=opt)
 # vis.show_snapshot()
 # vis.save_snapshot()
-opt.set_optimization_variables_thesis()
+# opt.set_optimization_variables_thesis()
 # opt.initialize_variables()
 # 
 # 
-
-# opt.set_optimization_variables_thesis()
-# pname = '../results/'
-# fname = 'output_file_1462316213.92_iter_60'
-# a = opt.load_with_pickle(pname+fname)
-# st = ca.tools.struct_symMX([entry("a", shape=(8723,3)),
-#                                entry("m", shape=(8723)),
-#                                entry("s", shape=(8723,3)),
-#                                entry("ys", shape=(64,3)),
-#                               ])
-# print a[1].shape
-
-# # # print a[1]
-# aa = st(a[1])
-# # aa = st
-# opt.sres = aa['s'].full()
-# opt.xres = aa['a'].full()[:,0]
-# vis = visualize(data=data, loc=opt)
-# # # vis.show_snapshot()
-# vis.show_s_field()
-# opt.w0 = opt.w(1)
-# opt.res = opt.w0['x']
-# opt.xres = opt.w0['x']
-
-
-# aa = []
-# for i in range(opt.data.electrode_rec.shape[1]):
-# 	    aa.append(sum(opt.data.cell_csd[ind_cell,i])/ sum(opt.data.electrode_rec[:,i]))
