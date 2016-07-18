@@ -1,7 +1,7 @@
 <map id="object" name="object">
-<area shape="rect" id="node2" href="$classsetData_1_1data__in.html" title="Data class loaded from file &#45;&#45;&#45;&#45;&#45;&#45;— Arguments &#45;&#45;&#45;&#45;&#45;&#45;— f_name &#45; filename flag_cell &#45; flag cell morphol..." alt="" coords="140,5,255,32"/>
-<area shape="rect" id="node3" href="$classsetInvProb_1_1data__out.html" title="Class of various reconstructions &#45;&#45;&#45;&#45;&#45;&#45;&#45;— Attributes &#45;&#45;&#45;&#45;&#45;&#45;&#45;—. " alt="" coords="128,56,267,83"/>
-<area shape="rect" id="node5" href="$classsetParamOpt_1_1param__opt.html" title="Inverse optimizer example. " alt="" coords="115,107,279,133"/>
-<area shape="rect" id="node6" href="$classsetVisualization_1_1visualize.html" title="Nice class info. " alt="" coords="113,157,282,184"/>
-<area shape="rect" id="node4" href="$classsetOptProb_1_1opt__out.html" title="Class for the optimization problem Child of inverse problem. " alt="" coords="331,56,466,83"/>
+<area shape="rect" id="node2" href="$classsetData_1_1data__in.html" title="Data class loaded from file. " alt="" coords="5,80,120,107"/>
+<area shape="rect" id="node3" href="$classsetInvProb_1_1data__out.html" title="Class of various reconstructions &#45;&#45;&#45;&#45;&#45;&#45;&#45;— Attributes &#45;&#45;&#45;&#45;&#45;&#45;&#45;—. " alt="" coords="144,80,283,107"/>
+<area shape="rect" id="node6" href="$classsetVisualization_1_1visualize.html" title="Nice class info. " alt="" coords="307,80,476,107"/>
+<area shape="rect" id="node4" href="$classsetOptProb_1_1opt__out.html" title="Class for the optimization problem Child of inverse problem. " alt="" coords="146,155,280,181"/>
+<area shape="rect" id="node5" href="$classsetParamOpt_1_1param__opt.html" title="Nice class info. " alt="" coords="131,229,295,256"/>
 </map>

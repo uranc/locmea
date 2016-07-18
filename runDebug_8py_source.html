@@ -166,7 +166,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="comment">#python -i runDebug.py -m mask -s ipopt -p 0 -d 50 -n 1 -h limited-memory -l mums</span></div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="comment"># Optimize</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="namespacerunDebug.html#a6d1b047d7a82522bf4568ca71fd92978">   66</a></span>&#160;optimization_options = {<span class="stringliteral">&#39;p_vres&#39;</span>:10, <span class="stringliteral">&#39;p_jlen&#39;</span>:0, <span class="stringliteral">&#39;p_erad&#39;</span>: 10,</div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="namespacerunDebug.html#a8f26b0a37b0769122711bfd32f1db1f8">   66</a></span>&#160;optimization_options = {<span class="stringliteral">&#39;p_vres&#39;</span>:10, <span class="stringliteral">&#39;p_jlen&#39;</span>:0, <span class="stringliteral">&#39;p_erad&#39;</span>: 10,</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                        <span class="stringliteral">&#39;solver&#39;</span>: p_solver,</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                        <span class="stringliteral">&#39;hessian&#39;</span>: p_hessian,</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                        <span class="stringliteral">&#39;linsol&#39;</span>: p_linsol,</div>
@@ -184,23 +184,23 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                        <span class="stringliteral">&#39;p_dyn&#39;</span>: float(p_dynamic)</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                        }</div>
 <div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;optimization_options = {<span class="stringliteral">&#39;p_vres&#39;</span>:10, <span class="stringliteral">&#39;p_jlen&#39;</span>:0, <span class="stringliteral">&#39;p_erad&#39;</span>: 10,</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                        <span class="stringliteral">&#39;solver&#39;</span>:<span class="stringliteral">&#39; &#39;</span>,</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                        <span class="stringliteral">&#39;hessian&#39;</span>: <span class="stringliteral">&#39;p_hessian&#39;</span>,</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                        <span class="stringliteral">&#39;linsol&#39;</span>: <span class="stringliteral">&#39;p_linsol&#39;</span>,</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                        <span class="stringliteral">&#39;method&#39;</span>: <span class="stringliteral">&#39;p_method&#39;</span>,</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                        <span class="stringliteral">&#39;t_ind&#39;</span>: 35, <span class="stringliteral">&#39;t_int&#39;</span>: 1, </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                        <span class="stringliteral">&#39;sigma&#39;</span>: float(0),</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;                        <span class="stringliteral">&#39;flag_depthweighted&#39;</span>: bool(int(0)),</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                        <span class="stringliteral">&#39;flag_parallel&#39;</span>: <span class="keyword">False</span>,</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                        <span class="stringliteral">&#39;datafile_name&#39;</span>: <span class="stringliteral">&#39;output_file&#39;</span>,</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                        <span class="stringliteral">&#39;flag_lift_mask&#39;</span>: <span class="keyword">False</span>,</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                        <span class="stringliteral">&#39;flag_data_mask&#39;</span>: <span class="keyword">True</span>,</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                        <span class="stringliteral">&#39;flag_callback&#39;</span>: <span class="keyword">True</span>,</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                        <span class="stringliteral">&#39;flag_callback_plot&#39;</span>: <span class="keyword">True</span>,</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                        <span class="stringliteral">&#39;callback_steps&#39;</span>: 40,</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                        <span class="stringliteral">&#39;p_dyn&#39;</span>: float(1)</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                        }</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="comment"># optimization_options = {&#39;p_vres&#39;:10, &#39;p_jlen&#39;:0, &#39;p_erad&#39;: 10,</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="comment">#                         &#39;solver&#39;:&#39; &#39;,</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="comment">#                         &#39;hessian&#39;: &#39;p_hessian&#39;,</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="comment">#                         &#39;linsol&#39;: &#39;p_linsol&#39;,</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="comment">#                         &#39;method&#39;: &#39;p_method&#39;,</span></div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;<span class="comment">#                         &#39;t_ind&#39;: 35, &#39;t_int&#39;: 1, </span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;<span class="comment">#                         &#39;sigma&#39;: float(0),</span></div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="comment">#                         &#39;flag_depthweighted&#39;: bool(int(0)),</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="comment">#                         &#39;flag_parallel&#39;: False,</span></div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;<span class="comment">#                         &#39;datafile_name&#39;: &#39;output_file&#39;,</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;<span class="comment">#                         &#39;flag_lift_mask&#39;: False,</span></div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="comment">#                         &#39;flag_data_mask&#39;: True,</span></div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="comment">#                         &#39;flag_callback&#39;: True,</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="comment">#                         &#39;flag_callback_plot&#39;: True,</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="comment">#                         &#39;callback_steps&#39;: 40,</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;<span class="comment">#                         &#39;p_dyn&#39;: float(1)</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="comment">#                         }</span></div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;</div>
 <div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="namespacerunDebug.html#ab0eb6d76d13b489888ab8a8ea939f2ce">  103</a></span>&#160;opt = <a class="code" href="classsetOptProb_1_1opt__out.html">opt_out</a>(data, **optimization_options)</div>
@@ -209,47 +209,20 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="keywordflow">elif</span> p_method == <span class="stringliteral">&#39;mask&#39;</span>:</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    opt.solve_ipopt_multi_measurement_only_mask()</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="comment"># opt.solve_ipopt_multi_measurement_slack()</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="comment"># opt.solve_ipopt_multi_measurement_2p()</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment"># ev = opt.evaluate_localization()</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment"># visualize</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="comment"># vis = visualize(data=data, loc=opt)</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment"># vis.show_snapshot()</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment"># vis.save_snapshot()</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;opt.set_optimization_variables_thesis()</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="comment"># opt.initialize_variables()</span></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="comment"># </span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="comment"># </span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="comment"># opt.solve_ipopt_multi_measurement_slack()</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="comment"># opt.solve_ipopt_multi_measurement_2p()</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="comment"># ev = opt.evaluate_localization()</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="comment"># visualize</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="comment"># vis = visualize(data=data, loc=opt)</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="comment"># vis.show_snapshot()</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="comment"># vis.save_snapshot()</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="comment"># opt.set_optimization_variables_thesis()</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="comment"># opt.initialize_variables()</span></div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="comment"># </span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="comment"># opt.set_optimization_variables_thesis()</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="comment"># pname = &#39;../results/&#39;</span></div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="comment"># fname = &#39;output_file_1462316213.92_iter_60&#39;</span></div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="comment"># a = opt.load_with_pickle(pname+fname)</span></div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="comment"># st = ca.tools.struct_symMX([entry(&quot;a&quot;, shape=(8723,3)),</span></div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="comment">#                                entry(&quot;m&quot;, shape=(8723)),</span></div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="comment">#                                entry(&quot;s&quot;, shape=(8723,3)),</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="comment">#                                entry(&quot;ys&quot;, shape=(64,3)),</span></div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="comment">#                               ])</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="comment"># print a[1].shape</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="comment"># # # print a[1]</span></div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="comment"># aa = st(a[1])</span></div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="comment"># # aa = st</span></div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="comment"># opt.sres = aa[&#39;s&#39;].full()</span></div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="comment"># opt.xres = aa[&#39;a&#39;].full()[:,0]</span></div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="comment"># vis = visualize(data=data, loc=opt)</span></div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="comment"># # # vis.show_snapshot()</span></div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="comment"># vis.show_s_field()</span></div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="comment"># opt.w0 = opt.w(1)</span></div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="comment"># opt.res = opt.w0[&#39;x&#39;]</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="comment"># opt.xres = opt.w0[&#39;x&#39;]</span></div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="comment"># aa = []</span></div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;<span class="comment"># for i in range(opt.data.electrode_rec.shape[1]):</span></div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="comment">#       aa.append(sum(opt.data.cell_csd[ind_cell,i])/ sum(opt.data.electrode_rec[:,i]))</span></div>
-<div class="ttc" id="classsetOptProb_1_1opt__out_html"><div class="ttname"><a href="classsetOptProb_1_1opt__out.html">setOptProb.opt_out</a></div><div class="ttdoc">Class for the optimization problem Child of inverse problem. </div><div class="ttdef"><b>Definition:</b> <a href="setOptProb_8py_source.html#l00190">setOptProb.py:190</a></div></div>
-<div class="ttc" id="classsetData_1_1data__in_html"><div class="ttname"><a href="classsetData_1_1data__in.html">setData.data_in</a></div><div class="ttdoc">Data class loaded from file ------— Arguments ------— f_name - filename flag_cell - flag cell morphol...</div><div class="ttdef"><b>Definition:</b> <a href="setData_8py_source.html#l00017">setData.py:17</a></div></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="comment"># </span></div>
+<div class="ttc" id="classsetOptProb_1_1opt__out_html"><div class="ttname"><a href="classsetOptProb_1_1opt__out.html">setOptProb.opt_out</a></div><div class="ttdoc">Class for the optimization problem Child of inverse problem. </div><div class="ttdef"><b>Definition:</b> <a href="setOptProb_8py_source.html#l00034">setOptProb.py:34</a></div></div>
+<div class="ttc" id="classsetData_1_1data__in_html"><div class="ttname"><a href="classsetData_1_1data__in.html">setData.data_in</a></div><div class="ttdoc">Data class loaded from file. </div><div class="ttdef"><b>Definition:</b> <a href="setData_8py_source.html#l00024">setData.py:24</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.8-->
 <!-- start footer part -->
@@ -259,7 +232,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 18 2016 14:59:05 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 18 2016 16:53:49 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

@@ -103,290 +103,299 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <a href="setInvProb_8py.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno"><a class="line" href="namespacesetInvProb.html">    1</a></span>&#160;<span class="comment">##</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"># </span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"># Create attributes for the localization framework</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"># </span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"># Author: Cem Uran &lt;cem.uran@uranus.uni-freiburg.de&gt;</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"># License:</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">import</span> numpy <span class="keyword">as</span> np</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">from</span> scipy.spatial.distance <span class="keyword">import</span> cdist</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">import</span> pickle <span class="keyword">as</span> pc</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">import</span> os, os.path</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">##</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"># </span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment">#     Class of various reconstructions ---------- Attributes ----------</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">#     </span></div>
-<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html">   16</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsetInvProb_1_1data__out.html">data_out</a>(<a class="code" href="classobject.html">object</a>):</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a43214680eac90ae168169a0c9b344057">   18</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a43214680eac90ae168169a0c9b344057">__init__</a>(self, *args, **kwargs):</div>
-<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a654e9e7454452f7e1d3af18dd014ef71">   19</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a654e9e7454452f7e1d3af18dd014ef71">data</a> = args[0]    <span class="comment"># does not have to be data dependant</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#aca4c24458adc7b0ceb1b893a04d9027f">   20</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#aca4c24458adc7b0ceb1b893a04d9027f">electrode_pos</a> = self.data.electrode_pos</div>
-<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">   21</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a> = {<span class="stringliteral">&#39;p_vres&#39;</span>: 5,</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;                        <span class="stringliteral">&#39;p_jlen&#39;</span>: 2,</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;                        <span class="stringliteral">&#39;p_erad&#39;</span>: 5,</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;                        <span class="stringliteral">&#39;p_maxd&#39;</span>: 55,</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;                        <span class="stringliteral">&#39;t_ind&#39;</span>: 0,</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;                        }</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;        self.options.update(kwargs)</div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a12d5bc8c61c26bac0ec7321712e94143">   28</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a12d5bc8c61c26bac0ec7321712e94143">t_ind</a> = self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a>[<span class="stringliteral">&#39;t_ind&#39;</span>]</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordflow">print</span> <span class="stringliteral">&#39;Parameter options:&#39;</span>, self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordflow">if</span> kwargs.get(<span class="stringliteral">&#39;voxels&#39;</span>) <span class="keywordflow">is</span> <span class="keywordflow">not</span> <span class="keywordtype">None</span>:</div>
-<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a04880d7bb3413fdea838347859b69fd3">   31</a></span>&#160;            self.<a class="code" href="classsetInvProb_1_1data__out.html#a04880d7bb3413fdea838347859b69fd3">voxels</a> = kwargs.get(<span class="stringliteral">&#39;voxels&#39;</span>)</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="keywordflow">else</span>:</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;            self.<a class="code" href="classsetInvProb_1_1data__out.html#a04880d7bb3413fdea838347859b69fd3">voxels</a> = self.<a class="code" href="classsetInvProb_1_1data__out.html#a5d8d48813834c1831a342bb92063ba05">create_voxels</a>(self.<a class="code" href="classsetInvProb_1_1data__out.html#aca4c24458adc7b0ceb1b893a04d9027f">electrode_pos</a>,</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                                             p_vres=self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a>[<span class="stringliteral">&#39;p_vres&#39;</span>],</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                                             el_radius=self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a>[<span class="stringliteral">&#39;p_erad&#39;</span>],</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;                                             max_depth=self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a>[<span class="stringliteral">&#39;p_maxd&#39;</span>],</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                                             p_jlen=self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a>[<span class="stringliteral">&#39;p_jlen&#39;</span>])</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="comment">#         computes sloreta inverse solution</span></div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="comment">#         @param      self  The object</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a444a5f96c63f946e77d04b13685f94eb">   47</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a444a5f96c63f946e77d04b13685f94eb">cmp_sloreta</a>(self):</div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a17bf9f00c61b51ecc201d05e4e7d207b">   48</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a17bf9f00c61b51ecc201d05e4e7d207b">fwd</a> = self.<a class="code" href="classsetInvProb_1_1data__out.html#aa6c3e55d0def8212a1baa792db8bce39">cmp_fwd_matrix</a>(self.<a class="code" href="classsetInvProb_1_1data__out.html#aca4c24458adc7b0ceb1b893a04d9027f">electrode_pos</a>, self.<a class="code" href="classsetInvProb_1_1data__out.html#a04880d7bb3413fdea838347859b69fd3">voxels</a>)</div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a2bd0534fe52d60d4ff29110f1af2cc6e">   49</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a2bd0534fe52d60d4ff29110f1af2cc6e">dw</a> = self.<a class="code" href="classsetInvProb_1_1data__out.html#a33c3c9285e3173dfc3c8124a582ce9de">cmp_weight_matrix</a>(self.<a class="code" href="classsetInvProb_1_1data__out.html#a17bf9f00c61b51ecc201d05e4e7d207b">fwd</a>)</div>
-<div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a4e665e36c8f0ecd7eee30f6a041370c6">   50</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a4e665e36c8f0ecd7eee30f6a041370c6">inv</a> = self.<a class="code" href="classsetInvProb_1_1data__out.html#aafde83dd2a5c8d692b43961d1b279353">cmp_inv_matrix</a>(self.<a class="code" href="classsetInvProb_1_1data__out.html#a17bf9f00c61b51ecc201d05e4e7d207b">fwd</a>, self.<a class="code" href="classsetInvProb_1_1data__out.html#a2bd0534fe52d60d4ff29110f1af2cc6e">dw</a>)</div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a94de837cb9b4d2ca189de9bc3aacf8c7">   51</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a94de837cb9b4d2ca189de9bc3aacf8c7">res</a> = np.dot(self.<a class="code" href="classsetInvProb_1_1data__out.html#a4e665e36c8f0ecd7eee30f6a041370c6">inv</a>, self.data.electrode_rec)</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">#         Create voxel space w.r.t. -m- electrode pos., 1 voxel larger margin</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">#         ------------- Arguments ------------- electrode_pos - Vector valued</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="comment">#         neuron morphology position param_res - Resolution in micrometer elrad -</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="comment">#         Electrode radius max_depth - max reconstruction depth ------------</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="comment">#         Returns ------------</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="comment">#         @param      self           The object</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="comment">#         @param      electrode_pos  The electrode position</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="comment">#         @param      p_vres         The p vres</span></div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="comment">#         @param      el_radius      The el radius</span></div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="comment">#         @param      max_depth      The maximum depth</span></div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="comment">#         @param      p_jlen         The p jlen</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="comment">#         @param      flag_bound     The flag bound</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a5d8d48813834c1831a342bb92063ba05">create_voxels</a>(self, electrode_pos, p_vres=5,</div>
-<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a5d8d48813834c1831a342bb92063ba05">   72</a></span>&#160;                      el_radius=5, max_depth=55, p_jlen=2, flag_bound=<span class="keyword">False</span>):</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        jitter_vector = np.random.random((3, )) * p_jlen   <span class="comment"># iCSD Leski</span></div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        n_elx = np.unique(electrode_pos[:, 0]).shape[0]</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        n_ely = np.unique(electrode_pos[:, 1]).shape[0]</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        n_elz = np.unique(electrode_pos[:, 2]).shape[0]</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        n_el = n_elx * n_ely * n_elz</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="comment"># Check position vector formats</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordflow">if</span> n_el != electrode_pos[:, 0].shape[0] <span class="keywordflow">or</span> n_el != \</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;            electrode_pos[:, 1].shape[0] <span class="keywordflow">or</span> \</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                n_el != electrode_pos[:, 2].shape[0] <span class="keywordflow">or</span> n_el &lt;= 0:</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&#39;Electrode coordinates are wrong&#39;</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        elec_normal = [n_elx, n_ely, n_elz].index(1)</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="comment"># Find min/max values</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        min_el = np.ma.array(np.min(electrode_pos, 0), mask=<span class="keyword">False</span>)</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        max_el = np.ma.array(np.max(electrode_pos, 0), mask=<span class="keyword">False</span>)</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        min_el[elec_normal] += el_radius</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        max_el[elec_normal] += max_depth + 1</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        min_el.mask[elec_normal] = <span class="keyword">True</span>    <span class="comment"># Handle depth differently</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        max_el.mask[elec_normal] = <span class="keyword">True</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        max_el += p_vres</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordflow">if</span> flag_bound:</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            min_el -= p_vres</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            max_el += 1</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        min_el.mask[elec_normal] = <span class="keyword">False</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        max_el.mask[elec_normal] = <span class="keyword">False</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordflow">return</span> (np.mgrid[min_el[0]:max_el[0]:p_vres,</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;                         min_el[1]:max_el[1]:p_vres,</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                         min_el[2]:max_el[2]:p_vres].T</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                + jitter_vector).T</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="comment">#         Calculate the m-by-n forward matrix given by</span></div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <span class="comment">#         1/(4*pi*sigma)*(1/(d(el_pos-vox_pos)^2) ------------ Arguments</span></div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="comment">#         ------------ elx, ely, elz - Vector valued electrode positions vx, vy,</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="comment">#         vz - Vector valued voxel positions</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="comment">#         @param      self           The object</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="comment">#         @param      electrode_pos  The electrode position</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="comment">#         @param      voxels         The voxels</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="comment">#         @param      p_sigma        The p sigma</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00116"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#aa6c3e55d0def8212a1baa792db8bce39">  116</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#aa6c3e55d0def8212a1baa792db8bce39">cmp_fwd_matrix</a>(self, electrode_pos, voxels, p_sigma=0.3):</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        vx, vy, vz = voxels</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        elx, ely, elz = electrode_pos.T</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="comment"># Flatten</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;        <span class="comment"># Electrode geometry</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        n_elx = np.unique(elx).shape[0]</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        n_ely = np.unique(ely).shape[0]</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        n_elz = np.unique(elz).shape[0]</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        n_el = n_elx * n_ely * n_elz</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        n_v = vx.shape[0]</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="comment"># Check position vector formats</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="keywordflow">if</span> n_el != elx.shape[0] <span class="keywordflow">or</span> n_el != ely.shape[0] \</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                <span class="keywordflow">or</span> n_el != elz.shape[0] <span class="keywordflow">or</span> n_el &lt;= 0:</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&#39;Electrode coordinates are wrong&#39;</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        fwd_matrix = np.zeros((n_el, n_v))</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keywordflow">for</span> el <span class="keywordflow">in</span> np.arange(0, n_el):</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <span class="keywordflow">for</span> v <span class="keywordflow">in</span> np.arange(0, n_v):</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;                fwd_matrix[el, v] = np.sqrt((elx[el] - vx[v]) ** 2 +</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;                                            (ely[el] - vy[v]) ** 2 +</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;                                            (elz[el] - vz[v]) ** 2)</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keywordflow">return</span> 1. / (fwd_matrix * (4. * np.pi * p_sigma))</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="comment">#         Computes regularized inverse matrix in the given method (Can be a class</span></div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="comment">#         later on with multiple methods)</span></div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;    <span class="comment">#         @param      self               The object</span></div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    <span class="comment">#         @param      fwd_matrix         The forward matrix</span></div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="comment">#         @param      depth_norm_matrix  The depth normalize matrix</span></div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    <span class="comment">#         @param      p_lmbda            The p lmbda</span></div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="comment">#         @param      snr                The snr</span></div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#aafde83dd2a5c8d692b43961d1b279353">cmp_inv_matrix</a>(self, fwd_matrix, depth_norm_matrix,</div>
-<div class="line"><a name="l00153"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#aafde83dd2a5c8d692b43961d1b279353">  153</a></span>&#160;                       p_lmbda=1e-2, snr=5):</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        cov_n = np.eye(fwd_matrix.shape[0])</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        p_lmbda = np.trace(np.dot(np.dot(fwd_matrix, depth_norm_matrix),</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;                                  fwd_matrix.T))/(np.trace(cov_n)*snr**2)</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        inv_matrix = np.dot(np.dot(depth_norm_matrix,</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                                   np.transpose(fwd_matrix)),</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                            np.linalg.inv(</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                            np.dot(np.dot(fwd_matrix, depth_norm_matrix),</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                                   np.transpose(</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                                       fwd_matrix)) + (p_lmbda ** 2) * cov_n))</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        <span class="keywordflow">return</span> inv_matrix</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <span class="comment">#         Calculate the column(depth) normalization matrix given by</span></div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    <span class="comment">#         (1./sum(a_i^2))^depth_par - column norm for fwd_matrix[:,i]</span></div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;    <span class="comment">#         @param      self        The object</span></div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <span class="comment">#         @param      fwd_matrix  The forward matrix</span></div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    <span class="comment">#         @param      p_depth     The p depth</span></div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00176"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a33c3c9285e3173dfc3c8124a582ce9de">  176</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a33c3c9285e3173dfc3c8124a582ce9de">cmp_weight_matrix</a>(self, fwd_matrix, p_depth=1.):</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="comment">##</span></div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="comment"># </span></div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="comment">#             Looks for the neighboring voxels within -d-</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="comment">#             hamming distance given a (i,j,k)position</span></div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="comment">#             </span></div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keyword">def </span>get_neighbors(self, voxels, i, j, k, d):</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        <span class="keywordflow">return</span> np.diag(np.power(np.sum(fwd_matrix ** 2, axis=0),</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                                1. / (2 * p_depth)))</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;    <span class="comment">#         Calculate the column(depth) normalization matrix given by</span></div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    <span class="comment">#         (1./sum(a_i^2))^depth_par - column norm for fwd_matrix[:,i]</span></div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    <span class="comment">#         :param      self:        { description }</span></div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="comment">#         :param      fwd_matrix:  { description }</span></div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    <span class="comment">#         :param      inv_matrix:  { description }</span></div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    <span class="comment">#         :type       self:        { type_description }</span></div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="comment">#         :type       fwd_matrix:  { type_description }</span></div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    <span class="comment">#         :type       inv_matrix:  { type_description }</span></div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00198"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#adac09d8245d5144c333cbaecf8b29a3e">  198</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#adac09d8245d5144c333cbaecf8b29a3e">cmp_resolution_matrix</a>(self, fwd_matrix, inv_matrix):</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        <span class="keywordflow">return</span> np.dot(inv_matrix, fwd_matrix)</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="comment">#         @brief      { writes the results in a file }</span></div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <span class="comment">#         @param      self  The object.</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"># Copyright (C) This program is free software: you can redistribute it and/or</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"># modify it under the terms of the GNU General Public License as published by the</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"># Free Software Foundation, either version 3 of the License, or (at your option)</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"># any later version. This program is distributed in the hope that it will be</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"># useful, but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"># License for more details.</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"># --------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"># Author: Cem Uran &lt;cem.uran@uranus.uni-freiburg.de&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"># --------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"># Define the inverse problem</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"># --------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"># </span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">import</span> numpy <span class="keyword">as</span> np</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">from</span> scipy.spatial.distance <span class="keyword">import</span> cdist</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">import</span> pickle <span class="keyword">as</span> pc</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">import</span> os, os.path</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">##</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment"># </span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">#     Class of various reconstructions ---------- Attributes ----------</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">#     </span></div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html">   25</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsetInvProb_1_1data__out.html">data_out</a>(<a class="code" href="classobject.html">object</a>):</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a43214680eac90ae168169a0c9b344057">   27</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a43214680eac90ae168169a0c9b344057">__init__</a>(self, *args, **kwargs):</div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a654e9e7454452f7e1d3af18dd014ef71">   28</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a654e9e7454452f7e1d3af18dd014ef71">data</a> = args[0]    <span class="comment"># does not have to be data dependant</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#aca4c24458adc7b0ceb1b893a04d9027f">   29</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#aca4c24458adc7b0ceb1b893a04d9027f">electrode_pos</a> = self.data.electrode_pos</div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">   30</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a> = {<span class="stringliteral">&#39;p_vres&#39;</span>: 5,</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;                        <span class="stringliteral">&#39;p_jlen&#39;</span>: 2,</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;                        <span class="stringliteral">&#39;p_erad&#39;</span>: 5,</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;                        <span class="stringliteral">&#39;p_maxd&#39;</span>: 55,</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;                        <span class="stringliteral">&#39;t_ind&#39;</span>: 0,</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;                        }</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        self.options.update(kwargs)</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a12d5bc8c61c26bac0ec7321712e94143">   37</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a12d5bc8c61c26bac0ec7321712e94143">t_ind</a> = self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a>[<span class="stringliteral">&#39;t_ind&#39;</span>]</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        <span class="keywordflow">print</span> <span class="stringliteral">&#39;Parameter options:&#39;</span>, self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">if</span> kwargs.get(<span class="stringliteral">&#39;voxels&#39;</span>) <span class="keywordflow">is</span> <span class="keywordflow">not</span> <span class="keywordtype">None</span>:</div>
+<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a04880d7bb3413fdea838347859b69fd3">   40</a></span>&#160;            self.<a class="code" href="classsetInvProb_1_1data__out.html#a04880d7bb3413fdea838347859b69fd3">voxels</a> = kwargs.get(<span class="stringliteral">&#39;voxels&#39;</span>)</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordflow">else</span>:</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            self.<a class="code" href="classsetInvProb_1_1data__out.html#a04880d7bb3413fdea838347859b69fd3">voxels</a> = self.<a class="code" href="classsetInvProb_1_1data__out.html#a5d8d48813834c1831a342bb92063ba05">create_voxels</a>(self.<a class="code" href="classsetInvProb_1_1data__out.html#aca4c24458adc7b0ceb1b893a04d9027f">electrode_pos</a>,</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;                                             p_vres=self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a>[<span class="stringliteral">&#39;p_vres&#39;</span>],</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                                             el_radius=self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a>[<span class="stringliteral">&#39;p_erad&#39;</span>],</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;                                             max_depth=self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a>[<span class="stringliteral">&#39;p_maxd&#39;</span>],</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                                             p_jlen=self.<a class="code" href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">options</a>[<span class="stringliteral">&#39;p_jlen&#39;</span>])</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="comment">#         computes sloreta inverse solution</span></div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="comment">#         @param      self  The object</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a444a5f96c63f946e77d04b13685f94eb">   56</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a444a5f96c63f946e77d04b13685f94eb">cmp_sloreta</a>(self):</div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a17bf9f00c61b51ecc201d05e4e7d207b">   57</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a17bf9f00c61b51ecc201d05e4e7d207b">fwd</a> = self.<a class="code" href="classsetInvProb_1_1data__out.html#aa6c3e55d0def8212a1baa792db8bce39">cmp_fwd_matrix</a>(self.<a class="code" href="classsetInvProb_1_1data__out.html#aca4c24458adc7b0ceb1b893a04d9027f">electrode_pos</a>, self.<a class="code" href="classsetInvProb_1_1data__out.html#a04880d7bb3413fdea838347859b69fd3">voxels</a>)</div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a2bd0534fe52d60d4ff29110f1af2cc6e">   58</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a2bd0534fe52d60d4ff29110f1af2cc6e">dw</a> = self.<a class="code" href="classsetInvProb_1_1data__out.html#a33c3c9285e3173dfc3c8124a582ce9de">cmp_weight_matrix</a>(self.<a class="code" href="classsetInvProb_1_1data__out.html#a17bf9f00c61b51ecc201d05e4e7d207b">fwd</a>)</div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a4e665e36c8f0ecd7eee30f6a041370c6">   59</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a4e665e36c8f0ecd7eee30f6a041370c6">inv</a> = self.<a class="code" href="classsetInvProb_1_1data__out.html#aafde83dd2a5c8d692b43961d1b279353">cmp_inv_matrix</a>(self.<a class="code" href="classsetInvProb_1_1data__out.html#a17bf9f00c61b51ecc201d05e4e7d207b">fwd</a>, self.<a class="code" href="classsetInvProb_1_1data__out.html#a2bd0534fe52d60d4ff29110f1af2cc6e">dw</a>)</div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a94de837cb9b4d2ca189de9bc3aacf8c7">   60</a></span>&#160;        self.<a class="code" href="classsetInvProb_1_1data__out.html#a94de837cb9b4d2ca189de9bc3aacf8c7">res</a> = np.dot(self.<a class="code" href="classsetInvProb_1_1data__out.html#a4e665e36c8f0ecd7eee30f6a041370c6">inv</a>, self.data.electrode_rec)</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="comment">#         Create voxel space w.r.t. -m- electrode pos., 1 voxel larger margin</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="comment">#         ------------- Arguments ------------- electrode_pos - Vector valued</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="comment">#         neuron morphology position param_res - Resolution in micrometer elrad -</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="comment">#         Electrode radius max_depth - max reconstruction depth ------------</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="comment">#         Returns ------------</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="comment">#         @param      self           The object</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="comment">#         @param      electrode_pos  The electrode position</span></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="comment">#         @param      p_vres         The p vres</span></div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="comment">#         @param      el_radius      The el radius</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="comment">#         @param      max_depth      The maximum depth</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="comment">#         @param      p_jlen         The p jlen</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="comment">#         @param      flag_bound     The flag bound</span></div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a5d8d48813834c1831a342bb92063ba05">create_voxels</a>(self, electrode_pos, p_vres=5,</div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a5d8d48813834c1831a342bb92063ba05">   81</a></span>&#160;                      el_radius=5, max_depth=55, p_jlen=2, flag_bound=<span class="keyword">False</span>):</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        jitter_vector = np.random.random((3, )) * p_jlen   <span class="comment"># iCSD Leski</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        n_elx = np.unique(electrode_pos[:, 0]).shape[0]</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        n_ely = np.unique(electrode_pos[:, 1]).shape[0]</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        n_elz = np.unique(electrode_pos[:, 2]).shape[0]</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        n_el = n_elx * n_ely * n_elz</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="comment"># Check position vector formats</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordflow">if</span> n_el != electrode_pos[:, 0].shape[0] <span class="keywordflow">or</span> n_el != \</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            electrode_pos[:, 1].shape[0] <span class="keywordflow">or</span> \</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;                n_el != electrode_pos[:, 2].shape[0] <span class="keywordflow">or</span> n_el &lt;= 0:</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&#39;Electrode coordinates are wrong&#39;</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        elec_normal = [n_elx, n_ely, n_elz].index(1)</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="comment"># Find min/max values</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        min_el = np.ma.array(np.min(electrode_pos, 0), mask=<span class="keyword">False</span>)</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        max_el = np.ma.array(np.max(electrode_pos, 0), mask=<span class="keyword">False</span>)</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        min_el[elec_normal] += el_radius</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        max_el[elec_normal] += max_depth + 1</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        min_el.mask[elec_normal] = <span class="keyword">True</span>    <span class="comment"># Handle depth differently</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        max_el.mask[elec_normal] = <span class="keyword">True</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        max_el += p_vres</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordflow">if</span> flag_bound:</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            min_el -= p_vres</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            max_el += 1</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        min_el.mask[elec_normal] = <span class="keyword">False</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        max_el.mask[elec_normal] = <span class="keyword">False</span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordflow">return</span> (np.mgrid[min_el[0]:max_el[0]:p_vres,</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                         min_el[1]:max_el[1]:p_vres,</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                         min_el[2]:max_el[2]:p_vres].T</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                + jitter_vector).T</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    <span class="comment">#         Calculate the m-by-n forward matrix given by</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="comment">#         1/(4*pi*sigma)*(1/(d(el_pos-vox_pos)^2) ------------ Arguments</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="comment">#         ------------ elx, ely, elz - Vector valued electrode positions vx, vy,</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="comment">#         vz - Vector valued voxel positions</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="comment">#         @param      self           The object</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="comment">#         @param      electrode_pos  The electrode position</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="comment">#         @param      voxels         The voxels</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="comment">#         @param      p_sigma        The p sigma</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00125"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#aa6c3e55d0def8212a1baa792db8bce39">  125</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#aa6c3e55d0def8212a1baa792db8bce39">cmp_fwd_matrix</a>(self, electrode_pos, voxels, p_sigma=0.3):</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        vx, vy, vz = voxels</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        elx, ely, elz = electrode_pos.T</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        <span class="comment"># Flatten</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        <span class="comment"># Electrode geometry</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        n_elx = np.unique(elx).shape[0]</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        n_ely = np.unique(ely).shape[0]</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        n_elz = np.unique(elz).shape[0]</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;        n_el = n_elx * n_ely * n_elz</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        n_v = vx.shape[0]</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <span class="comment"># Check position vector formats</span></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keywordflow">if</span> n_el != elx.shape[0] <span class="keywordflow">or</span> n_el != ely.shape[0] \</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;                <span class="keywordflow">or</span> n_el != elz.shape[0] <span class="keywordflow">or</span> n_el &lt;= 0:</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;            <span class="keywordflow">print</span> <span class="stringliteral">&#39;Electrode coordinates are wrong&#39;</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        fwd_matrix = np.zeros((n_el, n_v))</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keywordflow">for</span> el <span class="keywordflow">in</span> np.arange(0, n_el):</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;            <span class="keywordflow">for</span> v <span class="keywordflow">in</span> np.arange(0, n_v):</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;                fwd_matrix[el, v] = np.sqrt((elx[el] - vx[v]) ** 2 +</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                                            (ely[el] - vy[v]) ** 2 +</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                                            (elz[el] - vz[v]) ** 2)</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <span class="keywordflow">return</span> 1. / (fwd_matrix * (4. * np.pi * p_sigma))</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    <span class="comment">#         Computes regularized inverse matrix in the given method (Can be a class</span></div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="comment">#         later on with multiple methods)</span></div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="comment">#         @param      self               The object</span></div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="comment">#         @param      fwd_matrix         The forward matrix</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="comment">#         @param      depth_norm_matrix  The depth normalize matrix</span></div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="comment">#         @param      p_lmbda            The p lmbda</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="comment">#         @param      snr                The snr</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#aafde83dd2a5c8d692b43961d1b279353">cmp_inv_matrix</a>(self, fwd_matrix, depth_norm_matrix,</div>
+<div class="line"><a name="l00162"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#aafde83dd2a5c8d692b43961d1b279353">  162</a></span>&#160;                       p_lmbda=1e-2, snr=5):</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        cov_n = np.eye(fwd_matrix.shape[0])</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        p_lmbda = np.trace(np.dot(np.dot(fwd_matrix, depth_norm_matrix),</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                                  fwd_matrix.T))/(np.trace(cov_n)*snr**2)</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        inv_matrix = np.dot(np.dot(depth_norm_matrix,</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                                   np.transpose(fwd_matrix)),</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                            np.linalg.inv(</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                            np.dot(np.dot(fwd_matrix, depth_norm_matrix),</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                                   np.transpose(</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                                       fwd_matrix)) + (p_lmbda ** 2) * cov_n))</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="keywordflow">return</span> inv_matrix</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="comment">#         Calculate the column(depth) normalization matrix given by</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="comment">#         (1./sum(a_i^2))^depth_par - column norm for fwd_matrix[:,i]</span></div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;    <span class="comment">#         @param      self        The object</span></div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    <span class="comment">#         @param      fwd_matrix  The forward matrix</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    <span class="comment">#         @param      p_depth     The p depth</span></div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00185"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a33c3c9285e3173dfc3c8124a582ce9de">  185</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a33c3c9285e3173dfc3c8124a582ce9de">cmp_weight_matrix</a>(self, fwd_matrix, p_depth=1.):</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="comment">##</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <span class="comment"># </span></div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="comment">#             Looks for the neighboring voxels within -d-</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="comment">#             hamming distance given a (i,j,k)position</span></div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        <span class="comment">#             </span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="keyword">def </span>get_neighbors(self, voxels, i, j, k, d):</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="keywordflow">return</span> np.diag(np.power(np.sum(fwd_matrix ** 2, axis=0),</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;                                1. / (2 * p_depth)))</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <span class="comment">#         Calculate the column(depth) normalization matrix given by</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <span class="comment">#         (1./sum(a_i^2))^depth_par - column norm for fwd_matrix[:,i]</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="comment">#         :param      self:        { description }</span></div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="comment">#         :param      fwd_matrix:  { description }</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    <span class="comment">#         :param      inv_matrix:  { description }</span></div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="comment">#         :type       self:        { type_description }</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    <span class="comment">#         :type       fwd_matrix:  { type_description }</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <span class="comment">#         :type       inv_matrix:  { type_description }</span></div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00209"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a1fa645dd2f692d909b633301879ea874">  209</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a1fa645dd2f692d909b633301879ea874">write_with_pickle</a>(self, data_to_save):</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        fname = <span class="stringliteral">&#39;../results/&#39;</span>+self.datafile_name + \</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                    <span class="stringliteral">&#39;/&#39;</span> + self.datafile_name </div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="comment"># mkdir</span></div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        <span class="keywordflow">if</span> <span class="keywordflow">not</span> os.path.exists(os.path.dirname(fname)):</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;            <span class="keywordflow">try</span>:</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;                os.makedirs(os.path.dirname(fname))</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;            <span class="keywordflow">except</span> OSError <span class="keyword">as</span> exc: <span class="comment"># Guard against race condition</span></div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                <span class="keywordflow">if</span> exc.errno != errno.EEXIST:</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;                    <span class="keywordflow">raise</span></div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <span class="keywordflow">print</span> fname + <span class="stringliteral">&#39; written.&#39;</span></div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        with open(fname, <span class="stringliteral">&#39;wb&#39;</span>) <span class="keyword">as</span> f:</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;            pc.dump(data_to_save, f)</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    <span class="comment">#         @brief      { function_description }</span></div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    <span class="comment">#         @param      self   The object.</span></div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    <span class="comment">#         @param      fname  The fname</span></div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00232"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a9af57aeaec7318c6d88b713b68e2d343">  232</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a9af57aeaec7318c6d88b713b68e2d343">load_with_pickle</a>(self, fname):</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        <span class="keywordflow">return</span> pc.load(file(fname))</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <span class="comment">#         evaluate the localization</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#adac09d8245d5144c333cbaecf8b29a3e">  207</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#adac09d8245d5144c333cbaecf8b29a3e">cmp_resolution_matrix</a>(self, fwd_matrix, inv_matrix):</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;        <span class="keywordflow">return</span> np.dot(inv_matrix, fwd_matrix)</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    <span class="comment">#         @brief      { writes the results in a file }</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    <span class="comment">#         @param      self  The object.</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00218"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a1fa645dd2f692d909b633301879ea874">  218</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a1fa645dd2f692d909b633301879ea874">write_with_pickle</a>(self, data_to_save):</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        fname = <span class="stringliteral">&#39;../results/&#39;</span>+self.datafile_name + \</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;                    <span class="stringliteral">&#39;/&#39;</span> + self.datafile_name </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="comment"># mkdir</span></div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        <span class="keywordflow">if</span> <span class="keywordflow">not</span> os.path.exists(os.path.dirname(fname)):</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;            <span class="keywordflow">try</span>:</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                os.makedirs(os.path.dirname(fname))</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;            <span class="keywordflow">except</span> OSError <span class="keyword">as</span> exc: <span class="comment"># Guard against race condition</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                <span class="keywordflow">if</span> exc.errno != errno.EEXIST:</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                    <span class="keywordflow">raise</span></div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        <span class="keywordflow">print</span> fname + <span class="stringliteral">&#39; written.&#39;</span></div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        with open(fname, <span class="stringliteral">&#39;wb&#39;</span>) <span class="keyword">as</span> f:</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;            pc.dump(data_to_save, f)</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    <span class="comment">#         @brief      { function_description }</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <span class="comment">#         @param      self   The object.</span></div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <span class="comment">#         @param      fname  The fname</span></div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="comment">#         @param      self  The object</span></div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00243"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a568c08ec5c17229d95a56d916df36f45">  243</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a568c08ec5c17229d95a56d916df36f45">evaluate_localization</a>(self):</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <span class="comment"># if not self.res.any():</span></div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="comment">#     &quot;You don&#39;t have a reconstruction!&quot;</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="comment"># if not self.data.cell_pos.any():</span></div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="comment">#     &quot;You don&#39;t have a ground truth (data.cell_pos)!&quot;</span></div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        data = self.<a class="code" href="classsetInvProb_1_1data__out.html#a654e9e7454452f7e1d3af18dd014ef71">data</a></div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="comment"># mask reconstruction volume</span></div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        vx, vy, vz = self.<a class="code" href="classsetInvProb_1_1data__out.html#a04880d7bb3413fdea838347859b69fd3">voxels</a></div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        rx, ry, rz = vx, vy, vz</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <span class="comment"># result</span></div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        xmin, xmax = np.min(vx), np.max(vx)</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        ymin, ymax = np.min(vy), np.max(vy)</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        zmin, zmax = np.min(vz), np.max(vz)</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        ind_cell = ((xmin &lt;= data.cell_pos[:, 0]) &amp; (xmax &gt;= data.cell_pos[:, 0]) &amp;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;                   (ymin &lt;= data.cell_pos[:, 1]) &amp; (ymax &gt;= data.cell_pos[:, 1]) &amp;</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;                   (zmin &lt;= data.cell_pos[:, 2]) &amp; (zmax &gt;= data.cell_pos[:, 2]))</div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        vis_cell_pos = data.cell_pos[ind_cell.nonzero()[0],:]</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        ind_rec = self.xres.nonzero()[0]</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        rec_pos = self.voxels.reshape(3,-1).T[ind_rec,:]</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        closest_ind_to_cell = np.argmin(cdist(vis_cell_pos,rec_pos),1)</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        closest_ind_to_rec = np.argmin(cdist(vis_cell_pos,rec_pos),0)</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        <span class="keywordflow">return</span> self.xres[closest_ind_to_cell]-data.cell_csd[ind_cell,self.<a class="code" href="classsetInvProb_1_1data__out.html#a12d5bc8c61c26bac0ec7321712e94143">t_ind</a>]</div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a94de837cb9b4d2ca189de9bc3aacf8c7"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a94de837cb9b4d2ca189de9bc3aacf8c7">setInvProb.data_out.res</a></div><div class="ttdeci">res</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00051">setInvProb.py:51</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a444a5f96c63f946e77d04b13685f94eb"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a444a5f96c63f946e77d04b13685f94eb">setInvProb.data_out.cmp_sloreta</a></div><div class="ttdeci">def cmp_sloreta</div><div class="ttdoc">computes sloreta inverse solution </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00047">setInvProb.py:47</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a17bf9f00c61b51ecc201d05e4e7d207b"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a17bf9f00c61b51ecc201d05e4e7d207b">setInvProb.data_out.fwd</a></div><div class="ttdeci">fwd</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00048">setInvProb.py:48</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a654e9e7454452f7e1d3af18dd014ef71"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a654e9e7454452f7e1d3af18dd014ef71">setInvProb.data_out.data</a></div><div class="ttdeci">data</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00019">setInvProb.py:19</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a1fa645dd2f692d909b633301879ea874"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a1fa645dd2f692d909b633301879ea874">setInvProb.data_out.write_with_pickle</a></div><div class="ttdeci">def write_with_pickle</div><div class="ttdoc">{ writes the results in a file } </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00209">setInvProb.py:209</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_aa6c3e55d0def8212a1baa792db8bce39"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#aa6c3e55d0def8212a1baa792db8bce39">setInvProb.data_out.cmp_fwd_matrix</a></div><div class="ttdeci">def cmp_fwd_matrix</div><div class="ttdoc">Calculate the m-by-n forward matrix given by 1/(4*pi*sigma)*(1/(d(el_pos-vox_pos)^2) ---------— Argum...</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00116">setInvProb.py:116</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a5d8d48813834c1831a342bb92063ba05"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a5d8d48813834c1831a342bb92063ba05">setInvProb.data_out.create_voxels</a></div><div class="ttdeci">def create_voxels</div><div class="ttdoc">Create voxel space w.r.t. </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00072">setInvProb.py:72</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_aafde83dd2a5c8d692b43961d1b279353"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#aafde83dd2a5c8d692b43961d1b279353">setInvProb.data_out.cmp_inv_matrix</a></div><div class="ttdeci">def cmp_inv_matrix</div><div class="ttdoc">Computes regularized inverse matrix in the given method (Can be a class later on with multiple method...</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00153">setInvProb.py:153</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a568c08ec5c17229d95a56d916df36f45"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a568c08ec5c17229d95a56d916df36f45">setInvProb.data_out.evaluate_localization</a></div><div class="ttdeci">def evaluate_localization</div><div class="ttdoc">evaluate the localization </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00243">setInvProb.py:243</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a12d5bc8c61c26bac0ec7321712e94143"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a12d5bc8c61c26bac0ec7321712e94143">setInvProb.data_out.t_ind</a></div><div class="ttdeci">t_ind</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00028">setInvProb.py:28</a></div></div>
+<div class="line"><a name="l00241"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a9af57aeaec7318c6d88b713b68e2d343">  241</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a9af57aeaec7318c6d88b713b68e2d343">load_with_pickle</a>(self, fname):</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <span class="keywordflow">return</span> pc.load(file(fname))</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    <span class="comment">#         evaluate the localization</span></div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="comment">#         @param      self  The object</span></div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00252"></a><span class="lineno"><a class="line" href="classsetInvProb_1_1data__out.html#a568c08ec5c17229d95a56d916df36f45">  252</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetInvProb_1_1data__out.html#a568c08ec5c17229d95a56d916df36f45">evaluate_localization</a>(self):</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <span class="comment"># if not self.res.any():</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        <span class="comment">#     &quot;You don&#39;t have a reconstruction!&quot;</span></div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="comment"># if not self.data.cell_pos.any():</span></div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="comment">#     &quot;You don&#39;t have a ground truth (data.cell_pos)!&quot;</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        data = self.<a class="code" href="classsetInvProb_1_1data__out.html#a654e9e7454452f7e1d3af18dd014ef71">data</a></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="comment"># mask reconstruction volume</span></div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        vx, vy, vz = self.<a class="code" href="classsetInvProb_1_1data__out.html#a04880d7bb3413fdea838347859b69fd3">voxels</a></div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        rx, ry, rz = vx, vy, vz</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        <span class="comment"># result</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        xmin, xmax = np.min(vx), np.max(vx)</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        ymin, ymax = np.min(vy), np.max(vy)</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        zmin, zmax = np.min(vz), np.max(vz)</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        ind_cell = ((xmin &lt;= data.cell_pos[:, 0]) &amp; (xmax &gt;= data.cell_pos[:, 0]) &amp;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;                   (ymin &lt;= data.cell_pos[:, 1]) &amp; (ymax &gt;= data.cell_pos[:, 1]) &amp;</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;                   (zmin &lt;= data.cell_pos[:, 2]) &amp; (zmax &gt;= data.cell_pos[:, 2]))</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        vis_cell_pos = data.cell_pos[ind_cell.nonzero()[0],:]</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        ind_rec = self.xres.nonzero()[0]</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        rec_pos = self.voxels.reshape(3,-1).T[ind_rec,:]</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        closest_ind_to_cell = np.argmin(cdist(vis_cell_pos,rec_pos),1)</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        closest_ind_to_rec = np.argmin(cdist(vis_cell_pos,rec_pos),0)</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordflow">return</span> self.xres[closest_ind_to_cell]-data.cell_csd[ind_cell,self.<a class="code" href="classsetInvProb_1_1data__out.html#a12d5bc8c61c26bac0ec7321712e94143">t_ind</a>]</div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a94de837cb9b4d2ca189de9bc3aacf8c7"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a94de837cb9b4d2ca189de9bc3aacf8c7">setInvProb.data_out.res</a></div><div class="ttdeci">res</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00060">setInvProb.py:60</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a444a5f96c63f946e77d04b13685f94eb"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a444a5f96c63f946e77d04b13685f94eb">setInvProb.data_out.cmp_sloreta</a></div><div class="ttdeci">def cmp_sloreta</div><div class="ttdoc">computes sloreta inverse solution </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00056">setInvProb.py:56</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a17bf9f00c61b51ecc201d05e4e7d207b"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a17bf9f00c61b51ecc201d05e4e7d207b">setInvProb.data_out.fwd</a></div><div class="ttdeci">fwd</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00057">setInvProb.py:57</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a654e9e7454452f7e1d3af18dd014ef71"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a654e9e7454452f7e1d3af18dd014ef71">setInvProb.data_out.data</a></div><div class="ttdeci">data</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00028">setInvProb.py:28</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a1fa645dd2f692d909b633301879ea874"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a1fa645dd2f692d909b633301879ea874">setInvProb.data_out.write_with_pickle</a></div><div class="ttdeci">def write_with_pickle</div><div class="ttdoc">{ writes the results in a file } </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00218">setInvProb.py:218</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_aa6c3e55d0def8212a1baa792db8bce39"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#aa6c3e55d0def8212a1baa792db8bce39">setInvProb.data_out.cmp_fwd_matrix</a></div><div class="ttdeci">def cmp_fwd_matrix</div><div class="ttdoc">Calculate the m-by-n forward matrix given by 1/(4*pi*sigma)*(1/(d(el_pos-vox_pos)^2) ---------— Argum...</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00125">setInvProb.py:125</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a5d8d48813834c1831a342bb92063ba05"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a5d8d48813834c1831a342bb92063ba05">setInvProb.data_out.create_voxels</a></div><div class="ttdeci">def create_voxels</div><div class="ttdoc">Create voxel space w.r.t. </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00081">setInvProb.py:81</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_aafde83dd2a5c8d692b43961d1b279353"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#aafde83dd2a5c8d692b43961d1b279353">setInvProb.data_out.cmp_inv_matrix</a></div><div class="ttdeci">def cmp_inv_matrix</div><div class="ttdoc">Computes regularized inverse matrix in the given method (Can be a class later on with multiple method...</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00162">setInvProb.py:162</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a568c08ec5c17229d95a56d916df36f45"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a568c08ec5c17229d95a56d916df36f45">setInvProb.data_out.evaluate_localization</a></div><div class="ttdeci">def evaluate_localization</div><div class="ttdoc">evaluate the localization </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00252">setInvProb.py:252</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a12d5bc8c61c26bac0ec7321712e94143"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a12d5bc8c61c26bac0ec7321712e94143">setInvProb.data_out.t_ind</a></div><div class="ttdeci">t_ind</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00037">setInvProb.py:37</a></div></div>
 <div class="ttc" id="classobject_html"><div class="ttname"><a href="classobject.html">object</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_adac09d8245d5144c333cbaecf8b29a3e"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#adac09d8245d5144c333cbaecf8b29a3e">setInvProb.data_out.cmp_resolution_matrix</a></div><div class="ttdeci">def cmp_resolution_matrix</div><div class="ttdoc">Calculate the column(depth) normalization matrix given by (1. </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00198">setInvProb.py:198</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_aca4c24458adc7b0ceb1b893a04d9027f"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#aca4c24458adc7b0ceb1b893a04d9027f">setInvProb.data_out.electrode_pos</a></div><div class="ttdeci">electrode_pos</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00020">setInvProb.py:20</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a9af57aeaec7318c6d88b713b68e2d343"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a9af57aeaec7318c6d88b713b68e2d343">setInvProb.data_out.load_with_pickle</a></div><div class="ttdeci">def load_with_pickle</div><div class="ttdoc">{ function_description } </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00232">setInvProb.py:232</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a4e665e36c8f0ecd7eee30f6a041370c6"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a4e665e36c8f0ecd7eee30f6a041370c6">setInvProb.data_out.inv</a></div><div class="ttdeci">inv</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00050">setInvProb.py:50</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a43214680eac90ae168169a0c9b344057"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a43214680eac90ae168169a0c9b344057">setInvProb.data_out.__init__</a></div><div class="ttdeci">def __init__</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00018">setInvProb.py:18</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a2bd0534fe52d60d4ff29110f1af2cc6e"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a2bd0534fe52d60d4ff29110f1af2cc6e">setInvProb.data_out.dw</a></div><div class="ttdeci">dw</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00049">setInvProb.py:49</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html"><div class="ttname"><a href="classsetInvProb_1_1data__out.html">setInvProb.data_out</a></div><div class="ttdoc">Class of various reconstructions -------— Attributes -------—. </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00016">setInvProb.py:16</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a33e96eb4799f3da3d774f1415511380f"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">setInvProb.data_out.options</a></div><div class="ttdeci">options</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00021">setInvProb.py:21</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a04880d7bb3413fdea838347859b69fd3"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a04880d7bb3413fdea838347859b69fd3">setInvProb.data_out.voxels</a></div><div class="ttdeci">voxels</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00031">setInvProb.py:31</a></div></div>
-<div class="ttc" id="classsetInvProb_1_1data__out_html_a33c3c9285e3173dfc3c8124a582ce9de"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a33c3c9285e3173dfc3c8124a582ce9de">setInvProb.data_out.cmp_weight_matrix</a></div><div class="ttdeci">def cmp_weight_matrix</div><div class="ttdoc">Calculate the column(depth) normalization matrix given by (1. </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00176">setInvProb.py:176</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_adac09d8245d5144c333cbaecf8b29a3e"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#adac09d8245d5144c333cbaecf8b29a3e">setInvProb.data_out.cmp_resolution_matrix</a></div><div class="ttdeci">def cmp_resolution_matrix</div><div class="ttdoc">Calculate the column(depth) normalization matrix given by (1. </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00207">setInvProb.py:207</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_aca4c24458adc7b0ceb1b893a04d9027f"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#aca4c24458adc7b0ceb1b893a04d9027f">setInvProb.data_out.electrode_pos</a></div><div class="ttdeci">electrode_pos</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00029">setInvProb.py:29</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a9af57aeaec7318c6d88b713b68e2d343"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a9af57aeaec7318c6d88b713b68e2d343">setInvProb.data_out.load_with_pickle</a></div><div class="ttdeci">def load_with_pickle</div><div class="ttdoc">{ function_description } </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00241">setInvProb.py:241</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a4e665e36c8f0ecd7eee30f6a041370c6"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a4e665e36c8f0ecd7eee30f6a041370c6">setInvProb.data_out.inv</a></div><div class="ttdeci">inv</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00059">setInvProb.py:59</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a43214680eac90ae168169a0c9b344057"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a43214680eac90ae168169a0c9b344057">setInvProb.data_out.__init__</a></div><div class="ttdeci">def __init__</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00027">setInvProb.py:27</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a2bd0534fe52d60d4ff29110f1af2cc6e"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a2bd0534fe52d60d4ff29110f1af2cc6e">setInvProb.data_out.dw</a></div><div class="ttdeci">dw</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00058">setInvProb.py:58</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html"><div class="ttname"><a href="classsetInvProb_1_1data__out.html">setInvProb.data_out</a></div><div class="ttdoc">Class of various reconstructions -------— Attributes -------—. </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00025">setInvProb.py:25</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a33e96eb4799f3da3d774f1415511380f"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a33e96eb4799f3da3d774f1415511380f">setInvProb.data_out.options</a></div><div class="ttdeci">options</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00030">setInvProb.py:30</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a04880d7bb3413fdea838347859b69fd3"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a04880d7bb3413fdea838347859b69fd3">setInvProb.data_out.voxels</a></div><div class="ttdeci">voxels</div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00040">setInvProb.py:40</a></div></div>
+<div class="ttc" id="classsetInvProb_1_1data__out_html_a33c3c9285e3173dfc3c8124a582ce9de"><div class="ttname"><a href="classsetInvProb_1_1data__out.html#a33c3c9285e3173dfc3c8124a582ce9de">setInvProb.data_out.cmp_weight_matrix</a></div><div class="ttdeci">def cmp_weight_matrix</div><div class="ttdoc">Calculate the column(depth) normalization matrix given by (1. </div><div class="ttdef"><b>Definition:</b> <a href="setInvProb_8py_source.html#l00185">setInvProb.py:185</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.8-->
 <!-- start footer part -->
@@ -396,7 +405,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 18 2016 14:59:05 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 18 2016 16:53:49 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

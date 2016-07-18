@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['s_5fshape',['s_shape',['../classsetOptProb_1_1MyCallback.html#aa97a6626ac21c2237248bdbe79794b0e',1,'setOptProb::MyCallback']]],
-  ['save_5fsnapshot',['save_snapshot',['../classsetOptProb_1_1MyCallback.html#ad03cc462d51056cd1c2737cb09619cf4',1,'setOptProb.MyCallback.save_snapshot()'],['../classsetVisualization_1_1visualize.html#ad1695d341152f1934a852099015c203b',1,'setVisualization.visualize.save_snapshot()']]],
+  ['s_5fshape',['s_shape',['../classsetOptProb_1_1opt__out_1_1MyCallback.html#abc5088b7eba2162e339696867722a87c',1,'setOptProb::opt_out::MyCallback']]],
+  ['save_5fsnapshot',['save_snapshot',['../classsetOptProb_1_1opt__out_1_1MyCallback.html#a4ef385448de6f0955ce4c8a2bb01cf1b',1,'setOptProb.opt_out.MyCallback.save_snapshot()'],['../classsetVisualization_1_1visualize.html#ad1695d341152f1934a852099015c203b',1,'setVisualization.visualize.save_snapshot()']]],
   ['set_5foptimization_5fvariables_5f2p',['set_optimization_variables_2p',['../classsetOptProb_1_1opt__out.html#aa31cffd5f1e080142ac3ac071306583a',1,'setOptProb::opt_out']]],
   ['set_5foptimization_5fvariables_5fonly_5fmask',['set_optimization_variables_only_mask',['../classsetOptProb_1_1opt__out.html#ae260536d5533cd832da94cb099995c81',1,'setOptProb::opt_out']]],
   ['set_5foptimization_5fvariables_5fslack',['set_optimization_variables_slack',['../classsetOptProb_1_1opt__out.html#a3a1208b88a4b6f4a2dd36ad6d1416969',1,'setOptProb::opt_out']]],
