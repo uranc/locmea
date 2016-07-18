@@ -15,14 +15,37 @@ Check the tutorials directory for different use cases and tutorials.
 locMEA is developed in python. MATLAB extensions will eventually be.
 Minimum packages required are:
 
-Numpy
-Matplotlib (only for setVisualization)
-For optimization problems: CasADi
-Which requires more packages:
+There is 4 main modules of the framework with different functions.
+
+# getData
+Load the data, visualize, pre-process
+ - Requierements - 
+numpy 
+h5py (Optional for hdf5 files)
+Pickle (Optional for pickle files)
+
+
+# setInverseProblem
+Define the inverse source localization problem using the recordings and the electrode geometry.
+
+numpy
+scipy
+
+# setOptimizationProblem
+
+numpy
+CasADi
+OpenMP (optional)
+
+CasADi is an open-source symbolic framework for algorithmic (a.k.a. automatic) differentiation and numeric optimization.  requires more packages, check the website for installation details.
 
 ```
 https://github.com/casadi/casadi/wiki
 ```
+
+# getVisualization
+Matplotlib
+For optimization problems: CasADi
 
 ### Installing
 
@@ -34,21 +57,17 @@ git clone https://github.com/uranc/locmea.git
 ```
 
 Check the tutorials directory for different use cases and tutorials.
+PyPi package coming soon..
 
 ## Running the tests
 
+*Not yet* 
 Tests are not yet implemented.. 
-
-### And coding style tests
-
-Explain what these tests test and why
-
 
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
-
+Using the CasADi framework, you can generate the C-code for developed algorithms which will be much faster and will allow hardware implementations.
 
 ## Contributing
 
@@ -56,21 +75,23 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 
 ## Versioning
 
+*Not yet* 
+
 We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
-* **Cem Uran** - [uranc](https://github.com/uranc)
-* **Prof. Stefan Rotter** 
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+locMEA is an open-source tool, written in Python and built on top of the frameworks mentioned as earlier. It is developed by **Cem Uran** - [uranc](https://github.com/uranc) of the University of Freiburg under the supervision of **Prof. Stefan Rotter**  - [Bernstein Center Freiburg](https://www.bcf.uni-freiburg.de/people/details/rotter)
 
 ## License
 
-This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3 - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3, meaning the code can be used royalty-free even in commercial applications. See the [LICENSE.md](LICENSE.md) file for details.
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+* Thanks to all the great developers that are used in this framework. 
+- CasADi, LFPy, NEURON
+- numpy, scipy, matplotlib, h5py, pickle, Doxygen
+
+* Thanks to BWUniCluster for allowing the resources and the all computational power.
+
