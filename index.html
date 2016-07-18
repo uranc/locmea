@@ -99,20 +99,34 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <h3>Prerequisities</h3>
 <p>locMEA is developed in python. MATLAB extensions will eventually be. Minimum packages required are:</p>
 <p>There is 4 main modules of the framework with different functions.</p>
-<h1>getData</h1>
+<h4>getData</h4>
 <p>Load the data, visualize, pre-process</p>
 <ul>
-<li>Requierements - numpy h5py (Optional for hdf5 files) Pickle (Optional for pickle files)</li>
+<li>Requierements -</li>
 </ul>
-<h1>setInverseProblem</h1>
+<p>numpy</p>
+<ul>
+<li>h5py (Optional for hdf5 files)</li>
+<li>Pickle (Optional for pickle files)</li>
+</ul>
+<h4>setInverseProblem</h4>
 <p>Define the inverse source localization problem using the recordings and the electrode geometry.</p>
-<p>numpy scipy</p>
-<h1>setOptimizationProblem</h1>
-<p>numpy CasADi OpenMP (optional)</p>
+<ul>
+<li>numpy</li>
+<li>scipy</li>
+</ul>
+<h4>setOptimizationProblem</h4>
+<ul>
+<li>numpy</li>
+<li>CasADi</li>
+<li>OpenMP (optional)</li>
+</ul>
 <p>CasADi is an open-source symbolic framework for algorithmic (a.k.a. automatic) differentiation and numeric optimization. requires more packages, check the website for installation details.</p>
 <p>``` <a href="https://github.com/casadi/casadi/wiki">https://github.com/casadi/casadi/wiki</a> ```</p>
-<h1>getVisualization</h1>
-<p>Matplotlib For optimization problems: CasADi</p>
+<h4>getVisualization</h4>
+<ul>
+<li>Matplotlib</li>
+</ul>
 <h3>Installing</h3>
 <p>Currently the project is in developement, you can check the repo to have an idea.</p>
 <p>``` git clone <a href="https://github.com/uranc/locmea.git">https://github.com/uranc/locmea.git</a> ```</p>
@@ -127,7 +141,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p><em>Not yet</em></p>
 <p>We use <a href="http://semver.org/">SemVer</a> for versioning. For the versions available, see the <a href="https://github.com/your/project/tags">tags on this repository</a>.</p>
 <h2>Authors</h2>
-<p>locMEA is an open-source tool, written in Python and built on top of the frameworks mentioned as earlier. It is developed by <b>Cem Uran</b> - <a href="https://github.com/uranc">uranc</a> of the University of Freiburg under the supervision of <b>Prof. Stefan Rotter</b> - <a href="https://www.bcf.uni-freiburg.de/people/details/rotter">Bernstein Center Freiburg</a></p>
+<p>locMEA is an open-source tool, written in Python and built on top of the frameworks mentioned as earlier. It is developed by <b>Cem Uran</b> - <a href="https://github.com/uranc">uranc</a> of the University of Freiburg under the supervision of <b>Stefan Rotter</b> - <a href="https://www.bcf.uni-freiburg.de/people/details/rotter">Bernstein Center Freiburg</a></p>
 <h2>License</h2>
 <p>This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3, meaning the code can be used royalty-free even in commercial applications. See the LICENSE.md file for details.</p>
 <h2>Acknowledgments</h2>
@@ -146,7 +160,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 18 2016 14:54:44 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jul 18 2016 14:59:05 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
