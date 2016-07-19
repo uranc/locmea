@@ -1,5 +1,5 @@
 <map id="setOptProb.opt_out.cmp_fwd_diff" name="setOptProb.opt_out.cmp_fwd_diff">
-<area shape="rect" id="node2" href="$classsetOptProb_1_1opt__out.html#aff5ab983d08c03178628c0c8388d3146" title="cmp_dx " alt="" coords="219,5,383,46"/>
-<area shape="rect" id="node3" href="$classsetOptProb_1_1opt__out.html#aa9754187b9bdc0d983e8f97902faf44e" title="cmp_dy " alt="" coords="219,70,383,111"/>
-<area shape="rect" id="node4" href="$classsetOptProb_1_1opt__out.html#adff1c1c1a5afcad1d6b18cbf6e8e8b87" title="cmp_dz " alt="" coords="219,135,383,177"/>
+<area shape="rect" id="node2" href="$classsetOptProb_1_1opt__out.html#aff5ab983d08c03178628c0c8388d3146" title="Computes the forward difference along x dimension. " alt="" coords="219,5,383,46"/>
+<area shape="rect" id="node3" href="$classsetOptProb_1_1opt__out.html#aa9754187b9bdc0d983e8f97902faf44e" title="Computes the forward difference along y dimension. " alt="" coords="219,70,383,111"/>
+<area shape="rect" id="node4" href="$classsetOptProb_1_1opt__out.html#adff1c1c1a5afcad1d6b18cbf6e8e8b87" title="Computes the forward difference along z dimension. " alt="" coords="219,135,383,177"/>
 </map>

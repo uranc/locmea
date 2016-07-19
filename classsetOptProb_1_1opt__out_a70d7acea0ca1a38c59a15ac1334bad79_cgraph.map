@@ -2,7 +2,7 @@
 <area shape="rect" id="node2" href="$classsetOptProb_1_1opt__out.html#a3a1208b88a4b6f4a2dd36ad6d1416969" title="Variables for the lifted version. " alt="" coords="273,5,469,46"/>
 <area shape="rect" id="node3" href="$classsetOptProb_1_1opt__out.html#a0d0aa31a8244666a34b1aba9bddf688e" title="Computes objective function f With lifting variable ys constraints. " alt="" coords="269,70,472,111"/>
 <area shape="rect" id="node4" href="$classsetOptProb_1_1opt__out.html#a8f3b0d8deaaa71d8d704f7c4dfbe67f9" title="add slack l1 constraints with lifting variables " alt="" coords="277,135,464,177"/>
-<area shape="rect" id="node5" href="$classsetOptProb_1_1opt__out.html#a3c022d3219411d4463467fe2c75eb89c" title="Minimization routine. " alt="" coords="275,201,466,242"/>
+<area shape="rect" id="node5" href="$classsetOptProb_1_1opt__out.html#a3c022d3219411d4463467fe2c75eb89c" title="Main Minimization routine. " alt="" coords="275,201,466,242"/>
 <area shape="rect" id="node6" href="$classsetInvProb_1_1data__out.html#a1fa645dd2f692d909b633301879ea874" title="{ writes the results in a file } " alt="" coords="285,266,456,307"/>
 <area shape="rect" id="node7" href="$classsetOptProb_1_1opt__out.html#a0e02fae88eb83255ea73a2b72e35945b" title="{ function_description } " alt="" coords="287,331,454,373"/>
 </map>

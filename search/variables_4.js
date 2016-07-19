@@ -3,7 +3,6 @@ var searchData=
   ['f',['f',['../classsetOptProb_1_1opt__out.html#aa528bf8321a9797d82aa43f6ec479105',1,'setOptProb::opt_out']]],
   ['f_5fname',['f_name',['../classsetData_1_1data__in.html#a9853e5597a8f792439d31b5f5084e0a7',1,'setData::data_in']]],
   ['fig',['fig',['../classsetVisualization_1_1visualize.html#a17425d87a78d7b38ca6ce6582b31426f',1,'setVisualization::visualize']]],
-  ['file_5fname',['file_name',['../namespacerunDebug.html#a9ca817565a0792210b7302c7a63a7381',1,'runDebug']]],
   ['flag_5fcallback',['flag_callback',['../classsetOptProb_1_1opt__out.html#ae3863491b0a895db92c2cb00b1cfec4f',1,'setOptProb::opt_out']]],
   ['flag_5fcallback_5fplot',['flag_callback_plot',['../classsetOptProb_1_1opt__out_1_1MyCallback.html#aa75ba3d0b101f977e188c757296547b9',1,'setOptProb.opt_out.MyCallback.flag_callback_plot()'],['../classsetOptProb_1_1opt__out.html#a400d7484cbf4dbaa83a44ff461e62faa',1,'setOptProb.opt_out.flag_callback_plot()']]],
   ['flag_5fcell',['flag_cell',['../classsetData_1_1data__in.html#a61f98836c632639d6c15fd05ed601e5f',1,'setData::data_in']]],

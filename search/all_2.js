@@ -17,5 +17,6 @@ var searchData=
   ['cmp_5fresolution_5fmatrix',['cmp_resolution_matrix',['../classsetInvProb_1_1data__out.html#adac09d8245d5144c333cbaecf8b29a3e',1,'setInvProb::data_out']]],
   ['cmp_5fsloreta',['cmp_sloreta',['../classsetInvProb_1_1data__out.html#a444a5f96c63f946e77d04b13685f94eb',1,'setInvProb::data_out']]],
   ['cmp_5fweight_5fmatrix',['cmp_weight_matrix',['../classsetInvProb_1_1data__out.html#a33c3c9285e3173dfc3c8124a582ce9de',1,'setInvProb::data_out']]],
+  ['create',['Create',['../namespaceCreate.html',1,'']]],
   ['create_5fvoxels',['create_voxels',['../classsetInvProb_1_1data__out.html#a5d8d48813834c1831a342bb92063ba05',1,'setInvProb::data_out']]]
 ];

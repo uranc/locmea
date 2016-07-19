@@ -110,10 +110,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"># useful, but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"># License for more details.</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"># --------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"># Author: Cem Uran &lt;cem.uran@uranus.uni-freiburg.de&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"># --------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"># Visualization module</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"># ---------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"># - Author: Cem Uran &lt;cem.uran@uranus.uni-freiburg.de&gt; -</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment">#   --------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"># @package Visualization Module</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"># --------------------------------------------------------------------</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"># </span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
@@ -340,156 +340,153 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    <span class="comment">##</span></div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    <span class="comment">#         @brief      { function_description }</span></div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    <span class="comment">#         @brief      { Initialize the figure}</span></div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    <span class="comment">#         </span></div>
 <div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <span class="comment">#         @param      self  The object</span></div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <span class="comment">#         </span></div>
 <div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    <span class="comment">#         </span></div>
 <div class="line"><a name="l00246"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#a4d3b76629c5f70e9ca802e2eb92705be">  246</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetVisualization_1_1visualize.html#a4d3b76629c5f70e9ca802e2eb92705be">show_s_field</a>(self):</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="stringliteral">&quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="stringliteral">        Initialize the figure</span></div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="stringliteral">        &quot;&quot;&quot;</span></div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        data = self.<a class="code" href="classsetVisualization_1_1visualize.html#a680730218ff76e119272ca1f0baf8b6d">data</a></div>
-<div class="line"><a name="l00251"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#a17425d87a78d7b38ca6ce6582b31426f">  251</a></span>&#160;        self.<a class="code" href="classsetVisualization_1_1visualize.html#a17425d87a78d7b38ca6ce6582b31426f">fig</a> = plt.figure(figsize=(20, 10))</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        cmax = 1</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <span class="comment"># xres = self.xres</span></div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        t_ind = self.<a class="code" href="classsetVisualization_1_1visualize.html#abda02c1c937b3e8b104c2d6b6c715df7">t_ind</a></div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        <span class="comment"># mask reconstruction volume</span></div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        vx, vy, vz = self.<a class="code" href="classsetVisualization_1_1visualize.html#ae6f153869bd7c060cf2b7a0e8517de83">voxels</a></div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        rx, ry, rz = vx, vy, vz</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        <span class="comment"># result</span></div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        ress = self.sres.reshape(rx.shape[0],rx.shape[1],rx.shape[2],3)</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        resn = self.xres.reshape(rx.shape)</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        resn_ind = np.abs(resn) &gt; cmax</div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        xmin, xmax = np.min(vx), np.max(vx)</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        ymin, ymax = np.min(vy), np.max(vy)</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        zmin, zmax = np.min(vz), np.max(vz)</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        ind = ((xmin &lt;= data.cell_pos[:, 0]) &amp; (xmax &gt;= data.cell_pos[:, 0]) &amp;</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;               (ymin &lt;= data.cell_pos[:, 1]) &amp; (ymax &gt;= data.cell_pos[:, 1]) &amp;</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;               (zmin &lt;= data.cell_pos[:, 2]) &amp; (zmax &gt;= data.cell_pos[:, 2]))</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        <span class="comment"># csd plot</span></div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        <span class="comment"># morphology</span></div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        ax = self.fig.add_subplot(131, projection=<span class="stringliteral">&#39;3d&#39;</span>)</div>
-<div class="line"><a name="l00272"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#ac13f0a582484a7ef0aea1388bb8a78e5">  272</a></span>&#160;        self.<a class="code" href="classsetVisualization_1_1visualize.html#ac13f0a582484a7ef0aea1388bb8a78e5">morpPlot</a> = []</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        self.morpPlot.append(ax.scatter(data.electrode_pos[:, 0],</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;                                        data.electrode_pos[:, 1],</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;                                        data.electrode_pos[:, 2],</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                                        color=<span class="stringliteral">&#39;b&#39;</span>,</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;                                        marker=<span class="stringliteral">&#39;.&#39;</span>))  <span class="comment"># electrodes</span></div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        self.morpPlot.append(ax.scatter(data.cell_pos[ind, 0],</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                                        data.cell_pos[ind, 1],</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                                        data.cell_pos[ind, 2],</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;                                        c=data.cell_csd[ind, t_ind],</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;                                        cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;                                        marker=<span class="stringliteral">&#39;o&#39;</span>))  <span class="comment"># midpoints</span></div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        ax.azim = 165 - 90</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        ax.elev = 20</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        <span class="comment"># second morphology</span></div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        ax = self.fig.add_subplot(132, projection=<span class="stringliteral">&#39;3d&#39;</span>)  <span class="comment"># , aspect=&#39;equal&#39;</span></div>
-<div class="line"><a name="l00288"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#a97c333be4ddef2f46367774260284c4c">  288</a></span>&#160;        self.<a class="code" href="classsetVisualization_1_1visualize.html#a97c333be4ddef2f46367774260284c4c">recPlot</a> = []</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        self.recPlot.append(ax.scatter(data.electrode_pos[:, 0],</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                                       data.electrode_pos[:, 1],</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;                                       data.electrode_pos[:, 2],</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                                       color=<span class="stringliteral">&#39;b&#39;</span>,</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                                       marker=<span class="stringliteral">&#39;.&#39;</span>))  <span class="comment"># electrodes</span></div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        self.recPlot.append(ax.scatter(rx[resn_ind],</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;                                       ry[resn_ind],</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;                                       rz[resn_ind],</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;                                       c=resn[resn_ind],</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                                       cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                                       marker=<span class="stringliteral">&#39;o&#39;</span>))  <span class="comment"># midpoints</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        ax.azim = 165 - 90</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        ax.elev = 20</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        <span class="comment"># third morphology</span></div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        ax = self.fig.add_subplot(133, projection=<span class="stringliteral">&#39;3d&#39;</span>)  <span class="comment"># , aspect=&#39;equal&#39;</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;        self.<a class="code" href="classsetVisualization_1_1visualize.html#a97c333be4ddef2f46367774260284c4c">recPlot</a> = []</div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        self.recPlot.append(ax.scatter(data.electrode_pos[:, 0],</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;                                      data.electrode_pos[:, 1],</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;                                      data.electrode_pos[:, 2],</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;                                      color=<span class="stringliteral">&#39;b&#39;</span>,</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;                                      marker=<span class="stringliteral">&#39;.&#39;</span>))  <span class="comment"># electrodes</span></div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        self.recPlot.append(ax.quiver(rx[resn_ind],</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                                      ry[resn_ind],</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;                                      rz[resn_ind],</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                                      ress[resn_ind, 0],</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;                                      ress[resn_ind, 1],</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;                                      ress[resn_ind, 2],</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;                                      cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                                      length=5,</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;                                      pivot=<span class="stringliteral">&#39;tail&#39;</span>,</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;                                      ))  <span class="comment"># midpoints</span></div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        ax.azim = 165 - 90</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        ax.elev = 20</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="comment"># show all</span></div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        self.fig.tight_layout()</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        plt.show()</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    <span class="comment">#         Visualize the exponential decay PSF and CTF functions</span></div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        data = self.<a class="code" href="classsetVisualization_1_1visualize.html#a680730218ff76e119272ca1f0baf8b6d">data</a></div>
+<div class="line"><a name="l00248"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#a17425d87a78d7b38ca6ce6582b31426f">  248</a></span>&#160;        self.<a class="code" href="classsetVisualization_1_1visualize.html#a17425d87a78d7b38ca6ce6582b31426f">fig</a> = plt.figure(figsize=(20, 10))</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        cmax = 1</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        <span class="comment"># xres = self.xres</span></div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        t_ind = self.<a class="code" href="classsetVisualization_1_1visualize.html#abda02c1c937b3e8b104c2d6b6c715df7">t_ind</a></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        <span class="comment"># mask reconstruction volume</span></div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        vx, vy, vz = self.<a class="code" href="classsetVisualization_1_1visualize.html#ae6f153869bd7c060cf2b7a0e8517de83">voxels</a></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        rx, ry, rz = vx, vy, vz</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        <span class="comment"># result</span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        ress = self.sres.reshape(rx.shape[0],rx.shape[1],rx.shape[2],3)</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        resn = self.xres.reshape(rx.shape)</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        resn_ind = np.abs(resn) &gt; cmax</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;        xmin, xmax = np.min(vx), np.max(vx)</div>
+<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;        ymin, ymax = np.min(vy), np.max(vy)</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        zmin, zmax = np.min(vz), np.max(vz)</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        ind = ((xmin &lt;= data.cell_pos[:, 0]) &amp; (xmax &gt;= data.cell_pos[:, 0]) &amp;</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;               (ymin &lt;= data.cell_pos[:, 1]) &amp; (ymax &gt;= data.cell_pos[:, 1]) &amp;</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;               (zmin &lt;= data.cell_pos[:, 2]) &amp; (zmax &gt;= data.cell_pos[:, 2]))</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <span class="comment"># csd plot</span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="comment"># morphology</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        ax = self.fig.add_subplot(131, projection=<span class="stringliteral">&#39;3d&#39;</span>)</div>
+<div class="line"><a name="l00269"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#ac13f0a582484a7ef0aea1388bb8a78e5">  269</a></span>&#160;        self.<a class="code" href="classsetVisualization_1_1visualize.html#ac13f0a582484a7ef0aea1388bb8a78e5">morpPlot</a> = []</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        self.morpPlot.append(ax.scatter(data.electrode_pos[:, 0],</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;                                        data.electrode_pos[:, 1],</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;                                        data.electrode_pos[:, 2],</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;                                        color=<span class="stringliteral">&#39;b&#39;</span>,</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;                                        marker=<span class="stringliteral">&#39;.&#39;</span>))  <span class="comment"># electrodes</span></div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        self.morpPlot.append(ax.scatter(data.cell_pos[ind, 0],</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                                        data.cell_pos[ind, 1],</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;                                        data.cell_pos[ind, 2],</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                                        c=data.cell_csd[ind, t_ind],</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;                                        cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;                                        marker=<span class="stringliteral">&#39;o&#39;</span>))  <span class="comment"># midpoints</span></div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        ax.azim = 165 - 90</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        ax.elev = 20</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        <span class="comment"># second morphology</span></div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        ax = self.fig.add_subplot(132, projection=<span class="stringliteral">&#39;3d&#39;</span>)  <span class="comment"># , aspect=&#39;equal&#39;</span></div>
+<div class="line"><a name="l00285"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#a97c333be4ddef2f46367774260284c4c">  285</a></span>&#160;        self.<a class="code" href="classsetVisualization_1_1visualize.html#a97c333be4ddef2f46367774260284c4c">recPlot</a> = []</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        self.recPlot.append(ax.scatter(data.electrode_pos[:, 0],</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;                                       data.electrode_pos[:, 1],</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;                                       data.electrode_pos[:, 2],</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;                                       color=<span class="stringliteral">&#39;b&#39;</span>,</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;                                       marker=<span class="stringliteral">&#39;.&#39;</span>))  <span class="comment"># electrodes</span></div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        self.recPlot.append(ax.scatter(rx[resn_ind],</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;                                       ry[resn_ind],</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;                                       rz[resn_ind],</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;                                       c=resn[resn_ind],</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;                                       cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;                                       marker=<span class="stringliteral">&#39;o&#39;</span>))  <span class="comment"># midpoints</span></div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        ax.azim = 165 - 90</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        ax.elev = 20</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="comment"># third morphology</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        ax = self.fig.add_subplot(133, projection=<span class="stringliteral">&#39;3d&#39;</span>)  <span class="comment"># , aspect=&#39;equal&#39;</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        self.<a class="code" href="classsetVisualization_1_1visualize.html#a97c333be4ddef2f46367774260284c4c">recPlot</a> = []</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        self.recPlot.append(ax.scatter(data.electrode_pos[:, 0],</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;                                      data.electrode_pos[:, 1],</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;                                      data.electrode_pos[:, 2],</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;                                      color=<span class="stringliteral">&#39;b&#39;</span>,</div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;                                      marker=<span class="stringliteral">&#39;.&#39;</span>))  <span class="comment"># electrodes</span></div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        self.recPlot.append(ax.quiver(rx[resn_ind],</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;                                      ry[resn_ind],</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;                                      rz[resn_ind],</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;                                      ress[resn_ind, 0],</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                                      ress[resn_ind, 1],</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;                                      ress[resn_ind, 2],</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                                      cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;                                      length=5,</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;                                      pivot=<span class="stringliteral">&#39;tail&#39;</span>,</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;                                      ))  <span class="comment"># midpoints</span></div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        ax.azim = 165 - 90</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        ax.elev = 20</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="comment"># show all</span></div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        self.fig.tight_layout()</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        plt.show()</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;    <span class="comment">#         Visualize the exponential decay PSF and CTF functions</span></div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;    <span class="comment">#         @param      self  The object</span></div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    <span class="comment">#         @param      fwd   The forward</span></div>
 <div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="comment">#         @param      self  The object</span></div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <span class="comment">#         @param      fwd   The forward</span></div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00336"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#a2b8762956cccb4c1e19d5b0e3fa6c6d1">  336</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetVisualization_1_1visualize.html#a2b8762956cccb4c1e19d5b0e3fa6c6d1">show_forward_matrix</a>(self, fwd):</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    <span class="comment">#         visualize recordings, epochs, etc.. frq., power (can be extra function)</span></div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="comment">#         @param      self  The object</span></div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00346"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#aa487d9abdd709a1afb906e62821ab481">  346</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetVisualization_1_1visualize.html#aa487d9abdd709a1afb906e62821ab481">visualize_data</a>(self):</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <span class="comment">#         visualize morphology frq. power ( can be extra)</span></div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="comment">#         @param      self  The object</span></div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00356"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#a88fdf668333214ad000626ee11613f38">  356</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetVisualization_1_1visualize.html#a88fdf668333214ad000626ee11613f38">visualize_cell</a>(self):</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <span class="comment">#         visualize covariance matrix</span></div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="comment">#         @param      self  The object</span></div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00366"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#a8f212fbc5e376d48cd4a3914a2ae4d02">  366</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetVisualization_1_1visualize.html#a8f212fbc5e376d48cd4a3914a2ae4d02">visualize_cov</a>(self):</div>
-<div class="ttc" id="classsetVisualization_1_1visualize_html_ac13f0a582484a7ef0aea1388bb8a78e5"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#ac13f0a582484a7ef0aea1388bb8a78e5">setVisualization.visualize.morpPlot</a></div><div class="ttdeci">morpPlot</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00272">setVisualization.py:272</a></div></div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00333"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#a2b8762956cccb4c1e19d5b0e3fa6c6d1">  333</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetVisualization_1_1visualize.html#a2b8762956cccb4c1e19d5b0e3fa6c6d1">show_forward_matrix</a>(self, fwd):</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    <span class="comment">#         visualize recordings, epochs, etc.. frq., power (can be extra function)</span></div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    <span class="comment">#         @param      self  The object</span></div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00343"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#aa487d9abdd709a1afb906e62821ab481">  343</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetVisualization_1_1visualize.html#aa487d9abdd709a1afb906e62821ab481">visualize_data</a>(self):</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    <span class="comment">#         visualize morphology frq. power ( can be extra)</span></div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    <span class="comment">#         @param      self  The object</span></div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00353"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#a88fdf668333214ad000626ee11613f38">  353</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetVisualization_1_1visualize.html#a88fdf668333214ad000626ee11613f38">visualize_cell</a>(self):</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    <span class="comment">#         visualize covariance matrix</span></div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="comment">#         @param      self  The object</span></div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    <span class="comment">#         @return     { description_of_the_return_value }</span></div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00363"></a><span class="lineno"><a class="line" href="classsetVisualization_1_1visualize.html#a8f212fbc5e376d48cd4a3914a2ae4d02">  363</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetVisualization_1_1visualize.html#a8f212fbc5e376d48cd4a3914a2ae4d02">visualize_cov</a>(self):</div>
+<div class="ttc" id="classsetVisualization_1_1visualize_html_ac13f0a582484a7ef0aea1388bb8a78e5"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#ac13f0a582484a7ef0aea1388bb8a78e5">setVisualization.visualize.morpPlot</a></div><div class="ttdeci">morpPlot</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00269">setVisualization.py:269</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1visualize_html_af309c0df35767837d1d6deeed08f2c37"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#af309c0df35767837d1d6deeed08f2c37">setVisualization.visualize.norm</a></div><div class="ttdeci">norm</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00057">setVisualization.py:57</a></div></div>
-<div class="ttc" id="classsetVisualization_1_1visualize_html_a88fdf668333214ad000626ee11613f38"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a88fdf668333214ad000626ee11613f38">setVisualization.visualize.visualize_cell</a></div><div class="ttdeci">def visualize_cell</div><div class="ttdoc">visualize morphology frq. </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00356">setVisualization.py:356</a></div></div>
+<div class="ttc" id="classsetVisualization_1_1visualize_html_a88fdf668333214ad000626ee11613f38"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a88fdf668333214ad000626ee11613f38">setVisualization.visualize.visualize_cell</a></div><div class="ttdeci">def visualize_cell</div><div class="ttdoc">visualize morphology frq. </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00353">setVisualization.py:353</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1visualize_html_abda02c1c937b3e8b104c2d6b6c715df7"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#abda02c1c937b3e8b104c2d6b6c715df7">setVisualization.visualize.t_ind</a></div><div class="ttdeci">t_ind</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00056">setVisualization.py:56</a></div></div>
-<div class="ttc" id="classsetVisualization_1_1visualize_html_a2b8762956cccb4c1e19d5b0e3fa6c6d1"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a2b8762956cccb4c1e19d5b0e3fa6c6d1">setVisualization.visualize.show_forward_matrix</a></div><div class="ttdeci">def show_forward_matrix</div><div class="ttdoc">Visualize the exponential decay PSF and CTF functions. </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00336">setVisualization.py:336</a></div></div>
+<div class="ttc" id="classsetVisualization_1_1visualize_html_a2b8762956cccb4c1e19d5b0e3fa6c6d1"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a2b8762956cccb4c1e19d5b0e3fa6c6d1">setVisualization.visualize.show_forward_matrix</a></div><div class="ttdeci">def show_forward_matrix</div><div class="ttdoc">Visualize the exponential decay PSF and CTF functions. </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00333">setVisualization.py:333</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1visualize_html_ae6f153869bd7c060cf2b7a0e8517de83"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#ae6f153869bd7c060cf2b7a0e8517de83">setVisualization.visualize.voxels</a></div><div class="ttdeci">voxels</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00054">setVisualization.py:54</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1visualize_html_a47b52d08d7ead7775e8552e764056158"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a47b52d08d7ead7775e8552e764056158">setVisualization.visualize.xres</a></div><div class="ttdeci">xres</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00049">setVisualization.py:49</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1visualize_html_aa61d79665c058daa58094250f4997d3a"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#aa61d79665c058daa58094250f4997d3a">setVisualization.visualize.show_movie</a></div><div class="ttdeci">def show_movie</div><div class="ttdoc">Initialize the figure. </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00235">setVisualization.py:235</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1visualize_html_acfd167a173ed605f6d2c8a99c6970aa1"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#acfd167a173ed605f6d2c8a99c6970aa1">setVisualization.visualize.__init__</a></div><div class="ttdeci">def __init__</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00044">setVisualization.py:44</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1visualize_html_af27288d1611a42da993b585a3e73d951"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#af27288d1611a42da993b585a3e73d951">setVisualization.visualize.sres</a></div><div class="ttdeci">sres</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00053">setVisualization.py:53</a></div></div>
-<div class="ttc" id="classsetVisualization_1_1visualize_html_a17425d87a78d7b38ca6ce6582b31426f"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a17425d87a78d7b38ca6ce6582b31426f">setVisualization.visualize.fig</a></div><div class="ttdeci">fig</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00251">setVisualization.py:251</a></div></div>
+<div class="ttc" id="classsetVisualization_1_1visualize_html_a17425d87a78d7b38ca6ce6582b31426f"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a17425d87a78d7b38ca6ce6582b31426f">setVisualization.visualize.fig</a></div><div class="ttdeci">fig</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00248">setVisualization.py:248</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1visualize_html_ab1b95765f145731f576da42db610bf70"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#ab1b95765f145731f576da42db610bf70">setVisualization.visualize.show_snapshot</a></div><div class="ttdeci">def show_snapshot</div><div class="ttdoc">Initialize the figure. </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00154">setVisualization.py:154</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1visualize_html_aaff08f20d7f353479d0b9e63dc75eb6c"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#aaff08f20d7f353479d0b9e63dc75eb6c">setVisualization.visualize.datafile_name</a></div><div class="ttdeci">datafile_name</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00050">setVisualization.py:50</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1MidpointNormalize_html_ae84c2ccb9dc440127c25b696ebbfb7a0"><div class="ttname"><a href="classsetVisualization_1_1MidpointNormalize.html#ae84c2ccb9dc440127c25b696ebbfb7a0">setVisualization.MidpointNormalize.__init__</a></div><div class="ttdeci">def __init__</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00027">setVisualization.py:27</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1visualize_html"><div class="ttname"><a href="classsetVisualization_1_1visualize.html">setVisualization.visualize</a></div><div class="ttdoc">Nice class info. </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00042">setVisualization.py:42</a></div></div>
 <div class="ttc" id="classobject_html"><div class="ttname"><a href="classobject.html">object</a></div></div>
-<div class="ttc" id="classsetVisualization_1_1visualize_html_aa487d9abdd709a1afb906e62821ab481"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#aa487d9abdd709a1afb906e62821ab481">setVisualization.visualize.visualize_data</a></div><div class="ttdeci">def visualize_data</div><div class="ttdoc">visualize recordings, epochs, etc. </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00346">setVisualization.py:346</a></div></div>
+<div class="ttc" id="classsetVisualization_1_1visualize_html_aa487d9abdd709a1afb906e62821ab481"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#aa487d9abdd709a1afb906e62821ab481">setVisualization.visualize.visualize_data</a></div><div class="ttdeci">def visualize_data</div><div class="ttdoc">visualize recordings, epochs, etc. </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00343">setVisualization.py:343</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1MidpointNormalize_html_ad2436d425672fc697aaa8278a2e69992"><div class="ttname"><a href="classsetVisualization_1_1MidpointNormalize.html#ad2436d425672fc697aaa8278a2e69992">setVisualization.MidpointNormalize.midpoint</a></div><div class="ttdeci">midpoint</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00028">setVisualization.py:28</a></div></div>
-<div class="ttc" id="classsetVisualization_1_1visualize_html_a8f212fbc5e376d48cd4a3914a2ae4d02"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a8f212fbc5e376d48cd4a3914a2ae4d02">setVisualization.visualize.visualize_cov</a></div><div class="ttdeci">def visualize_cov</div><div class="ttdoc">visualize covariance matrix </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00366">setVisualization.py:366</a></div></div>
+<div class="ttc" id="classsetVisualization_1_1visualize_html_a8f212fbc5e376d48cd4a3914a2ae4d02"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a8f212fbc5e376d48cd4a3914a2ae4d02">setVisualization.visualize.visualize_cov</a></div><div class="ttdeci">def visualize_cov</div><div class="ttdoc">visualize covariance matrix </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00363">setVisualization.py:363</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1visualize_html_ad1695d341152f1934a852099015c203b"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#ad1695d341152f1934a852099015c203b">setVisualization.visualize.save_snapshot</a></div><div class="ttdeci">def save_snapshot</div><div class="ttdoc">Initialize the figure. </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00069">setVisualization.py:69</a></div></div>
-<div class="ttc" id="classsetVisualization_1_1visualize_html_a97c333be4ddef2f46367774260284c4c"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a97c333be4ddef2f46367774260284c4c">setVisualization.visualize.recPlot</a></div><div class="ttdeci">recPlot</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00288">setVisualization.py:288</a></div></div>
+<div class="ttc" id="classsetVisualization_1_1visualize_html_a97c333be4ddef2f46367774260284c4c"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a97c333be4ddef2f46367774260284c4c">setVisualization.visualize.recPlot</a></div><div class="ttdeci">recPlot</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00285">setVisualization.py:285</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1MidpointNormalize_html"><div class="ttname"><a href="classsetVisualization_1_1MidpointNormalize.html">setVisualization.MidpointNormalize</a></div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00026">setVisualization.py:26</a></div></div>
-<div class="ttc" id="classsetVisualization_1_1visualize_html_a4d3b76629c5f70e9ca802e2eb92705be"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a4d3b76629c5f70e9ca802e2eb92705be">setVisualization.visualize.show_s_field</a></div><div class="ttdeci">def show_s_field</div><div class="ttdoc">{ function_description } </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00246">setVisualization.py:246</a></div></div>
+<div class="ttc" id="classsetVisualization_1_1visualize_html_a4d3b76629c5f70e9ca802e2eb92705be"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a4d3b76629c5f70e9ca802e2eb92705be">setVisualization.visualize.show_s_field</a></div><div class="ttdeci">def show_s_field</div><div class="ttdoc">{ Initialize the figure} </div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00246">setVisualization.py:246</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1visualize_html_a680730218ff76e119272ca1f0baf8b6d"><div class="ttname"><a href="classsetVisualization_1_1visualize.html#a680730218ff76e119272ca1f0baf8b6d">setVisualization.visualize.data</a></div><div class="ttdeci">data</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00048">setVisualization.py:48</a></div></div>
 <div class="ttc" id="classsetVisualization_1_1MidpointNormalize_html_ae3818b882f10e9e8e013025c361918f7"><div class="ttname"><a href="classsetVisualization_1_1MidpointNormalize.html#ae3818b882f10e9e8e013025c361918f7">setVisualization.MidpointNormalize.__call__</a></div><div class="ttdeci">def __call__</div><div class="ttdef"><b>Definition:</b> <a href="setVisualization_8py_source.html#l00031">setVisualization.py:31</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
@@ -501,7 +498,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jul 18 2016 16:53:50 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 19 2016 15:36:04 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
