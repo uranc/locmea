@@ -6,10 +6,10 @@ any later version. This program is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 License for more details.
---------------------------------------------------------------------
-Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
---------------------------------------------------------------------
-Create attributes for the optimization problem
+---------------------------------------------------------------------
+- Author: Cem Uran <cem.uran@uranus.uni-freiburg.de> -
+  --------------------------------------------------------------------
+@package Create attributes for the optimization problem
 --------------------------------------------------------------------
 """
 from setInvProb import data_out
@@ -32,7 +32,8 @@ class opt_out(data_out):
     """
     class MyCallback(ca.Callback):
         """
-        Callback class
+        Callback class gets results during optimization. This is necessary for
+        saving intermediate results.
         """
         class MidpointNormalize(Normalize):
             """
@@ -40,7 +41,7 @@ class opt_out(data_out):
             """
             def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
                 """
-                Requires
+                Requires a midpoint
                 """
                 self.midpoint = midpoint
                 Normalize.__init__(self, vmin, vmax, clip)
@@ -61,6 +62,14 @@ class opt_out(data_out):
         def __init__(self, name, nx, ng, np, opts={}):
             """
             Callback class is used for the optimization
+            
+            @param      self  The object
+            @param      name  The name
+            @param      nx    { Number of optimization variables x }
+            @param      ng    { Number of optimization constraints g }
+            @param      np    { Number of optimization parameters p }
+            @param      opts  Options for plotting and saving intermediate
+                              results.
             """
             ca.Callback.__init__(self)
             self.norm = self.MidpointNormalize(midpoint=0)
@@ -100,15 +109,15 @@ class opt_out(data_out):
 
         def save_snapshot(self, xres_mid, fname, cmax = 1e-3, t_ind = 35):
             """
-            Initialize the figure
+            Save a figure showing the intermediate results.
             
             @param      self      The object
-            @param      xres_mid  The xres middle
-            @param      fname     The filename
-            @param      cmax      The cmax
-            @param      t_ind     The t ind
+            @param      xres_mid  The soultion x.
+            @param      fname     The filename to save.
+            @param      cmax      The threshold for visualization.
+            @param      t_ind     The time point to visualize.
             
-            @return     { description_of_the_return_value }
+            @return     { None }
             """
             print fname
             fname = fname + '.png'
@@ -185,6 +194,14 @@ class opt_out(data_out):
             plt.savefig(fname)
 
         def eval(self, arg):
+            """
+            @brief      { This is the function that CasADi calls at every step. }
+            
+            @param      self  The object
+            @param      arg   The argument
+            
+            @return     { 0 }
+            """
             darg = {}
             for (i,s) in enumerate(ca.nlpsol_out()): darg[s] = arg[i]
             sol = darg['x']
@@ -218,93 +235,99 @@ class opt_out(data_out):
             """
             Options for optimization
             
-            @param      self    The object
-            @param      args    The arguments
-            @param      kwargs  The kwargs
+            @param      self    Optimization object
+            @param      args    Optimization options
+            @param      kwargs  Optimization options
             """
-        data_out.__init__(self, *args, **kwargs)
-        self.opt_opt = {'solver': 'ipopt',
-                        'datafile_name': 'output_file',
-                        'callback_steps': 100,
-                        'method': 'not_thesis',
-                        't_ind': 35,
-                        't_int': 1,
-                        'flag_depthweighted': True,
-                        'sigma': 0.1,
-                        'p_dyn': 10, 
-                        'flag_lift_mask': True,
-                        'flag_data_mask': True,
-                        'flag_write_output': True,
-                        'flag_parallel': False,
-                        'flag_callback': True,
-                        'flag_callback_plot': False,
-                        'solver': 'ipopt',
-                        'hessian': 'exact',
-                        'linsol': 'ma57'
-                        }
+            data_out.__init__(self, *args, **kwargs)
+            self.opt_opt = {'solver': 'ipopt',
+                            'datafile_name': 'output_file',
+                            'callback_steps': 100,
+                            'method': 'not_thesis',
+                            't_ind': 35,
+                            't_int': 1,
+                            'flag_depthweighted': True,
+                            'sigma': 0.1,
+                            'p_dyn': 10, 
+                            'flag_lift_mask': True,
+                            'flag_data_mask': True,
+                            'flag_write_output': True,
+                            'flag_parallel': False,
+                            'flag_callback': True,
+                            'flag_callback_plot': False,
+                            'solver': 'ipopt',
+                            'hessian': 'exact',
+                            'linsol': 'ma57'
+                            }
 
-        self.opt_opt.update(kwargs)
-        self.solver = self.opt_opt['solver']
-        self.datafile_name = self.opt_opt['datafile_name']+'_'+str(time.time())
-        self.callback_steps = self.opt_opt['callback_steps']
-        self.t_ind = self.opt_opt['t_ind']
-        self.t_int = self.opt_opt['t_int']
-        self.sigma_value = self.opt_opt['sigma']
-        self.method = self.opt_opt['method']
-        self.flag_depthweighted = self.opt_opt['flag_depthweighted']
-        self.flag_lift_mask = self.opt_opt['flag_lift_mask']
-        self.flag_parallel = self.opt_opt['flag_parallel']
-        self.flag_data_mask = self.opt_opt['flag_data_mask']
-        self.flag_callback = self.opt_opt['flag_callback']
-        self.flag_callback_plot = self.opt_opt['flag_callback_plot']
-        self.p_solver = self.opt_opt['solver']
-        self.p_hessian = self.opt_opt['hessian']
-        self.p_linsol = self.opt_opt['linsol']
-        self.p_dyn = self.opt_opt['p_dyn']
-        # ######################## #
-        #     Problem  setup       #
-        # ######################## #
-        print self.opt_opt
-        self.y = self.data.electrode_rec[:, self.t_ind:self.t_ind+self.t_int]
-        self.y_size = self.y.flatten().shape[0]
-        self.x_size = self.voxels[0, :].flatten().shape[0]
-        fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
-        if self.flag_depthweighted:
-            dw = self.cmp_weight_matrix(fwd)
-            self.fwd = ca.MX(np.dot(fwd, dw))
-        else:
-            self.fwd = ca.MX(fwd)
+            self.opt_opt.update(kwargs)
+            self.solver = self.opt_opt['solver']
+            self.datafile_name = self.opt_opt['datafile_name']+'_'+str(time.time())
+            self.callback_steps = self.opt_opt['callback_steps']
+            self.t_ind = self.opt_opt['t_ind']
+            self.t_int = self.opt_opt['t_int']
+            self.sigma_value = self.opt_opt['sigma']
+            self.method = self.opt_opt['method']
+            self.flag_depthweighted = self.opt_opt['flag_depthweighted']
+            self.flag_lift_mask = self.opt_opt['flag_lift_mask']
+            self.flag_parallel = self.opt_opt['flag_parallel']
+            self.flag_data_mask = self.opt_opt['flag_data_mask']
+            self.flag_callback = self.opt_opt['flag_callback']
+            self.flag_callback_plot = self.opt_opt['flag_callback_plot']
+            self.p_solver = self.opt_opt['solver']
+            self.p_hessian = self.opt_opt['hessian']
+            self.p_linsol = self.opt_opt['linsol']
+            self.p_dyn = self.opt_opt['p_dyn']
+            # ######################## #
+            #     Problem  setup       #
+            # ######################## #
+            print self.opt_opt
+            self.y = self.data.electrode_rec[:, self.t_ind:self.t_ind+self.t_int]
+            self.y_size = self.y.flatten().shape[0]
+            self.x_size = self.voxels[0, :].flatten().shape[0]
+            fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
+            if self.flag_depthweighted:
+                dw = self.cmp_weight_matrix(fwd)
+                self.fwd = ca.MX(np.dot(fwd, dw))
+            else:
+                self.fwd = ca.MX(fwd)
 
     def initialize_variables(self):
         """
-        initialization for the optimization problem
+        Initialization for the optimization problem
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         self.w0 = self.w(0)
-        if self.method == 'thesis':
-            tmp_s0 = np.random.randn(self.s.shape[0],self.s.shape[1])
-            for i in range(self.s.shape[0]):
-                tmp_s0[i, :] = tmp_s0[i, :] / np.linalg.norm(tmp_s0[i, :])
-            self.w0['s'] = tmp_s0
-            print 'initialization: Thesis'
-        print self.method
-        if self.method == 'thesis' or self.method == 'mask':
-            tmp_m0 = np.random.rand(self.m.shape[0])
-            tmp_a0 = np.random.randn(self.a.shape[0],self.a.shape[1])
-            self.w0['m'] = tmp_m0
-            self.w0['a'] = tmp_a0
-            print 'initialization: Thesis or Mask'
+        [csd] = self.get_ground_truth()
+        gt = np.reshape(csd,(self.w0['m'].shape[0],1))
+        mask_init = np.where(gt > 0, 1, 0).T[0]
+        activity_init = gt[mask_init].T[0]
+        self.w0['m'] = mask_init
+        self.w0['a'] = activity_init
+        # if self.method == 'thesis':
+        #     tmp_s0 = np.random.randn(self.s.shape[0],self.s.shape[1])
+        #     for i in range(self.s.shape[0]):
+        #         tmp_s0[i, :] = tmp_s0[i, :] / np.linalg.norm(tmp_s0[i, :])
+        #     self.w0['s'] = tmp_s0
+        #     print 'initialization: Thesis'
+        # print self.method
+        # if self.method == 'thesis' or self.method == 'mask':
+        #     tmp_m0 = np.random.rand(self.m.shape[0])
+        #     tmp_a0 = np.random.randn(self.a.shape[0],self.a.shape[1])
+        #     self.w0['m'] = tmp_m0
+        #     self.w0['a'] = tmp_a0
+        #     print 'initialization: Thesis or Mask'
 
     def minimize_function(self):
         """
-        Minimization routine
+        Main Minimization routine
         
-        @param      self  The object
+        @param      self  Optimization Object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         self.str_shape = self.w(0)
         self.g = ca.vertcat(*self.g)
@@ -359,17 +382,17 @@ class opt_out(data_out):
 
     def cmp_dx(self, smooth_entity, i, j, k, t, h=1.):
         """
-        cmp_dx
+        Computes the forward difference along x dimension.
         
-        @param      self           The object
-        @param      smooth_entity  The smooth entity
-        @param      i              { parameter_description }
-        @param      j              { parameter_description }
-        @param      k              { parameter_description }
-        @param      t              { parameter_description }
-        @param      h              { parameter_description }
+        @param      self           The optimization object
+        @param      smooth_entity  The image to smooth
+        @param      i              { pixel index for x - dimension}
+        @param      j              { pixel index for y - dimension}
+        @param      k              { pixel index for z - dimension}
+        @param      t              { time index }
+        @param      h              { discretization step }
         
-        @return     { description_of_the_return_value }
+        @return     { returns the gradient for a single pixel }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -407,17 +430,17 @@ class opt_out(data_out):
 
     def cmp_dy(self, smooth_entity, i, j, k, t, h=1.):
         """
-        cmp_dy
+        Computes the forward difference along y dimension.
         
-        @param      self           The object
-        @param      smooth_entity  The smooth entity
-        @param      i              { parameter_description }
-        @param      j              { parameter_description }
-        @param      k              { parameter_description }
-        @param      t              { parameter_description }
-        @param      h              { parameter_description }
+        @param      self           The optimization object
+        @param      smooth_entity  The image to smooth
+        @param      i              { pixel index for x - dimension}
+        @param      j              { pixel index for y - dimension}
+        @param      k              { pixel index for z - dimension}
+        @param      t              { time index }
+        @param      h              { discretization step }
         
-        @return     { description_of_the_return_value }
+        @return     { returns the gradient for a single pixel }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -462,17 +485,17 @@ class opt_out(data_out):
 
     def cmp_dz(self, smooth_entity, i, j, k, t, h=1.):
         """
-        cmp_dz
+        Computes the forward difference along z dimension.
         
-        @param      self           The object
-        @param      smooth_entity  The smooth entity
-        @param      i              { parameter_description }
-        @param      j              { parameter_description }
-        @param      k              { parameter_description }
-        @param      t              { parameter_description }
-        @param      h              { parameter_description }
+        @param      self           The optimization object
+        @param      smooth_entity  The image to smooth
+        @param      i              { pixel index for x - dimension}
+        @param      j              { pixel index for y - dimension}
+        @param      k              { pixel index for z - dimension}
+        @param      t              { time index }
+        @param      h              { discretization step }
         
-        @return     { description_of_the_return_value }
+        @return     { returns the gradient for a single pixel }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -510,15 +533,16 @@ class opt_out(data_out):
 
     def cmp_gradient(self, smooth_entity, flag_tmp_smooth=False, h=1., flag_second=True):
         """
-        <F7>cmp_gradient
+        Computes the forward difference for the whole volume.
         
-        @param      self             The object
-        @param      smooth_entity    The smooth entity
-        @param      flag_tmp_smooth  The flag temporary smooth
-        @param      h                { parameter_description }
-        @param      flag_second      The flag second
+        @param      self             {The optimization object}
+        @param      smooth_entity    {The image to smooth}
+        @param      flag_tmp_smooth  {The flag temporary smooth}
+        @param      h                {discretization step}
+        @param      flag_second      {The flag for second order approxiamion}
+        @param      t     {time index}
         
-        @return     { description_of_the_return_value }
+        @return     { returns the gradient for a the whole image }
         """
         # initials
         x = smooth_entity
@@ -552,18 +576,18 @@ class opt_out(data_out):
 
     def cmp_fwd_dx(self, smooth_entity, flag_average, i, j, k, t, h=1.):
         """
-        cmp_dx
+        Computes the forward difference along x dimension.
         
-        @param      self           The object
-        @param      smooth_entity  The smooth entity
-        @param      flag_average   The flag average
-        @param      i              { parameter_description }
-        @param      j              { parameter_description }
-        @param      k              { parameter_description }
-        @param      t              { parameter_description }
-        @param      h              { parameter_description }
+        @param      self           The optimization object
+        @param      smooth_entity  The image to smooth
+        @param      flag_average   The flag to get mask average
+        @param      i              { pixel index for x - dimension}
+        @param      j              { pixel index for y - dimension}
+        @param      k              { pixel index for z - dimension}
+        @param      t              { time index }
+        @param      h              { discretization step }
         
-        @return     { description_of_the_return_value }
+        @return     { returns the gradient for a single pixel }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -583,18 +607,18 @@ class opt_out(data_out):
 
     def cmp_fwd_dy(self, smooth_entity, flag_average, i, j, k, t, h=1.):
         """
-        cmp_dy
+        Computes the forward difference along y dimension.
         
-        @param      self           The object
-        @param      smooth_entity  The smooth entity
-        @param      flag_average   The flag average
-        @param      i              { parameter_description }
-        @param      j              { parameter_description }
-        @param      k              { parameter_description }
-        @param      t              { parameter_description }
-        @param      h              { parameter_description }
+        @param      self           The optimization object
+        @param      smooth_entity  The image to smooth
+        @param      flag_average   The flag to get mask average
+        @param      i              { pixel index for x - dimension}
+        @param      j              { pixel index for y - dimension}
+        @param      k              { pixel index for z - dimension}
+        @param      t              { time index }
+        @param      h              { discretization step }
         
-        @return     { description_of_the_return_value }
+        @return     { returns the gradient for a single pixel }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -614,18 +638,18 @@ class opt_out(data_out):
 
     def cmp_fwd_dz(self, smooth_entity, flag_average, i, j, k, t, h=1.):
         """
-        cmp_dz
+        Computes the forward difference along z dimension.
         
-        @param      self           The object
-        @param      smooth_entity  The smooth entity
-        @param      flag_average   The flag average
-        @param      i              { parameter_description }
-        @param      j              { parameter_description }
-        @param      k              { parameter_description }
-        @param      t              { parameter_description }
-        @param      h              { parameter_description }
+        @param      self           The optimization object
+        @param      smooth_entity  The image to smooth
+        @param      flag_average   The flag to get mask average
+        @param      i              { pixel index for x - dimension}
+        @param      j              { pixel index for y - dimension}
+        @param      k              { pixel index for z - dimension}
+        @param      t              { time index }
+        @param      h              { discretization step }
         
-        @return     { description_of_the_return_value }
+        @return     { returns the gradient for a single pixel }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -1106,7 +1130,7 @@ class opt_out(data_out):
         """
         thesis implementation
         
-        @param      self  The object
+        @param      self  The optimization object
         
         @return     { description_of_the_return_value }
         """
@@ -1129,7 +1153,7 @@ class opt_out(data_out):
         """
         Reform source space x as the difference of x+ - x-
         
-        @param      self  The object
+        @param      self  The optimization object
         
         @return     { description_of_the_return_value }
         """
@@ -1157,21 +1181,10 @@ class opt_out(data_out):
         """
         @brief      Get the ground truth.
         
-        @param      self  The object
+        @param      self  The optimization object
         
         @return     Ground truth.
         """
-        """
-        evaluate the localization
-        
-        @param      self  The object
-        
-        @return     { description_of_the_return_value }
-        """
-        # if not self.res.any():
-        #     "You don't have a reconstruction!"
-        # if not self.data.cell_pos.any():
-        #     "You don't have a ground truth (data.cell_pos)!"
         data = self.data
         # mask reconstruction volume
         vx, vy, vz = self.voxels
@@ -1203,5 +1216,5 @@ class opt_out(data_out):
             vox_cell_csd = vis_cell_csd[ind_in_vox[ivv,:]]
             vox_pos = [vx[ivv],vy[ivv],vz[ivv]]
             vox_dis = 1./np.sum(np.abs(vox_cell_pos- vox_pos)**2,axis=-1)
-            vox_csd[ivv] = np.dot(vox_cell_csd[:,0],vox_dis)/np.sum(vox_dis)
-        return [vis_cell_pos, vis_cell_csd]
+            vox_csd[ivv] = np.dot(vox_cell_csd[:,30],vox_dis)/np.sum(vox_dis)
+        return [vox_csd]

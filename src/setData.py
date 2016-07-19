@@ -6,10 +6,10 @@ any later version. This program is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 License for more details.
---------------------------------------------------------------------
-Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
---------------------------------------------------------------------
-Load the data
+---------------------------------------------------------------------
+- Author: Cem Uran <cem.uran@uranus.uni-freiburg.de> -
+  --------------------------------------------------------------------
+@package Data
 --------------------------------------------------------------------
 """
 import h5py

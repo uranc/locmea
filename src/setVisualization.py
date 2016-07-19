@@ -6,10 +6,10 @@ any later version. This program is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 License for more details.
---------------------------------------------------------------------
-Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
---------------------------------------------------------------------
-Visualization module
+---------------------------------------------------------------------
+- Author: Cem Uran <cem.uran@uranus.uni-freiburg.de> -
+  --------------------------------------------------------------------
+@package Visualization Module
 --------------------------------------------------------------------
 """
 
@@ -232,14 +232,11 @@ class visualize(object):
 
     def show_s_field(self):
         """
-        @brief      { function_description }
+        @brief      { Initialize the figure}
         
         @param      self  The object
         
         @return     { description_of_the_return_value }
-        """
-        """
-        Initialize the figure
         """
         data = self.data
         self.fig = plt.figure(figsize=(20, 10))

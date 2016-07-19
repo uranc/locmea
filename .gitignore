@@ -7,3 +7,8 @@ results/
 *.hdf5
 *.sublime*
 *.swp
+*.html
+*.xml
+*.bak
+*.css
+*.js
