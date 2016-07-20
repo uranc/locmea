@@ -69,7 +69,7 @@ class opt_out(data_out):
                               results.
             """
             ca.Callback.__init__(self)
-            self.norm = self.MidpointNormalize(midpoint=0)
+            self.norm = opt_out.MyCallback.MidpointNormalize(midpoint=0)
             self.iter = 0
             self.data_to_save = []
             self.datafile_name = opts['filename']
@@ -355,7 +355,7 @@ class opt_out(data_out):
         if self.flag_callback:
             print self.w.shape[0]
             print self.g.shape[0]
-            self.mycallback = self.MyCallback('mycallback', self.w.shape[0], self.g.shape[0], 0, 
+            self.mycallback = opt_out.MyCallback('mycallback', self.w.shape[0], self.g.shape[0], 0, 
                 opts={'filename': self.datafile_name, 
                 'flag_callback_plot': self.flag_callback_plot,'str_shape': self.str_shape,'data_cb': self.data,'voxels_cb': self.voxels})
             self.opts["iteration_callback"] = self.mycallback
