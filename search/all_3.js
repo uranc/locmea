@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['data',['Data',['../namespaceData.html',1,'Data'],['../classsetInvProb_1_1data__out.html#a654e9e7454452f7e1d3af18dd014ef71',1,'setInvProb.data_out.data()'],['../classsetOptProb_1_1opt__out_1_1MyCallback.html#adc5524c3b68dc6a854119ab7d3687c58',1,'setOptProb.opt_out.MyCallback.data()'],['../classsetVisualization_1_1visualize.html#a680730218ff76e119272ca1f0baf8b6d',1,'setVisualization.visualize.data()']]],
+  ['data',['data',['../classsetInvProb_1_1data__out.html#a654e9e7454452f7e1d3af18dd014ef71',1,'setInvProb.data_out.data()'],['../classsetOptProb_1_1opt__out_1_1MyCallback.html#adc5524c3b68dc6a854119ab7d3687c58',1,'setOptProb.opt_out.MyCallback.data()'],['../classsetVisualization_1_1visualize.html#a680730218ff76e119272ca1f0baf8b6d',1,'setVisualization.visualize.data()']]],
   ['data_5fin',['data_in',['../classsetData_1_1data__in.html',1,'setData']]],
   ['data_5fout',['data_out',['../classsetInvProb_1_1data__out.html',1,'setInvProb']]],
   ['data_5fto_5fsave',['data_to_save',['../classsetOptProb_1_1opt__out_1_1MyCallback.html#ab37d44afdece907c45a2e1c9754a4f8b',1,'setOptProb::opt_out::MyCallback']]],

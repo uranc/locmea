@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['visualization',['Visualization',['../namespaceVisualization.html',1,'']]],
   ['visualize',['visualize',['../classsetVisualization_1_1visualize.html',1,'setVisualization']]],
   ['visualize_5fcell',['visualize_cell',['../classsetVisualization_1_1visualize.html#a88fdf668333214ad000626ee11613f38',1,'setVisualization::visualize']]],
   ['visualize_5fcov',['visualize_cov',['../classsetVisualization_1_1visualize.html#a8f212fbc5e376d48cd4a3914a2ae4d02',1,'setVisualization::visualize']]],
