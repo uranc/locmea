@@ -106,7 +106,7 @@ elif p_method == 'mask':
 	opt.solve_ipopt_multi_measurement_only_mask()
 
 # 
-# opt.solve_ipopt_multi_measurement_slack()
+opt.solve_ipopt_multi_measurement_slack()
 # opt.solve_ipopt_multi_measurement_2p()
 # ev = opt.evaluate_localization()
 # visualize

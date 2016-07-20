@@ -1,4 +1,6 @@
 """
+@package setOptProb
+@author Cem Uran <cemuran@gmail.com> 
 Copyright (C) This program is free software: you can redistribute it and/or
 modify it under the terms of the GNU General Public License as published by the
 Free Software Foundation, either version 3 of the License, or (at your option)
@@ -6,11 +8,6 @@ any later version. This program is distributed in the hope that it will be
 useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 License for more details.
----------------------------------------------------------------------
-- Author: Cem Uran <cem.uran@uranus.uni-freiburg.de> -
-  --------------------------------------------------------------------
-@package Create attributes for the optimization problem
---------------------------------------------------------------------
 """
 from setInvProb import data_out
 import casadi as ca
@@ -93,6 +90,7 @@ class opt_out(data_out):
             opts['input_scheme'] = ca.nlpsol_out()
             opts['output_scheme'] = ['ret']
             self.construct(name, opts)
+
         def get_n_in(self): return ca.nlpsol_n_out()
         def get_n_out(self): return 1
         
@@ -301,25 +299,25 @@ class opt_out(data_out):
         @return     { None }
         """
         self.w0 = self.w(0)
-        [csd] = self.get_ground_truth()
-        gt = np.reshape(csd,(self.w0['m'].shape[0],1))
-        mask_init = np.where(gt > 0, 1, 0).T[0]
-        activity_init = gt[mask_init].T[0]
-        self.w0['m'] = mask_init
-        self.w0['a'] = activity_init
-        # if self.method == 'thesis':
-        #     tmp_s0 = np.random.randn(self.s.shape[0],self.s.shape[1])
-        #     for i in range(self.s.shape[0]):
-        #         tmp_s0[i, :] = tmp_s0[i, :] / np.linalg.norm(tmp_s0[i, :])
-        #     self.w0['s'] = tmp_s0
-        #     print 'initialization: Thesis'
-        # print self.method
-        # if self.method == 'thesis' or self.method == 'mask':
+        if self.method == 'thesis':
+            tmp_s0 = np.random.randn(self.s.shape[0],self.s.shape[1])
+            for i in range(self.s.shape[0]):
+                tmp_s0[i, :] = tmp_s0[i, :] / np.linalg.norm(tmp_s0[i, :])
+            self.w0['s'] = tmp_s0
+            print 'initialization: Thesis'
+        print self.method
+        if self.method == 'thesis' or self.method == 'mask':
         #     tmp_m0 = np.random.rand(self.m.shape[0])
         #     tmp_a0 = np.random.randn(self.a.shape[0],self.a.shape[1])
         #     self.w0['m'] = tmp_m0
         #     self.w0['a'] = tmp_a0
         #     print 'initialization: Thesis or Mask'
+            [csd] = self.get_ground_truth()
+            gt = np.reshape(csd,(self.w0['m'].shape[0],1))
+            mask_init = np.where(gt > 0, 1, 0).T[0]
+            activity_init = gt[mask_init].T[0]
+            self.w0['m'] = mask_init
+            self.w0['a'] = activity_init
 
     def minimize_function(self):
         """
@@ -355,12 +353,11 @@ class opt_out(data_out):
                          "qpsol": "qpoases"
                         }
         if self.flag_callback:
+            print self.w.shape[0]
+            print self.g.shape[0]
             self.mycallback = self.MyCallback('mycallback', self.w.shape[0], self.g.shape[0], 0, 
-                                         opts={'filename': self.datafile_name,
-                                               'flag_callback_plot': self.flag_callback_plot,
-                                               'str_shape': self.str_shape,
-                                               'data_cb': self.data,
-                                               'voxels_cb': self.voxels})
+                opts={'filename': self.datafile_name, 
+                'flag_callback_plot': self.flag_callback_plot,'str_shape': self.str_shape,'data_cb': self.data,'voxels_cb': self.voxels})
             self.opts["iteration_callback"] = self.mycallback
             self.opts["iteration_callback_step"] = self.callback_steps
 
@@ -1216,5 +1213,5 @@ class opt_out(data_out):
             vox_cell_csd = vis_cell_csd[ind_in_vox[ivv,:]]
             vox_pos = [vx[ivv],vy[ivv],vz[ivv]]
             vox_dis = 1./np.sum(np.abs(vox_cell_pos- vox_pos)**2,axis=-1)
-            vox_csd[ivv] = np.dot(vox_cell_csd[:,30],vox_dis)/np.sum(vox_dis)
+            vox_csd[ivv] = np.dot(vox_cell_csd[:,35],vox_dis)/np.sum(vox_dis)
         return [vox_csd]
