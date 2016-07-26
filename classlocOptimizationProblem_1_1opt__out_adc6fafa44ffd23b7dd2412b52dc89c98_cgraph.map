@@ -1,8 +1,5 @@
 <map id="locOptimizationProblem.opt_out.solve_ipopt_multi_measurement_only_mask" name="locOptimizationProblem.opt_out.solve_ipopt_multi_measurement_only_mask">
-<area shape="rect" id="node2" href="$classlocOptimizationProblem_1_1opt__out.html#a8480f52e16417210d219766a64e67090" title="thesis implementation " alt="" coords="319,5,524,61"/>
-<area shape="rect" id="node3" href="$classlocOptimizationProblem_1_1opt__out.html#ad206cf2addad166f191ef546baaa8ac3" title="Computes objective function f With lifting variable ys constraints. " alt="" coords="293,85,549,126"/>
-<area shape="rect" id="node4" href="$classlocOptimizationProblem_1_1opt__out.html#a399b857b6b5d5b7ee9ff765574e6e4d9" title="add background constraints with lifting variables " alt="" coords="329,149,514,205"/>
-<area shape="rect" id="node5" href="$classlocOptimizationProblem_1_1opt__out.html#ae9d069182d752a33804b7f8d6616cf4f" title="Main Minimization routine. " alt="" coords="330,229,513,270"/>
-<area shape="rect" id="node6" href="$classlocInverseProblem_1_1data__out.html#a6fa0bd1f863610eb022ec63b45d069d7" title="{ writes the results in a file } " alt="" coords="342,294,501,335"/>
-<area shape="rect" id="node7" href="$classlocOptimizationProblem_1_1opt__out.html#a33255df91cc26c45098b3fa70e5326a9" title="{ function_description } " alt="" coords="330,359,513,401"/>
+<area shape="rect" id="node2" href="$classlocOptimizationProblem_1_1opt__out.html#a8480f52e16417210d219766a64e67090" title="thesis implementation " alt="" coords="293,5,499,61"/>
+<area shape="rect" id="node3" href="$classlocInverseProblem_1_1data__out.html#a6fa0bd1f863610eb022ec63b45d069d7" title="{ writes the results in a file } " alt="" coords="317,85,475,126"/>
+<area shape="rect" id="node4" href="$classlocOptimizationProblem_1_1opt__out.html#a33255df91cc26c45098b3fa70e5326a9" title="{ function_description } " alt="" coords="305,150,487,191"/>
 </map>

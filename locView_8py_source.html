@@ -132,43 +132,43 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="comment">#         Colormap normalization</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="comment">#         </span></div>
 <div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize_1_1MidpointNormalize.html">   31</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classlocView_1_1visualize_1_1MidpointNormalize.html">MidpointNormalize</a>(Normalize):</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="comment">##</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="comment"># </span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="comment">#             Requires a midpoint value</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <span class="comment">#             </span></div>
-<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize_1_1MidpointNormalize.html#aa2faec8f672249724384d5a12ead7eed">   37</a></span>&#160;        <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize_1_1MidpointNormalize.html#aa2faec8f672249724384d5a12ead7eed">__init__</a>(self, vmin=None, vmax=None, midpoint=None, clip=False):</div>
-<div class="line"><a name="l00038"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize_1_1MidpointNormalize.html#ad4ecfc1a7a80f1f7856e8339bf172361">   38</a></span>&#160;            self.<a class="code" href="classlocView_1_1visualize_1_1MidpointNormalize.html#ad4ecfc1a7a80f1f7856e8339bf172361">midpoint</a> = midpoint</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;            Normalize.__init__(self, vmin, vmax, clip)</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="comment">##</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="comment">##</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        <span class="comment"># </span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <span class="comment">#             Requires a midpoint value</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="comment">#             </span></div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize_1_1MidpointNormalize.html#aa2faec8f672249724384d5a12ead7eed">   36</a></span>&#160;        <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize_1_1MidpointNormalize.html#aa2faec8f672249724384d5a12ead7eed">__init__</a>(self, vmin=None, vmax=None, midpoint=None, clip=False):</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize_1_1MidpointNormalize.html#ad4ecfc1a7a80f1f7856e8339bf172361">   37</a></span>&#160;            self.<a class="code" href="classlocView_1_1visualize_1_1MidpointNormalize.html#ad4ecfc1a7a80f1f7856e8339bf172361">midpoint</a> = midpoint</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;            Normalize.__init__(self, vmin, vmax, clip)</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="comment">##</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="comment"># </span></div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="comment">#             @brief      { Requires a midpoint value }</span></div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="comment"># </span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="comment">#             @brief      { Requires a midpoint value }</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="comment"># </span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="comment">#             @param      self   The object</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="comment">#             @param      value  The value</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="comment">#             @param      clip   The clip value</span></div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="comment"># </span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="comment">#             @return     { colormap }</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="comment">#             </span></div>
-<div class="line"><a name="l00051"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize_1_1MidpointNormalize.html#ac14083a016ccf9ad55335ee1fa431c09">   51</a></span>&#160;        <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize_1_1MidpointNormalize.html#ac14083a016ccf9ad55335ee1fa431c09">__call__</a>(self, value, clip=None):</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;            x, y = [self.vmin, self.<a class="code" href="classlocView_1_1visualize_1_1MidpointNormalize.html#ad4ecfc1a7a80f1f7856e8339bf172361">midpoint</a>, self.vmax], [0, 0.5, 1]</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;            <span class="keywordflow">return</span> np.ma.masked_array(np.interp(value, x, y))</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a465cfe31194056d823d76c65d86ed6d8">   55</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#a465cfe31194056d823d76c65d86ed6d8">__init__</a>(self, *args, **kwargs):</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        <span class="keywordflow">print</span> <span class="stringliteral">&quot;Visualization of:&quot;</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <span class="keywordflow">for</span> key <span class="keywordflow">in</span> kwargs.keys():</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;            <span class="keywordflow">print</span> key</div>
-<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a3a932cd511dba66a8bcc06dde3667867">   59</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#a3a932cd511dba66a8bcc06dde3667867">data</a> = kwargs[<span class="stringliteral">&#39;data&#39;</span>]</div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a31ba61235757b6ad0306a5bd22e1bdb9">   60</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#a31ba61235757b6ad0306a5bd22e1bdb9">xres</a> = kwargs[<span class="stringliteral">&#39;loc&#39;</span>].xres[:, 0]</div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a1cc93478636329a5d75935b542269fd8">   61</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#a1cc93478636329a5d75935b542269fd8">datafile_name</a> = kwargs[<span class="stringliteral">&#39;loc&#39;</span>].datafile_name</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">print</span> kwargs[<span class="stringliteral">&#39;loc&#39;</span>].method</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">if</span> kwargs[<span class="stringliteral">&#39;loc&#39;</span>].method == <span class="stringliteral">&#39;thesis&#39;</span>:</div>
-<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a2753b8269d9e0a6b8303a6152d2c581f">   64</a></span>&#160;            self.<a class="code" href="classlocView_1_1visualize.html#a2753b8269d9e0a6b8303a6152d2c581f">sres</a> = kwargs[<span class="stringliteral">&#39;loc&#39;</span>].sres</div>
-<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a8c424a53c380d2a2b4b5c0925f9848e8">   65</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#a8c424a53c380d2a2b4b5c0925f9848e8">voxels</a> = kwargs[<span class="stringliteral">&#39;loc&#39;</span>].voxels</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="comment"># self.t_ind = args[1].t_ind</span></div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#ae638804ab3c1c0eb0fed5af44b6cf255">   67</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#ae638804ab3c1c0eb0fed5af44b6cf255">t_ind</a> = 0</div>
-<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">   68</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">norm</a> = <a class="code" href="classlocView_1_1visualize_1_1MidpointNormalize.html">visualize.MidpointNormalize</a>(midpoint=0)</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="comment">#             @param      self   The object</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <span class="comment">#             @param      value  The value</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="comment">#             @param      clip   The clip value</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="comment"># </span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;        <span class="comment">#             @return     { colormap }</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="comment">#             </span></div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize_1_1MidpointNormalize.html#ac14083a016ccf9ad55335ee1fa431c09">   49</a></span>&#160;        <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize_1_1MidpointNormalize.html#ac14083a016ccf9ad55335ee1fa431c09">__call__</a>(self, value, clip=None):</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            x, y = [self.vmin, self.<a class="code" href="classlocView_1_1visualize_1_1MidpointNormalize.html#ad4ecfc1a7a80f1f7856e8339bf172361">midpoint</a>, self.vmax], [0, 0.5, 1]</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            <span class="keywordflow">return</span> np.ma.masked_array(np.interp(value, x, y))</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;</div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a465cfe31194056d823d76c65d86ed6d8">   53</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#a465cfe31194056d823d76c65d86ed6d8">__init__</a>(self, *args, **kwargs):</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordflow">print</span> <span class="stringliteral">&quot;Visualization of:&quot;</span></div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">for</span> key <span class="keywordflow">in</span> kwargs.keys():</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;            <span class="keywordflow">print</span> key</div>
+<div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a3a932cd511dba66a8bcc06dde3667867">   57</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#a3a932cd511dba66a8bcc06dde3667867">data</a> = kwargs[<span class="stringliteral">&#39;data&#39;</span>]</div>
+<div class="line"><a name="l00058"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a31ba61235757b6ad0306a5bd22e1bdb9">   58</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#a31ba61235757b6ad0306a5bd22e1bdb9">xres</a> = kwargs[<span class="stringliteral">&#39;loc&#39;</span>].xres[:, 0]</div>
+<div class="line"><a name="l00059"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#aec6ea5da83cd9f4c9a8f6d23e8ec442b">   59</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#aec6ea5da83cd9f4c9a8f6d23e8ec442b">xreal</a> = kwargs[<span class="stringliteral">&#39;loc&#39;</span>].xreal[0]</div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a1cc93478636329a5d75935b542269fd8">   60</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#a1cc93478636329a5d75935b542269fd8">datafile_name</a> = kwargs[<span class="stringliteral">&#39;loc&#39;</span>].datafile_name</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        <span class="keywordflow">print</span> kwargs[<span class="stringliteral">&#39;loc&#39;</span>].method</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">if</span> kwargs[<span class="stringliteral">&#39;loc&#39;</span>].method == <span class="stringliteral">&#39;thesis&#39;</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a2753b8269d9e0a6b8303a6152d2c581f">   63</a></span>&#160;            self.<a class="code" href="classlocView_1_1visualize.html#a2753b8269d9e0a6b8303a6152d2c581f">sres</a> = kwargs[<span class="stringliteral">&#39;loc&#39;</span>].sres</div>
+<div class="line"><a name="l00064"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a8c424a53c380d2a2b4b5c0925f9848e8">   64</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#a8c424a53c380d2a2b4b5c0925f9848e8">voxels</a> = kwargs[<span class="stringliteral">&#39;loc&#39;</span>].voxels</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="comment"># self.t_ind = args[1].t_ind</span></div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#ae638804ab3c1c0eb0fed5af44b6cf255">   66</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#ae638804ab3c1c0eb0fed5af44b6cf255">t_ind</a> = 0</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="comment"># self.norm = visualize.MidpointNormalize(midpoint=0)</span></div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">   68</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">norm</a> = <a class="code" href="classlocView_1_1visualize_1_1MidpointNormalize.html">visualize.MidpointNormalize</a>(vmin=-1,vmax =1,midpoint=0)</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="comment">##</span></div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="comment"># </span></div>
@@ -214,14 +214,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            ax1 = plt.subplot2grid(</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;                (2, n_depth + cs_width * 2), (0, dl + cs_width * 2))</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            ax1.imshow(sss[:, dl, :].T, norm=self.<a class="code" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">norm</a>,</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                       cmap=plt.cm.RdBu, interpolation=<span class="stringliteral">&#39;none&#39;</span>, origin=<span class="stringliteral">&#39;lower&#39;</span>)</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                   cmap=<span class="stringliteral">&#39;RdBu&#39;</span>, interpolation=<span class="stringliteral">&#39;none&#39;</span>, origin=<span class="stringliteral">&#39;lower&#39;</span>)</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            <span class="comment"># ax1.set_ylabel(&#39;Transmembrane (nA)&#39;)</span></div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            <span class="comment"># ax1.set_xlabel(&#39;Time (ms)&#39;)</span></div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            <span class="comment"># second plot</span></div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            ax2 = plt.subplot2grid(</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                (2, n_depth + cs_width * 2), (1, dl + cs_width * 2))</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;            ax2.imshow(sss[:, dl, :].T, norm=self.<a class="code" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">norm</a>,</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                       cmap=plt.cm.RdBu, interpolation=<span class="stringliteral">&#39;none&#39;</span>, origin=<span class="stringliteral">&#39;lower&#39;</span>)</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                   cmap=<span class="stringliteral">&#39;RdBu&#39;</span>, interpolation=<span class="stringliteral">&#39;none&#39;</span>, origin=<span class="stringliteral">&#39;lower&#39;</span>)</div>
 <div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            <span class="comment"># ax2.set_ylabel(&#39;Electrode Potential(mV)&#39;)</span></div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            <span class="comment"># ax2.set_xlabel(&#39;Time (ms)&#39;)</span></div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="comment"># morphology</span></div>
@@ -284,233 +284,235 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        n_depth = self.voxels.shape[2]</div>
 <div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        cs_width = n_depth / 2</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        resn = self.xres.reshape(rx.shape)</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        resn_ind = np.abs(resn) &gt; cmax</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        xmin, xmax = np.min(vx), np.max(vx)</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        ymin, ymax = np.min(vy), np.max(vy)</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        zmin, zmax = np.min(vz), np.max(vz)</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        ind = ((xmin &lt;= data.cell_pos[:, 0]) &amp; (xmax &gt;= data.cell_pos[:, 0]) &amp;</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;               (ymin &lt;= data.cell_pos[:, 1]) &amp; (ymax &gt;= data.cell_pos[:, 1]) &amp;</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;               (zmin &lt;= data.cell_pos[:, 2]) &amp; (zmax &gt;= data.cell_pos[:, 2]))</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="comment"># csd plot</span></div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        sss = np.zeros(resn.shape)</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        sss[resn_ind] = resn[resn_ind]</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="comment"># res_min = np.min(sss)</span></div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        <span class="comment"># res_max = np.max(sss)</span></div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="comment"># res_zero = 1 - res_max/(res_max + np.abs(res_min))</span></div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="comment"># orgcmap = mcm.RdBu</span></div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="comment"># shiftedcmap = self.shiftedColorMap(orgcmap, midpoint=res_zero, name=&#39;shifted&#39;)</span></div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        <span class="keywordflow">for</span> dl <span class="keywordflow">in</span> range(n_depth):</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;            <span class="comment"># (2,n_depth+2,3+dl)</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            ax1 = plt.subplot2grid(</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;                (2, n_depth + cs_width * 2), (0, dl + cs_width * 2))</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            ax1.imshow(sss[:, dl, :].T, norm=self.<a class="code" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">norm</a>,</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;                       cmap=plt.cm.RdBu, interpolation=<span class="stringliteral">&#39;none&#39;</span>, origin=<span class="stringliteral">&#39;lower&#39;</span>)</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;            <span class="comment"># ax1.set_ylabel(&#39;Transmembrane (nA)&#39;)</span></div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            <span class="comment"># ax1.set_xlabel(&#39;Time (ms)&#39;)</span></div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            <span class="comment"># second plot</span></div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            ax2 = plt.subplot2grid(</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                (2, n_depth + cs_width * 2), (1, dl + cs_width * 2))</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;            ax2.imshow(sss[:, dl, :].T, norm=self.<a class="code" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">norm</a>,</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;                       cmap=plt.cm.RdBu, interpolation=<span class="stringliteral">&#39;none&#39;</span>, origin=<span class="stringliteral">&#39;lower&#39;</span>)</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;            <span class="comment"># ax2.set_ylabel(&#39;Electrode Potential(mV)&#39;)</span></div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;            <span class="comment"># ax2.set_xlabel(&#39;Time (ms)&#39;)</span></div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        <span class="comment"># morphology</span></div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        ax = plt.subplot2grid((2, n_depth + cs_width * 2), (0, 0),</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;                              colspan=cs_width, rowspan=cs_width, projection=<span class="stringliteral">&#39;3d&#39;</span>)</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        ax.scatter(data.electrode_pos[:, 0],</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;                   data.electrode_pos[:, 1],</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                   data.electrode_pos[:, 2],</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;                   color=<span class="stringliteral">&#39;b&#39;</span>,</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;                   marker=<span class="stringliteral">&#39;.&#39;</span>)  <span class="comment"># electrodes</span></div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;        ax.scatter(data.cell_pos[ind, 0],</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;                   data.cell_pos[ind, 1],</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                   data.cell_pos[ind, 2],</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                   c=data.cell_csd[ind, t_ind],</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                   norm=self.<a class="code" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">norm</a>,</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                   cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                   marker=<span class="stringliteral">&#39;o&#39;</span>)  <span class="comment"># midpoints</span></div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        ax.azim = 10</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        ax.elev = 7</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="comment"># second morphology</span></div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        ax = plt.subplot2grid((2, n_depth + cs_width * 2), (0, cs_width),</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                              colspan=cs_width, rowspan=cs_width, projection=<span class="stringliteral">&#39;3d&#39;</span>)</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        ax.scatter(data.electrode_pos[:, 0],</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                   data.electrode_pos[:, 1],</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                   data.electrode_pos[:, 2],</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                   color=<span class="stringliteral">&#39;b&#39;</span>,</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                   marker=<span class="stringliteral">&#39;.&#39;</span>)  <span class="comment"># electrodes</span></div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        ax.scatter(rx[resn_ind],</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;                   ry[resn_ind],</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;                   rz[resn_ind],</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                   c=resn[resn_ind],</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;                   norm=self.<a class="code" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">norm</a>,</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                   cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                   marker=<span class="stringliteral">&#39;o&#39;</span>)  <span class="comment"># midpoints</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        ax.azim = 10</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        ax.elev = 7</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="comment"># show all</span></div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="comment"># # self.fig.tight_layout()</span></div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        plt.show()</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="comment">#         Displays a movie for multiple time indices</span></div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="comment">#         @param      self  The visualization object</span></div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="comment">#         @return     { None }</span></div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00260"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a26e41b6a8c5d69c028adddac24f95686">  260</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#a26e41b6a8c5d69c028adddac24f95686">show_movie</a>(self):</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    <span class="comment">#         @brief      { Displays the Spike Propogation Field for the method Thesis }</span></div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="comment">#         @param      self  The visualization object</span></div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="comment">#         @return     { None }</span></div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00270"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a4b46d429284abc7f00850c79be9b68f9">  270</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#a4b46d429284abc7f00850c79be9b68f9">show_s_field</a>(self):</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        data = self.<a class="code" href="classlocView_1_1visualize.html#a3a932cd511dba66a8bcc06dde3667867">data</a></div>
-<div class="line"><a name="l00272"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#ac7e7d5b91f20ca731aaca5e098210e2b">  272</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#ac7e7d5b91f20ca731aaca5e098210e2b">fig</a> = plt.figure(figsize=(20, 10))</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        cmax = 1</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="comment"># xres = self.xres</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        t_ind = self.<a class="code" href="classlocView_1_1visualize.html#ae638804ab3c1c0eb0fed5af44b6cf255">t_ind</a></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <span class="comment"># mask reconstruction volume</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        vx, vy, vz = self.<a class="code" href="classlocView_1_1visualize.html#a8c424a53c380d2a2b4b5c0925f9848e8">voxels</a></div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        rx, ry, rz = vx, vy, vz</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <span class="comment"># result</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        ress = self.sres.reshape(rx.shape[0], rx.shape[1], rx.shape[2], 3)</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        resn = self.xres.reshape(rx.shape)</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        resn_ind = np.abs(resn) &gt; cmax</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        xmin, xmax = np.min(vx), np.max(vx)</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        ymin, ymax = np.min(vy), np.max(vy)</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        zmin, zmax = np.min(vz), np.max(vz)</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        ind = ((xmin &lt;= data.cell_pos[:, 0]) &amp; (xmax &gt;= data.cell_pos[:, 0]) &amp;</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;               (ymin &lt;= data.cell_pos[:, 1]) &amp; (ymax &gt;= data.cell_pos[:, 1]) &amp;</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;               (zmin &lt;= data.cell_pos[:, 2]) &amp; (zmax &gt;= data.cell_pos[:, 2]))</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        <span class="comment"># csd plot</span></div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <span class="comment"># morphology</span></div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        ax = self.fig.add_subplot(131, projection=<span class="stringliteral">&#39;3d&#39;</span>)</div>
-<div class="line"><a name="l00293"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a8927fc41ac52cdfca81cea10fe297816">  293</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#a8927fc41ac52cdfca81cea10fe297816">morpPlot</a> = []</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        self.morpPlot.append(ax.scatter(data.electrode_pos[:, 0],</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;                                        data.electrode_pos[:, 1],</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;                                        data.electrode_pos[:, 2],</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;                                        color=<span class="stringliteral">&#39;b&#39;</span>,</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                                        marker=<span class="stringliteral">&#39;.&#39;</span>))  <span class="comment"># electrodes</span></div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        self.morpPlot.append(ax.scatter(data.cell_pos[ind, 0],</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;                                        data.cell_pos[ind, 1],</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                                        data.cell_pos[ind, 2],</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                                        c=data.cell_csd[ind, t_ind],</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;                                        cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;                                        marker=<span class="stringliteral">&#39;o&#39;</span>))  <span class="comment"># midpoints</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;        ax.azim = 165 - 90</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        ax.elev = 20</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <span class="comment"># second morphology</span></div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        ax = self.fig.add_subplot(132, projection=<span class="stringliteral">&#39;3d&#39;</span>)  <span class="comment"># , aspect=&#39;equal&#39;</span></div>
-<div class="line"><a name="l00309"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#ac56628443bcb10a5652bc23782e02b89">  309</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#ac56628443bcb10a5652bc23782e02b89">recPlot</a> = []</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        self.recPlot.append(ax.scatter(data.electrode_pos[:, 0],</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;                                       data.electrode_pos[:, 1],</div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;                                       data.electrode_pos[:, 2],</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                                       color=<span class="stringliteral">&#39;b&#39;</span>,</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;                                       marker=<span class="stringliteral">&#39;.&#39;</span>))  <span class="comment"># electrodes</span></div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        self.recPlot.append(ax.scatter(rx[resn_ind],</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;                                       ry[resn_ind],</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                                       rz[resn_ind],</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;                                       c=resn[resn_ind],</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;                                       cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                                       marker=<span class="stringliteral">&#39;o&#39;</span>))  <span class="comment"># midpoints</span></div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        ax.azim = 165 - 90</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        ax.elev = 20</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        <span class="comment"># third morphology</span></div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        ax = self.fig.add_subplot(133, projection=<span class="stringliteral">&#39;3d&#39;</span>)  <span class="comment"># , aspect=&#39;equal&#39;</span></div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#ac56628443bcb10a5652bc23782e02b89">recPlot</a> = []</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        self.recPlot.append(ax.scatter(data.electrode_pos[:, 0],</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;                                       data.electrode_pos[:, 1],</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;                                       data.electrode_pos[:, 2],</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                                       color=<span class="stringliteral">&#39;b&#39;</span>,</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;                                       marker=<span class="stringliteral">&#39;.&#39;</span>))  <span class="comment"># electrodes</span></div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        self.recPlot.append(ax.quiver(rx[resn_ind],</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;                                      ry[resn_ind],</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;                                      rz[resn_ind],</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                                      ress[resn_ind, 0],</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;                                      ress[resn_ind, 1],</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                                      ress[resn_ind, 2],</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;                                      cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;                                      length=5,</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;                                      pivot=<span class="stringliteral">&#39;tail&#39;</span>,</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                                      ))  <span class="comment"># midpoints</span></div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;        ax.azim = 165 - 90</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        ax.elev = 20</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="comment"># show all</span></div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        self.fig.tight_layout()</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        plt.show()</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    <span class="comment">#         Visualize the exponential decay PSF and CTF functions</span></div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="comment">#         @param      self  The visualization object</span></div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="comment">#         @param      fwd   The forward matrix</span></div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="comment">#         @return     { None }</span></div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00356"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a2bf7c00594804deb6caf381188bda306">  356</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#a2bf7c00594804deb6caf381188bda306">show_forward_matrix</a>(self, fwd):</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <span class="comment">#         Visualize recordings, epochs, etc.. frq., power (can be extra function)</span></div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="comment">#         @param      self  The visualization object</span></div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <span class="comment">#         @return     { None }</span></div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00366"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#acd81772303f49be50e31b4f359841f1f">  366</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#acd81772303f49be50e31b4f359841f1f">visualize_data</a>(self):</div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;</div>
-<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    <span class="comment">#         Visualize morphology frq. power ( can be extra)</span></div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    <span class="comment">#         @param      self  The visualization object</span></div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    <span class="comment">#         @return     { None }</span></div>
-<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00376"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#aa1e1b524e4273dc3b152f85850c8af90">  376</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#aa1e1b524e4273dc3b152f85850c8af90">visualize_cell</a>(self):</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    <span class="comment">#         Visualize covariance matrix</span></div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;    <span class="comment">#         @param      self  The visualization object</span></div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    <span class="comment">#         @return     { None }</span></div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00386"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a5e84fd0602784a16992da547dd47dd96">  386</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#a5e84fd0602784a16992da547dd47dd96">visualize_cov</a>(self):</div>
-<div class="ttc" id="classlocView_1_1visualize_html_a2bf7c00594804deb6caf381188bda306"><div class="ttname"><a href="classlocView_1_1visualize.html#a2bf7c00594804deb6caf381188bda306">locView.visualize.show_forward_matrix</a></div><div class="ttdeci">def show_forward_matrix</div><div class="ttdoc">Visualize the exponential decay PSF and CTF functions. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00356">locView.py:356</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_a2753b8269d9e0a6b8303a6152d2c581f"><div class="ttname"><a href="classlocView_1_1visualize.html#a2753b8269d9e0a6b8303a6152d2c581f">locView.visualize.sres</a></div><div class="ttdeci">sres</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00064">locView.py:64</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_a31ba61235757b6ad0306a5bd22e1bdb9"><div class="ttname"><a href="classlocView_1_1visualize.html#a31ba61235757b6ad0306a5bd22e1bdb9">locView.visualize.xres</a></div><div class="ttdeci">xres</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00060">locView.py:60</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_1_1MidpointNormalize_html_aa2faec8f672249724384d5a12ead7eed"><div class="ttname"><a href="classlocView_1_1visualize_1_1MidpointNormalize.html#aa2faec8f672249724384d5a12ead7eed">locView.visualize.MidpointNormalize.__init__</a></div><div class="ttdeci">def __init__</div><div class="ttdoc">Requires a midpoint value. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00037">locView.py:37</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_ae638804ab3c1c0eb0fed5af44b6cf255"><div class="ttname"><a href="classlocView_1_1visualize.html#ae638804ab3c1c0eb0fed5af44b6cf255">locView.visualize.t_ind</a></div><div class="ttdeci">t_ind</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00067">locView.py:67</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_a26e41b6a8c5d69c028adddac24f95686"><div class="ttname"><a href="classlocView_1_1visualize.html#a26e41b6a8c5d69c028adddac24f95686">locView.visualize.show_movie</a></div><div class="ttdeci">def show_movie</div><div class="ttdoc">Displays a movie for multiple time indices. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00260">locView.py:260</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_acd81772303f49be50e31b4f359841f1f"><div class="ttname"><a href="classlocView_1_1visualize.html#acd81772303f49be50e31b4f359841f1f">locView.visualize.visualize_data</a></div><div class="ttdeci">def visualize_data</div><div class="ttdoc">Visualize recordings, epochs, etc. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00366">locView.py:366</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_aa1e1b524e4273dc3b152f85850c8af90"><div class="ttname"><a href="classlocView_1_1visualize.html#aa1e1b524e4273dc3b152f85850c8af90">locView.visualize.visualize_cell</a></div><div class="ttdeci">def visualize_cell</div><div class="ttdoc">Visualize morphology frq. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00376">locView.py:376</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_1_1MidpointNormalize_html_ac14083a016ccf9ad55335ee1fa431c09"><div class="ttname"><a href="classlocView_1_1visualize_1_1MidpointNormalize.html#ac14083a016ccf9ad55335ee1fa431c09">locView.visualize.MidpointNormalize.__call__</a></div><div class="ttdeci">def __call__</div><div class="ttdoc">{ Requires a midpoint value } </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00051">locView.py:51</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_a8927fc41ac52cdfca81cea10fe297816"><div class="ttname"><a href="classlocView_1_1visualize.html#a8927fc41ac52cdfca81cea10fe297816">locView.visualize.morpPlot</a></div><div class="ttdeci">morpPlot</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00293">locView.py:293</a></div></div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        resReal = self.xreal.reshape(rx.shape)</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        resn_ind = np.abs(resn) &gt; cmax</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        xmin, xmax = np.min(vx), np.max(vx)</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        ymin, ymax = np.min(vy), np.max(vy)</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        zmin, zmax = np.min(vz), np.max(vz)</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        ind = ((xmin &lt;= data.cell_pos[:, 0]) &amp; (xmax &gt;= data.cell_pos[:, 0]) &amp;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;               (ymin &lt;= data.cell_pos[:, 1]) &amp; (ymax &gt;= data.cell_pos[:, 1]) &amp;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;               (zmin &lt;= data.cell_pos[:, 2]) &amp; (zmax &gt;= data.cell_pos[:, 2]))</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="comment"># csd plot</span></div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        sss = np.zeros(resn.shape)</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        sss[resn_ind] = resn[resn_ind]</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        <span class="comment"># res_min = np.min(sss)</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;        <span class="comment"># res_max = np.max(sss)</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="comment"># res_zero = 1 - res_max/(res_max + np.abs(res_min))</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        <span class="comment"># orgcmap = mcm.RdBu</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;        <span class="comment"># shiftedcmap = self.shiftedColorMap(orgcmap, midpoint=res_zero, name=&#39;shifted&#39;)</span></div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;        <span class="keywordflow">for</span> dl <span class="keywordflow">in</span> range(n_depth):</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;            <span class="comment"># (2,n_depth+2,3+dl)</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;            ax1 = plt.subplot2grid(</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;                (2, n_depth + cs_width * 2), (0, dl + cs_width * 2))</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;            ax1.imshow(sss[:, dl, :].T, norm=self.<a class="code" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">norm</a>,</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;                   cmap=<span class="stringliteral">&#39;RdBu&#39;</span>, interpolation=<span class="stringliteral">&#39;none&#39;</span>, origin=<span class="stringliteral">&#39;lower&#39;</span>)</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            <span class="comment"># ax1.set_ylabel(&#39;Transmembrane (nA)&#39;)</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            <span class="comment"># ax1.set_xlabel(&#39;Time (ms)&#39;)</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            <span class="comment"># second plot norm=self.norm,</span></div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;            ax2 = plt.subplot2grid(</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;                (2, n_depth + cs_width * 2), (1, dl + cs_width * 2))</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;            ax2.imshow(resReal[:, dl, :].T,norm=self.<a class="code" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">norm</a>,</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;                   cmap=<span class="stringliteral">&#39;RdBu&#39;</span>, interpolation=<span class="stringliteral">&#39;none&#39;</span>, origin=<span class="stringliteral">&#39;lower&#39;</span>)</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;            <span class="comment"># ax2.set_ylabel(&#39;Electrode Potential(mV)&#39;)</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;            <span class="comment"># ax2.set_xlabel(&#39;Time (ms)&#39;)</span></div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        <span class="comment"># morphology</span></div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        ax = plt.subplot2grid((2, n_depth + cs_width * 2), (0, 0),</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;                              colspan=cs_width, rowspan=cs_width, projection=<span class="stringliteral">&#39;3d&#39;</span>)</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        ax.scatter(data.electrode_pos[:, 0],</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;                   data.electrode_pos[:, 1],</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;                   data.electrode_pos[:, 2],</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;                   color=<span class="stringliteral">&#39;b&#39;</span>,</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;                   marker=<span class="stringliteral">&#39;.&#39;</span>)  <span class="comment"># electrodes</span></div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;        ax.scatter(data.cell_pos[ind, 0],</div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;                   data.cell_pos[ind, 1],</div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;                   data.cell_pos[ind, 2],</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;                   c=data.cell_csd[ind, t_ind],</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;                   norm=self.<a class="code" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">norm</a>,</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;                   cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;                   marker=<span class="stringliteral">&#39;o&#39;</span>)  <span class="comment"># midpoints</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        ax.azim = 10</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        ax.elev = 7</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        <span class="comment"># second morphology</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        ax = plt.subplot2grid((2, n_depth + cs_width * 2), (0, cs_width),</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                              colspan=cs_width, rowspan=cs_width, projection=<span class="stringliteral">&#39;3d&#39;</span>)</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        ax.scatter(data.electrode_pos[:, 0],</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                   data.electrode_pos[:, 1],</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                   data.electrode_pos[:, 2],</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;                   color=<span class="stringliteral">&#39;b&#39;</span>,</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;                   marker=<span class="stringliteral">&#39;.&#39;</span>)  <span class="comment"># electrodes</span></div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        ax.scatter(rx[resn_ind],</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;                   ry[resn_ind],</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;                   rz[resn_ind],</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;                   c=resn[resn_ind],</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                   norm=self.<a class="code" href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">norm</a>,</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;                   cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;                   marker=<span class="stringliteral">&#39;o&#39;</span>)  <span class="comment"># midpoints</span></div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        ax.azim = 10</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        ax.elev = 7</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="comment"># show all</span></div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        <span class="comment"># # self.fig.tight_layout()</span></div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        plt.show()</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    <span class="comment">#         Displays a movie for multiple time indices</span></div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;    <span class="comment">#         @param      self  The visualization object</span></div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    <span class="comment">#         @return     { None }</span></div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00261"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a26e41b6a8c5d69c028adddac24f95686">  261</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#a26e41b6a8c5d69c028adddac24f95686">show_movie</a>(self):</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    <span class="comment">#         @brief      { Displays the Spike Propogation Field for the method Thesis }</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    <span class="comment">#         @param      self  The visualization object</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    <span class="comment">#         @return     { None }</span></div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00271"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a4b46d429284abc7f00850c79be9b68f9">  271</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#a4b46d429284abc7f00850c79be9b68f9">show_s_field</a>(self):</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        data = self.<a class="code" href="classlocView_1_1visualize.html#a3a932cd511dba66a8bcc06dde3667867">data</a></div>
+<div class="line"><a name="l00273"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#ac7e7d5b91f20ca731aaca5e098210e2b">  273</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#ac7e7d5b91f20ca731aaca5e098210e2b">fig</a> = plt.figure(figsize=(20, 10))</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        cmax = 1</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="comment"># xres = self.xres</span></div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        t_ind = self.<a class="code" href="classlocView_1_1visualize.html#ae638804ab3c1c0eb0fed5af44b6cf255">t_ind</a></div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="comment"># mask reconstruction volume</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        vx, vy, vz = self.<a class="code" href="classlocView_1_1visualize.html#a8c424a53c380d2a2b4b5c0925f9848e8">voxels</a></div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        rx, ry, rz = vx, vy, vz</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        <span class="comment"># result</span></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        ress = self.sres.reshape(rx.shape[0], rx.shape[1], rx.shape[2], 3)</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        resn = self.xres.reshape(rx.shape)</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        resn_ind = np.abs(resn) &gt; cmax</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        xmin, xmax = np.min(vx), np.max(vx)</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        ymin, ymax = np.min(vy), np.max(vy)</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        zmin, zmax = np.min(vz), np.max(vz)</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        ind = ((xmin &lt;= data.cell_pos[:, 0]) &amp; (xmax &gt;= data.cell_pos[:, 0]) &amp;</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;               (ymin &lt;= data.cell_pos[:, 1]) &amp; (ymax &gt;= data.cell_pos[:, 1]) &amp;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;               (zmin &lt;= data.cell_pos[:, 2]) &amp; (zmax &gt;= data.cell_pos[:, 2]))</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <span class="comment"># csd plot</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <span class="comment"># morphology</span></div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        ax = self.fig.add_subplot(131, projection=<span class="stringliteral">&#39;3d&#39;</span>)</div>
+<div class="line"><a name="l00294"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a8927fc41ac52cdfca81cea10fe297816">  294</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#a8927fc41ac52cdfca81cea10fe297816">morpPlot</a> = []</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        self.morpPlot.append(ax.scatter(data.electrode_pos[:, 0],</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;                                        data.electrode_pos[:, 1],</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;                                        data.electrode_pos[:, 2],</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;                                        color=<span class="stringliteral">&#39;b&#39;</span>,</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                                        marker=<span class="stringliteral">&#39;.&#39;</span>))  <span class="comment"># electrodes</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        self.morpPlot.append(ax.scatter(data.cell_pos[ind, 0],</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;                                        data.cell_pos[ind, 1],</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;                                        data.cell_pos[ind, 2],</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;                                        c=data.cell_csd[ind, t_ind],</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;                                        cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;                                        marker=<span class="stringliteral">&#39;o&#39;</span>))  <span class="comment"># midpoints</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        ax.azim = 165 - 90</div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        ax.elev = 20</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        <span class="comment"># second morphology</span></div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        ax = self.fig.add_subplot(132, projection=<span class="stringliteral">&#39;3d&#39;</span>)  <span class="comment"># , aspect=&#39;equal&#39;</span></div>
+<div class="line"><a name="l00310"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#ac56628443bcb10a5652bc23782e02b89">  310</a></span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#ac56628443bcb10a5652bc23782e02b89">recPlot</a> = []</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;        self.recPlot.append(ax.scatter(data.electrode_pos[:, 0],</div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;                                       data.electrode_pos[:, 1],</div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;                                       data.electrode_pos[:, 2],</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;                                       color=<span class="stringliteral">&#39;b&#39;</span>,</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;                                       marker=<span class="stringliteral">&#39;.&#39;</span>))  <span class="comment"># electrodes</span></div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        self.recPlot.append(ax.scatter(rx[resn_ind],</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;                                       ry[resn_ind],</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;                                       rz[resn_ind],</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;                                       c=resn[resn_ind],</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;                                       cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;                                       marker=<span class="stringliteral">&#39;o&#39;</span>))  <span class="comment"># midpoints</span></div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        ax.azim = 165 - 90</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;        ax.elev = 20</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        <span class="comment"># third morphology</span></div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        ax = self.fig.add_subplot(133, projection=<span class="stringliteral">&#39;3d&#39;</span>)  <span class="comment"># , aspect=&#39;equal&#39;</span></div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        self.<a class="code" href="classlocView_1_1visualize.html#ac56628443bcb10a5652bc23782e02b89">recPlot</a> = []</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        self.recPlot.append(ax.scatter(data.electrode_pos[:, 0],</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;                                       data.electrode_pos[:, 1],</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                                       data.electrode_pos[:, 2],</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;                                       color=<span class="stringliteral">&#39;b&#39;</span>,</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;                                       marker=<span class="stringliteral">&#39;.&#39;</span>))  <span class="comment"># electrodes</span></div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        self.recPlot.append(ax.quiver(rx[resn_ind],</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;                                      ry[resn_ind],</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;                                      rz[resn_ind],</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;                                      ress[resn_ind, 0],</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;                                      ress[resn_ind, 1],</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;                                      ress[resn_ind, 2],</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;                                      cmap=<span class="stringliteral">&#39;RdBu&#39;</span>,</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;                                      length=5,</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;                                      pivot=<span class="stringliteral">&#39;tail&#39;</span>,</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;                                      ))  <span class="comment"># midpoints</span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        ax.azim = 165 - 90</div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        ax.elev = 20</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        <span class="comment"># show all</span></div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        self.fig.tight_layout()</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        plt.show()</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    <span class="comment">#         Visualize the exponential decay PSF and CTF functions</span></div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="comment">#         @param      self  The visualization object</span></div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <span class="comment">#         @param      fwd   The forward matrix</span></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <span class="comment">#         @return     { None }</span></div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00357"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a2bf7c00594804deb6caf381188bda306">  357</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#a2bf7c00594804deb6caf381188bda306">show_forward_matrix</a>(self, fwd):</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    <span class="comment">#         Visualize recordings, epochs, etc.. frq., power (can be extra function)</span></div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="comment">#         @param      self  The visualization object</span></div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    <span class="comment">#         @return     { None }</span></div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00367"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#acd81772303f49be50e31b4f359841f1f">  367</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#acd81772303f49be50e31b4f359841f1f">visualize_data</a>(self):</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;</div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    <span class="comment">#         Visualize morphology frq. power ( can be extra)</span></div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    <span class="comment">#         @param      self  The visualization object</span></div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;    <span class="comment">#         @return     { None }</span></div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00377"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#aa1e1b524e4273dc3b152f85850c8af90">  377</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#aa1e1b524e4273dc3b152f85850c8af90">visualize_cell</a>(self):</div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    <span class="comment">#         Visualize covariance matrix</span></div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;    <span class="comment">#         @param      self  The visualization object</span></div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    <span class="comment">#         @return     { None }</span></div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00387"></a><span class="lineno"><a class="line" href="classlocView_1_1visualize.html#a5e84fd0602784a16992da547dd47dd96">  387</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classlocView_1_1visualize.html#a5e84fd0602784a16992da547dd47dd96">visualize_cov</a>(self):</div>
+<div class="ttc" id="classlocView_1_1visualize_html_a2bf7c00594804deb6caf381188bda306"><div class="ttname"><a href="classlocView_1_1visualize.html#a2bf7c00594804deb6caf381188bda306">locView.visualize.show_forward_matrix</a></div><div class="ttdeci">def show_forward_matrix</div><div class="ttdoc">Visualize the exponential decay PSF and CTF functions. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00357">locView.py:357</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_a2753b8269d9e0a6b8303a6152d2c581f"><div class="ttname"><a href="classlocView_1_1visualize.html#a2753b8269d9e0a6b8303a6152d2c581f">locView.visualize.sres</a></div><div class="ttdeci">sres</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00063">locView.py:63</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_a31ba61235757b6ad0306a5bd22e1bdb9"><div class="ttname"><a href="classlocView_1_1visualize.html#a31ba61235757b6ad0306a5bd22e1bdb9">locView.visualize.xres</a></div><div class="ttdeci">xres</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00058">locView.py:58</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_1_1MidpointNormalize_html_aa2faec8f672249724384d5a12ead7eed"><div class="ttname"><a href="classlocView_1_1visualize_1_1MidpointNormalize.html#aa2faec8f672249724384d5a12ead7eed">locView.visualize.MidpointNormalize.__init__</a></div><div class="ttdeci">def __init__</div><div class="ttdoc">Requires a midpoint value. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00036">locView.py:36</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_ae638804ab3c1c0eb0fed5af44b6cf255"><div class="ttname"><a href="classlocView_1_1visualize.html#ae638804ab3c1c0eb0fed5af44b6cf255">locView.visualize.t_ind</a></div><div class="ttdeci">t_ind</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00066">locView.py:66</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_a26e41b6a8c5d69c028adddac24f95686"><div class="ttname"><a href="classlocView_1_1visualize.html#a26e41b6a8c5d69c028adddac24f95686">locView.visualize.show_movie</a></div><div class="ttdeci">def show_movie</div><div class="ttdoc">Displays a movie for multiple time indices. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00261">locView.py:261</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_acd81772303f49be50e31b4f359841f1f"><div class="ttname"><a href="classlocView_1_1visualize.html#acd81772303f49be50e31b4f359841f1f">locView.visualize.visualize_data</a></div><div class="ttdeci">def visualize_data</div><div class="ttdoc">Visualize recordings, epochs, etc. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00367">locView.py:367</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_aa1e1b524e4273dc3b152f85850c8af90"><div class="ttname"><a href="classlocView_1_1visualize.html#aa1e1b524e4273dc3b152f85850c8af90">locView.visualize.visualize_cell</a></div><div class="ttdeci">def visualize_cell</div><div class="ttdoc">Visualize morphology frq. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00377">locView.py:377</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_1_1MidpointNormalize_html_ac14083a016ccf9ad55335ee1fa431c09"><div class="ttname"><a href="classlocView_1_1visualize_1_1MidpointNormalize.html#ac14083a016ccf9ad55335ee1fa431c09">locView.visualize.MidpointNormalize.__call__</a></div><div class="ttdeci">def __call__</div><div class="ttdoc">{ Requires a midpoint value } </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00049">locView.py:49</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_a8927fc41ac52cdfca81cea10fe297816"><div class="ttname"><a href="classlocView_1_1visualize.html#a8927fc41ac52cdfca81cea10fe297816">locView.visualize.morpPlot</a></div><div class="ttdeci">morpPlot</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00294">locView.py:294</a></div></div>
 <div class="ttc" id="classlocView_1_1visualize_html"><div class="ttname"><a href="classlocView_1_1visualize.html">locView.visualize</a></div><div class="ttdoc">Visualization. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00026">locView.py:26</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_aec6ea5da83cd9f4c9a8f6d23e8ec442b"><div class="ttname"><a href="classlocView_1_1visualize.html#aec6ea5da83cd9f4c9a8f6d23e8ec442b">locView.visualize.xreal</a></div><div class="ttdeci">xreal</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00059">locView.py:59</a></div></div>
 <div class="ttc" id="classlocView_1_1visualize_1_1MidpointNormalize_html"><div class="ttname"><a href="classlocView_1_1visualize_1_1MidpointNormalize.html">locView.visualize.MidpointNormalize</a></div><div class="ttdoc">Colormap normalization. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00031">locView.py:31</a></div></div>
 <div class="ttc" id="classlocView_1_1visualize_html_a6d8329425e274b1618ceeb4fc15f4992"><div class="ttname"><a href="classlocView_1_1visualize.html#a6d8329425e274b1618ceeb4fc15f4992">locView.visualize.show_snapshot</a></div><div class="ttdeci">def show_snapshot</div><div class="ttdoc">Displays a snapshot for a single time index. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00172">locView.py:172</a></div></div>
 <div class="ttc" id="classlocView_1_1visualize_html_aa5cd436003a482f7af22f970af11d0e8"><div class="ttname"><a href="classlocView_1_1visualize.html#aa5cd436003a482f7af22f970af11d0e8">locView.visualize.save_snapshot</a></div><div class="ttdeci">def save_snapshot</div><div class="ttdoc">Saves a .png snapshot for a single time index. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00080">locView.py:80</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_a5e84fd0602784a16992da547dd47dd96"><div class="ttname"><a href="classlocView_1_1visualize.html#a5e84fd0602784a16992da547dd47dd96">locView.visualize.visualize_cov</a></div><div class="ttdeci">def visualize_cov</div><div class="ttdoc">Visualize covariance matrix. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00386">locView.py:386</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_1_1MidpointNormalize_html_ad4ecfc1a7a80f1f7856e8339bf172361"><div class="ttname"><a href="classlocView_1_1visualize_1_1MidpointNormalize.html#ad4ecfc1a7a80f1f7856e8339bf172361">locView.visualize.MidpointNormalize.midpoint</a></div><div class="ttdeci">midpoint</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00038">locView.py:38</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_a4b46d429284abc7f00850c79be9b68f9"><div class="ttname"><a href="classlocView_1_1visualize.html#a4b46d429284abc7f00850c79be9b68f9">locView.visualize.show_s_field</a></div><div class="ttdeci">def show_s_field</div><div class="ttdoc">{ Displays the Spike Propogation Field for the method Thesis } </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00270">locView.py:270</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_ac56628443bcb10a5652bc23782e02b89"><div class="ttname"><a href="classlocView_1_1visualize.html#ac56628443bcb10a5652bc23782e02b89">locView.visualize.recPlot</a></div><div class="ttdeci">recPlot</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00309">locView.py:309</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_a5e84fd0602784a16992da547dd47dd96"><div class="ttname"><a href="classlocView_1_1visualize.html#a5e84fd0602784a16992da547dd47dd96">locView.visualize.visualize_cov</a></div><div class="ttdeci">def visualize_cov</div><div class="ttdoc">Visualize covariance matrix. </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00387">locView.py:387</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_1_1MidpointNormalize_html_ad4ecfc1a7a80f1f7856e8339bf172361"><div class="ttname"><a href="classlocView_1_1visualize_1_1MidpointNormalize.html#ad4ecfc1a7a80f1f7856e8339bf172361">locView.visualize.MidpointNormalize.midpoint</a></div><div class="ttdeci">midpoint</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00037">locView.py:37</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_a4b46d429284abc7f00850c79be9b68f9"><div class="ttname"><a href="classlocView_1_1visualize.html#a4b46d429284abc7f00850c79be9b68f9">locView.visualize.show_s_field</a></div><div class="ttdeci">def show_s_field</div><div class="ttdoc">{ Displays the Spike Propogation Field for the method Thesis } </div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00271">locView.py:271</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_ac56628443bcb10a5652bc23782e02b89"><div class="ttname"><a href="classlocView_1_1visualize.html#ac56628443bcb10a5652bc23782e02b89">locView.visualize.recPlot</a></div><div class="ttdeci">recPlot</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00310">locView.py:310</a></div></div>
 <div class="ttc" id="classobject_html"><div class="ttname"><a href="classobject.html">object</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_a465cfe31194056d823d76c65d86ed6d8"><div class="ttname"><a href="classlocView_1_1visualize.html#a465cfe31194056d823d76c65d86ed6d8">locView.visualize.__init__</a></div><div class="ttdeci">def __init__</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00055">locView.py:55</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_a8c424a53c380d2a2b4b5c0925f9848e8"><div class="ttname"><a href="classlocView_1_1visualize.html#a8c424a53c380d2a2b4b5c0925f9848e8">locView.visualize.voxels</a></div><div class="ttdeci">voxels</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00065">locView.py:65</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_a3a932cd511dba66a8bcc06dde3667867"><div class="ttname"><a href="classlocView_1_1visualize.html#a3a932cd511dba66a8bcc06dde3667867">locView.visualize.data</a></div><div class="ttdeci">data</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00059">locView.py:59</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_a1cc93478636329a5d75935b542269fd8"><div class="ttname"><a href="classlocView_1_1visualize.html#a1cc93478636329a5d75935b542269fd8">locView.visualize.datafile_name</a></div><div class="ttdeci">datafile_name</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00061">locView.py:61</a></div></div>
-<div class="ttc" id="classlocView_1_1visualize_html_ac7e7d5b91f20ca731aaca5e098210e2b"><div class="ttname"><a href="classlocView_1_1visualize.html#ac7e7d5b91f20ca731aaca5e098210e2b">locView.visualize.fig</a></div><div class="ttdeci">fig</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00272">locView.py:272</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_a465cfe31194056d823d76c65d86ed6d8"><div class="ttname"><a href="classlocView_1_1visualize.html#a465cfe31194056d823d76c65d86ed6d8">locView.visualize.__init__</a></div><div class="ttdeci">def __init__</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00053">locView.py:53</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_a8c424a53c380d2a2b4b5c0925f9848e8"><div class="ttname"><a href="classlocView_1_1visualize.html#a8c424a53c380d2a2b4b5c0925f9848e8">locView.visualize.voxels</a></div><div class="ttdeci">voxels</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00064">locView.py:64</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_a3a932cd511dba66a8bcc06dde3667867"><div class="ttname"><a href="classlocView_1_1visualize.html#a3a932cd511dba66a8bcc06dde3667867">locView.visualize.data</a></div><div class="ttdeci">data</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00057">locView.py:57</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_a1cc93478636329a5d75935b542269fd8"><div class="ttname"><a href="classlocView_1_1visualize.html#a1cc93478636329a5d75935b542269fd8">locView.visualize.datafile_name</a></div><div class="ttdeci">datafile_name</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00060">locView.py:60</a></div></div>
+<div class="ttc" id="classlocView_1_1visualize_html_ac7e7d5b91f20ca731aaca5e098210e2b"><div class="ttname"><a href="classlocView_1_1visualize.html#ac7e7d5b91f20ca731aaca5e098210e2b">locView.visualize.fig</a></div><div class="ttdeci">fig</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00273">locView.py:273</a></div></div>
 <div class="ttc" id="classlocView_1_1visualize_html_ab01a1f9480f9f45998a9d97eddb9eae6"><div class="ttname"><a href="classlocView_1_1visualize.html#ab01a1f9480f9f45998a9d97eddb9eae6">locView.visualize.norm</a></div><div class="ttdeci">norm</div><div class="ttdef"><b>Definition:</b> <a href="locView_8py_source.html#l00068">locView.py:68</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.8-->
@@ -521,7 +523,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jul 26 2016 11:20:48 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 26 2016 17:28:08 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>
