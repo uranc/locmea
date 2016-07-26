@@ -1,6 +1,6 @@
 """
-@package setVisualization
-@author Cem Uran <cemuran@gmail.com> 
+@package locView
+@author Cem Uran <cemuran@gmail.com>
 Copyright (C) This program is free software: you can redistribute it and/or
 modify it under the terms of the GNU General Public License as published by the
 Free Software Foundation, either version 3 of the License, or (at your option)
@@ -12,34 +12,46 @@ License for more details.
 
 import numpy as np
 import matplotlib
-#matplotlib.use('TkAgg')
+# matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.axes_grid1 import AxesGrid
 from matplotlib.colors import Normalize
 
 
-class MidpointNormalize(Normalize):
-    def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
-        self.midpoint = midpoint
-        Normalize.__init__(self, vmin, vmax, clip)
-
-    def __call__(self, value, clip=None):
-        # I'm ignoring masked values and all kinds of edge cases to make a
-        # simple example...
-        x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
-        return np.ma.masked_array(np.interp(value, x, y))
-
-
 class visualize(object):
     """
-    Nice class info
+    Visualization
     """
+    class MidpointNormalize(Normalize):
+        """
+        Colormap normalization
+        """
+
+        def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
+            """
+            Requires a midpoint value
+            """
+            self.midpoint = midpoint
+            Normalize.__init__(self, vmin, vmax, clip)
+
+        def __call__(self, value, clip=None):
+            """
+            @brief      { Requires a midpoint value }
+
+            @param      self   The object
+            @param      value  The value
+            @param      clip   The clip value
+
+            @return     { colormap }
+            """
+            x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
+            return np.ma.masked_array(np.interp(value, x, y))
 
     def __init__(self, *args, **kwargs):
         print "Visualization of:"
         for key in kwargs.keys():
-        	print key
+            print key
         self.data = kwargs['data']
         self.xres = kwargs['loc'].xres[:, 0]
         self.datafile_name = kwargs['loc'].datafile_name
@@ -47,22 +59,22 @@ class visualize(object):
         if kwargs['loc'].method == 'thesis':
             self.sres = kwargs['loc'].sres
         self.voxels = kwargs['loc'].voxels
-        #self.t_ind = args[1].t_ind
+        # self.t_ind = args[1].t_ind
         self.t_ind = 0
-        self.norm = MidpointNormalize(midpoint=0)
+        self.norm = visualize.MidpointNormalize(midpoint=0)
 
-    def save_snapshot(self, cmax = 1e-3, t_ind = 35):
+    def save_snapshot(self, cmax=1e-3, t_ind=35):
         """
-        Initialize the figure
-        
-        @param      self   The object
-        @param      cmax   The cmax
-        @param      t_ind  The t ind
-        
-        @return     { description_of_the_return_value }
+        Saves a .png snapshot for a single time index
+
+        @param      self   The visualization object
+        @param      cmax   Threshold for displaying charges
+        @param      t_ind  Time index to show
+
+        @return     { None }
         """
-        fname = '../results/'+self.datafile_name + \
-                    '/' + self.datafile_name + '_final.png'
+        fname = '../results/' + self.datafile_name + \
+            '/' + self.datafile_name + '_final.png'
         data = self.data
         # self.fig = plt.figure(figsize=(20, 10))
         plt.figure(figsize=(20, 10))
@@ -72,7 +84,7 @@ class visualize(object):
         vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()
         # result
         n_depth = self.voxels.shape[2]
-        cs_width = n_depth/2
+        cs_width = n_depth / 2
         resn = self.xres.reshape(rx.shape)
         resn_ind = np.abs(resn) > cmax
         xmin, xmax = np.min(vx), np.max(vx)
@@ -90,17 +102,23 @@ class visualize(object):
         # orgcmap = mcm.RdBu
         # shiftedcmap = self.shiftedColorMap(orgcmap, midpoint=res_zero, name='shifted')
         for dl in range(n_depth):
-            ax1 = plt.subplot2grid((2,n_depth+cs_width*2),(0,dl+cs_width*2))  #  (2,n_depth+2,3+dl)
-            ax1.imshow(sss[:, dl, :].T, norm=self.norm, cmap=plt.cm.RdBu, interpolation='none', origin='lower')
+            # (2,n_depth+2,3+dl)
+            ax1 = plt.subplot2grid(
+                (2, n_depth + cs_width * 2), (0, dl + cs_width * 2))
+            ax1.imshow(sss[:, dl, :].T, norm=self.norm,
+                       cmap=plt.cm.RdBu, interpolation='none', origin='lower')
             # ax1.set_ylabel('Transmembrane (nA)')
             # ax1.set_xlabel('Time (ms)')
             # second plot
-            ax2 = plt.subplot2grid((2,n_depth+cs_width*2),(1,dl+cs_width*2))
-            ax2.imshow(sss[:, dl, :].T, norm=self.norm, cmap=plt.cm.RdBu, interpolation='none', origin='lower')
+            ax2 = plt.subplot2grid(
+                (2, n_depth + cs_width * 2), (1, dl + cs_width * 2))
+            ax2.imshow(sss[:, dl, :].T, norm=self.norm,
+                       cmap=plt.cm.RdBu, interpolation='none', origin='lower')
             # ax2.set_ylabel('Electrode Potential(mV)')
             # ax2.set_xlabel('Time (ms)')
         # morphology
-        ax = plt.subplot2grid((2,n_depth+cs_width*2),(0,0), colspan=cs_width, rowspan=cs_width, projection='3d')
+        ax = plt.subplot2grid((2, n_depth + cs_width * 2), (0, 0),
+                              colspan=cs_width, rowspan=cs_width, projection='3d')
         ax.scatter(data.electrode_pos[:, 0],
                    data.electrode_pos[:, 1],
                    data.electrode_pos[:, 2],
@@ -116,7 +134,8 @@ class visualize(object):
         ax.azim = 10
         ax.elev = 7
         # second morphology
-        ax = plt.subplot2grid((2,n_depth+cs_width*2),(0,cs_width), colspan=cs_width, rowspan=cs_width, projection='3d')
+        ax = plt.subplot2grid((2, n_depth + cs_width * 2), (0, cs_width),
+                              colspan=cs_width, rowspan=cs_width, projection='3d')
         ax.scatter(data.electrode_pos[:, 0],
                    data.electrode_pos[:, 1],
                    data.electrode_pos[:, 2],
@@ -135,15 +154,15 @@ class visualize(object):
         # # self.fig.tight_layout()
         plt.savefig(fname)
 
-    def show_snapshot(self, cmax = 1e-3, t_ind = 35):
+    def show_snapshot(self, cmax=1e-3, t_ind=35):
         """
-        Initialize the figure
-        
-        @param      self   The object
-        @param      cmax   The cmax
-        @param      t_ind  The t ind
-        
-        @return     { description_of_the_return_value }
+        Displays a snapshot for a single time index
+
+        @param      self   The visualization object
+        @param      cmax   Threshold for displaying charges
+        @param      t_ind  Time index to show
+
+        @return     { None }
         """
         data = self.data
         # self.fig = plt.figure(figsize=(20, 10))
@@ -154,7 +173,7 @@ class visualize(object):
         vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()
         # result
         n_depth = self.voxels.shape[2]
-        cs_width = n_depth/2
+        cs_width = n_depth / 2
         resn = self.xres.reshape(rx.shape)
         resn_ind = np.abs(resn) > cmax
         xmin, xmax = np.min(vx), np.max(vx)
@@ -172,17 +191,23 @@ class visualize(object):
         # orgcmap = mcm.RdBu
         # shiftedcmap = self.shiftedColorMap(orgcmap, midpoint=res_zero, name='shifted')
         for dl in range(n_depth):
-            ax1 = plt.subplot2grid((2,n_depth+cs_width*2),(0,dl+cs_width*2))  #  (2,n_depth+2,3+dl)
-            ax1.imshow(sss[:, dl, :].T, norm=self.norm, cmap=plt.cm.RdBu, interpolation='none', origin='lower')
+            # (2,n_depth+2,3+dl)
+            ax1 = plt.subplot2grid(
+                (2, n_depth + cs_width * 2), (0, dl + cs_width * 2))
+            ax1.imshow(sss[:, dl, :].T, norm=self.norm,
+                       cmap=plt.cm.RdBu, interpolation='none', origin='lower')
             # ax1.set_ylabel('Transmembrane (nA)')
             # ax1.set_xlabel('Time (ms)')
             # second plot
-            ax2 = plt.subplot2grid((2,n_depth+cs_width*2),(1,dl+cs_width*2))
-            ax2.imshow(sss[:, dl, :].T, norm=self.norm, cmap=plt.cm.RdBu, interpolation='none', origin='lower')
+            ax2 = plt.subplot2grid(
+                (2, n_depth + cs_width * 2), (1, dl + cs_width * 2))
+            ax2.imshow(sss[:, dl, :].T, norm=self.norm,
+                       cmap=plt.cm.RdBu, interpolation='none', origin='lower')
             # ax2.set_ylabel('Electrode Potential(mV)')
             # ax2.set_xlabel('Time (ms)')
         # morphology
-        ax = plt.subplot2grid((2,n_depth+cs_width*2),(0,0), colspan=cs_width, rowspan=cs_width, projection='3d')
+        ax = plt.subplot2grid((2, n_depth + cs_width * 2), (0, 0),
+                              colspan=cs_width, rowspan=cs_width, projection='3d')
         ax.scatter(data.electrode_pos[:, 0],
                    data.electrode_pos[:, 1],
                    data.electrode_pos[:, 2],
@@ -198,7 +223,8 @@ class visualize(object):
         ax.azim = 10
         ax.elev = 7
         # second morphology
-        ax = plt.subplot2grid((2,n_depth+cs_width*2),(0,cs_width), colspan=cs_width, rowspan=cs_width, projection='3d')
+        ax = plt.subplot2grid((2, n_depth + cs_width * 2), (0, cs_width),
+                              colspan=cs_width, rowspan=cs_width, projection='3d')
         ax.scatter(data.electrode_pos[:, 0],
                    data.electrode_pos[:, 1],
                    data.electrode_pos[:, 2],
@@ -219,21 +245,20 @@ class visualize(object):
 
     def show_movie(self):
         """
-        Initialize the figure
-        
-        @param      self  The object
-        
-        @return     { description_of_the_return_value }
-        """
+        Displays a movie for multiple time indices
 
+        @param      self  The visualization object
+
+        @return     { None }
+        """
 
     def show_s_field(self):
         """
-        @brief      { Initialize the figure}
-        
-        @param      self  The object
-        
-        @return     { description_of_the_return_value }
+        @brief      { Displays the Spike Propogation Field for the method Thesis }
+
+        @param      self  The visualization object
+
+        @return     { None }
         """
         data = self.data
         self.fig = plt.figure(figsize=(20, 10))
@@ -245,7 +270,7 @@ class visualize(object):
         rx, ry, rz = vx, vy, vz
         vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()
         # result
-        ress = self.sres.reshape(rx.shape[0],rx.shape[1],rx.shape[2],3)
+        ress = self.sres.reshape(rx.shape[0], rx.shape[1], rx.shape[2], 3)
         resn = self.xres.reshape(rx.shape)
         resn_ind = np.abs(resn) > cmax
         xmin, xmax = np.min(vx), np.max(vx)
@@ -291,10 +316,10 @@ class visualize(object):
         ax = self.fig.add_subplot(133, projection='3d')  # , aspect='equal'
         self.recPlot = []
         self.recPlot.append(ax.scatter(data.electrode_pos[:, 0],
-                                      data.electrode_pos[:, 1],
-                                      data.electrode_pos[:, 2],
-                                      color='b',
-                                      marker='.'))  # electrodes
+                                       data.electrode_pos[:, 1],
+                                       data.electrode_pos[:, 2],
+                                       color='b',
+                                       marker='.'))  # electrodes
         self.recPlot.append(ax.quiver(rx[resn_ind],
                                       ry[resn_ind],
                                       rz[resn_ind],
@@ -311,40 +336,39 @@ class visualize(object):
         self.fig.tight_layout()
         plt.show()
 
-
     def show_forward_matrix(self, fwd):
         """
         Visualize the exponential decay PSF and CTF functions
-        
-        @param      self  The object
-        @param      fwd   The forward
-        
-        @return     { description_of_the_return_value }
+
+        @param      self  The visualization object
+        @param      fwd   The forward matrix
+
+        @return     { None }
         """
 
     def visualize_data(self):
         """
-        visualize recordings, epochs, etc.. frq., power (can be extra function)
-        
-        @param      self  The object
-        
-        @return     { description_of_the_return_value }
+        Visualize recordings, epochs, etc.. frq., power (can be extra function)
+
+        @param      self  The visualization object
+
+        @return     { None }
         """
 
     def visualize_cell(self):
         """
-        visualize morphology frq. power ( can be extra)
-        
-        @param      self  The object
-        
-        @return     { description_of_the_return_value }
+        Visualize morphology frq. power ( can be extra)
+
+        @param      self  The visualization object
+
+        @return     { None }
         """
 
     def visualize_cov(self):
         """
-        visualize covariance matrix
-        
-        @param      self  The object
-        
-        @return     { description_of_the_return_value }
+        Visualize covariance matrix
+
+        @param      self  The visualization object
+
+        @return     { None }
         """

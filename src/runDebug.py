@@ -3,10 +3,10 @@ Inverse optimizer example
 """
 # Author: Cem Uran <cem.uran@uranus.uni-freiburg.de>
 # License:
-from setData import data_in
-from setInvProb import data_out
-from setOptProb import opt_out
-from setVisualization import visualize
+from locData import data_in
+from locInverseProblem import data_out
+from locOptimizationProblem import opt_out
+from locView import visualize
 import casadi as ca
 import numpy as np
 import matplotlib.pyplot as plt

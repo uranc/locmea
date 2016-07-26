@@ -1,5 +1,5 @@
 """
-@package setData
+@package locData
 @author Cem Uran <cemuran@gmail.com> 
 Copyright (C) This program is free software: you can redistribute it and/or
 modify it under the terms of the GNU General Public License as published by the
@@ -15,16 +15,16 @@ import pickle as pc
 
 class data_in(object):
     """
-    Data class loaded from file
+    Data class loaded from file or LFPy
     """
 
     def __init__(self, *args, **kwargs):
         """
-        @brief      { constructor_description }
+        @brief      { Data object }
         
-        @param      self    The object
-        @param      args    The args
-        @param      kwargs  The kwargs
+        @param      self    The data object
+        @param      args    The arguments
+        @param      kwargs  The arguments
         """
         self.f_name = args[0]
         self.flag_cell = kwargs.get('flag_cell')
@@ -43,11 +43,11 @@ class data_in(object):
         """
         load h5py data optionally cell and electrode positions
         
-        @param      self       The object
-        @param      f_name     The f name
-        @param      flag_cell  The flag cell
+        @param      self       Data object
+        @param      f_name     Filename
+        @param      flag_cell  Cell data avaliable? - Binary Flag
         
-        @return     { description_of_the_return_value }
+        @return     { Returns data }
         """
         f = h5py.File(self.f_name, 'r')
         print "Cell data avaliable"
@@ -62,53 +62,53 @@ class data_in(object):
         """
         load h5py data optionally cell and electrode positions
         
-        @param      self    The object
-        @param      f_name  The f name
+        @param      self    Data object
+        @param      f_name  Filename
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
 
     def filter_bpass_data(self):
         """
         filter raw data
         
-        @param      self  The object
+        @param      self  Data object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
 
     def car_data(self):
         """
         common average reference
         
-        @param      self  The object
+        @param      self  Data object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
 
     def epoch_data(self):
         """
         threshold to get spike time points (can be overwritten)
         
-        @param      self  The object
+        @param      self  Data object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
 
     def cmp_cov_sensor(self):
         """
         compute the covariance matrix for sensors
         
-        @param      self  The object
+        @param      self  Data object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
 
     def cmp_pca_ica(self):
         """
         compute pca, ica, dimensionality reduction
         
-        @param      self  The object
+        @param      self  Data object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """

@@ -1,5 +1,5 @@
 """
-@package setOptProb
+@package locOptimizationProblem
 @author Cem Uran <cemuran@gmail.com> 
 Copyright (C) This program is free software: you can redistribute it and/or
 modify it under the terms of the GNU General Public License as published by the
@@ -9,16 +9,16 @@ useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
 License for more details.
 """
-from setInvProb import data_out
+from locInverseProblem import data_out
 import casadi as ca
 import numpy as np
 from casadi.tools import struct_symMX, entry, repeated
 import pickle as pc
 import os, os.path
 import time
-from matplotlib.colors import Normalize
 try:
     import matplotlib.pyplot as plt
+    from matplotlib.colors import Normalize
 except ImportError:
     raise ImportError('Matplotlib not found. Might cause problem.')
 
@@ -45,13 +45,13 @@ class opt_out(data_out):
 
             def __call__(self, value, clip=None):
                 """
-                Call t
+                Call for the function
                 
                 @param      self   The object
                 @param      value  The value
-                @param      clip   The clip
+                @param      clip   The clipping value
                 
-                @return     { description_of_the_return_value }
+                @return     { Colormap }
                 """
                 x, y = [self.vmin, self.midpoint, self.vmax], [0, 0.5, 1]
                 return np.ma.masked_array(np.interp(value, x, y))
@@ -323,7 +323,7 @@ class opt_out(data_out):
         """
         Main Minimization routine
         
-        @param      self  Optimization Object
+        @param      self Optimization Object
         
         @return     { None }
         """
@@ -389,7 +389,7 @@ class opt_out(data_out):
         @param      t              { time index }
         @param      h              { discretization step }
         
-        @return     { returns the gradient for a single pixel }
+        @return     { returns the x derivative for a single pixel }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -437,7 +437,7 @@ class opt_out(data_out):
         @param      t              { time index }
         @param      h              { discretization step }
         
-        @return     { returns the gradient for a single pixel }
+        @return     { returns the y derivative for a single pixel }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels
@@ -492,7 +492,7 @@ class opt_out(data_out):
         @param      t              { time index }
         @param      h              { discretization step }
         
-        @return     { returns the gradient for a single pixel }
+        @return     { returns the z derivative for a single pixel }
         """
         x = smooth_entity
         vx, vy, vz = self.voxels

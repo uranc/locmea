@@ -1,5 +1,5 @@
 """
-@package setInvProb
+@package locInverseProblem
 @author Cem Uran <cemuran@gmail.com> 
 Copyright (C) This program is free software: you can redistribute it and/or
 modify it under the terms of the GNU General Public License as published by the
@@ -16,9 +16,8 @@ import os, os.path
 
 class data_out(object):
     """
-    Class of various reconstructions ---------- Attributes ----------
+    Class of various reconstructions
     """
-
     def __init__(self, *args, **kwargs):
         self.data = args[0]    # does not have to be data dependant
         self.electrode_pos = self.data.electrode_pos
@@ -44,9 +43,9 @@ class data_out(object):
         """
         computes sloreta inverse solution
         
-        @param      self  The object
+        @param      self  The inverse object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         self.fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
         self.dw = self.cmp_weight_matrix(self.fwd)
@@ -56,21 +55,17 @@ class data_out(object):
     def create_voxels(self, electrode_pos, p_vres=5,
                       el_radius=5, max_depth=55, p_jlen=2, flag_bound=False):
         """
-        Create voxel space w.r.t. -m- electrode pos., 1 voxel larger margin
-        ------------- Arguments ------------- electrode_pos - Vector valued
-        neuron morphology position param_res - Resolution in micrometer elrad -
-        Electrode radius max_depth - max reconstruction depth ------------
-        Returns ------------
+        Create voxel space w.r.t. electrode positions
         
-        @param      self           The object
-        @param      electrode_pos  The electrode position
-        @param      p_vres         The p vres
-        @param      el_radius      The el radius
-        @param      max_depth      The maximum depth
-        @param      p_jlen         The p jlen
-        @param      flag_bound     The flag bound
+        @param      self           The inverse problem object
+        @param      electrode_pos  Electrode positions
+        @param      p_vres         Voxel resolution
+        @param      el_radius      Interelectrode distance
+        @param      max_depth      Maximum distance from the electrodes
+        @param      p_jlen         Jitter value for the voxels
+        @param      flag_bound     Sets Voxel Volume larger then the electrode area
         
-        @return     { description_of_the_return_value }
+        @return     { Voxels in as numpy array }
         """
         jitter_vector = np.random.random((3, )) * p_jlen   # iCSD Leski
         n_elx = np.unique(electrode_pos[:, 0]).shape[0]
@@ -104,14 +99,12 @@ class data_out(object):
     def cmp_fwd_matrix(self, electrode_pos, voxels, p_sigma=0.3):
         """
         Calculate the m-by-n forward matrix given by
-        1/(4*pi*sigma)*(1/(d(el_pos-vox_pos)^2) ------------ Arguments
-        ------------ elx, ely, elz - Vector valued electrode positions vx, vy,
-        vz - Vector valued voxel positions
+        1/(4*pi*sigma)*(1/(d(el_pos-vox_pos)^2)
         
-        @param      self           The object
+        @param      self           The inverse problem object
         @param      electrode_pos  The electrode position
         @param      voxels         The voxels
-        @param      p_sigma        The p sigma
+        @param      p_sigma        Extracellular conductance
         
         @return     { description_of_the_return_value }
         """
@@ -140,14 +133,13 @@ class data_out(object):
     def cmp_inv_matrix(self, fwd_matrix, depth_norm_matrix,
                        p_lmbda=1e-2, snr=5):
         """
-        Computes regularized inverse matrix in the given method (Can be a class
-        later on with multiple methods)
+        Computes regularized inverse matrix in the given method 
         
-        @param      self               The object
+        @param      self               The inverse problem object
         @param      fwd_matrix         The forward matrix
         @param      depth_norm_matrix  The depth normalize matrix
-        @param      p_lmbda            The p lmbda
-        @param      snr                The snr
+        @param      p_lmbda            Regularization parameter
+        @param      snr                Signal-to-Noise ratio
         
         @return     { description_of_the_return_value }
         """
@@ -167,9 +159,9 @@ class data_out(object):
         Calculate the column(depth) normalization matrix given by
         (1./sum(a_i^2))^depth_par - column norm for fwd_matrix[:,i]
         
-        @param      self        The object
+        @param      self        The inverse object
         @param      fwd_matrix  The forward matrix
-        @param      p_depth     The p depth
+        @param      p_depth     Depth normalization norm order
         
         @return     { description_of_the_return_value }
         """
@@ -186,12 +178,11 @@ class data_out(object):
         Calculate the column(depth) normalization matrix given by
         (1./sum(a_i^2))^depth_par - column norm for fwd_matrix[:,i]
         
-        :param      self:        { description }
-        :param      fwd_matrix:  { description }
-        :param      inv_matrix:  { description }
-        :type       self:        { type_description }
-        :type       fwd_matrix:  { type_description }
-        :type       inv_matrix:  { type_description }
+        @param      self        The inverse object
+        @param      fwd_matrix  The forward matrix
+        @param      inv_matrix  The inverse matrix
+        
+        @return     { Resolution Matrix }
         """
         return np.dot(inv_matrix, fwd_matrix)
 
@@ -199,9 +190,10 @@ class data_out(object):
         """
         @brief      { writes the results in a file }
         
-        @param      self  The object.
+        @param      self          The inverse object.
+        @param      data_to_save  The data to save
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         fname = '../results/'+self.datafile_name + \
                     '/' + self.datafile_name 
@@ -218,12 +210,12 @@ class data_out(object):
 
     def load_with_pickle(self, fname):
         """
-        @brief      { function_description }
+        @brief      Loads with pickle.
         
-        @param      self   The object.
-        @param      fname  The fname
+        @param      self   The inverse object.
+        @param      fname  The filename
         
-        @return     { description_of_the_return_value }
+        @return     { Loaded file }
         """
         return pc.load(file(fname))
 
@@ -231,9 +223,9 @@ class data_out(object):
         """
         evaluate the localization
         
-        @param      self  The object
+        @param      self  The inverse object
         
-        @return     { description_of_the_return_value }
+        @return     { Evaluation based on closest charges }
         """
         # if not self.res.any():
         #     "You don't have a reconstruction!"

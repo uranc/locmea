@@ -8,7 +8,11 @@ locMEA is a source localization framework for Micro Electrode Array recordings.
 git clone https://github.com/uranc/locmea.git
 ```
 
-Check the tutorials directory for different use cases and tutorials.
+Check the tutorials directory for different use cases and tutorials. For more information about the packages and different functions, please check the documentation at the github page.
+
+```
+uranc.github.io/locmea
+```
 
 ### Prerequisities
 
@@ -17,25 +21,30 @@ Minimum packages required are:
 
 There is 4 main modules of the framework with different functions.
 
-#### getData
+#### locData
 Load the data, visualize, pre-process
  - Requierements - 
-- numpy 
-- h5py (Optional for hdf5 files)
-- Pickle (Optional for pickle files)
+- numpy
+- scipy (Optional)
+- h5py (Optional)
+- LFPy (Optional)
+- Pickle (Optional)
 
+#### locView
+- numpy
+- Matplotlib
 
-#### setInverseProblem
+#### locInverseProblem
 Define the inverse source localization problem using the recordings and the electrode geometry.
 
 - numpy
 - scipy
 
-#### setOptimizationProblem
+#### locOptimizationProblem
 
 - numpy
 - CasADi
-- OpenMP (optional)
+- matplotlib (Optional)
 
 CasADi is an open-source symbolic framework for algorithmic (a.k.a. automatic) differentiation and numeric optimization.  requires more packages, check the website for installation details.
 
@@ -43,8 +52,13 @@ CasADi is an open-source symbolic framework for algorithmic (a.k.a. automatic) d
 https://github.com/casadi/casadi/wiki
 ```
 
-#### getVisualization
-- Matplotlib
+#### locParameterOptimization
+- ACADO
+- OptimizationProblem (See Above)
+
+Acado is a parameter optimization framework that works with the CasADi framework.
+
+
 
 ### Installing
 
