@@ -1,0 +1,8 @@
+<map id="locOptimizationProblem.opt_out.solve_ipopt_multi_measurement_slack" name="locOptimizationProblem.opt_out.solve_ipopt_multi_measurement_slack">
+<area shape="rect" id="node2" href="$classlocOptimizationProblem_1_1opt__out.html#a5b89a60581545edefe8dbdf5f9466db6" title="Variables for the lifted version. " alt="" coords="336,5,579,46"/>
+<area shape="rect" id="node3" href="$classlocOptimizationProblem_1_1opt__out.html#a96950fe8e31cfa92e77d23abb03be69e" title="Computes objective function f With lifting variable ys constraints. " alt="" coords="331,70,583,111"/>
+<area shape="rect" id="node4" href="$classlocOptimizationProblem_1_1opt__out.html#a4281fc64c77411052101f17e339bc982" title="add slack l1 constraints with lifting variables " alt="" coords="339,135,576,177"/>
+<area shape="rect" id="node5" href="$classlocOptimizationProblem_1_1opt__out.html#ae9d069182d752a33804b7f8d6616cf4f" title="Main Minimization routine. " alt="" coords="366,201,549,242"/>
+<area shape="rect" id="node6" href="$classlocInverseProblem_1_1data__out.html#a6fa0bd1f863610eb022ec63b45d069d7" title="{ writes the results in a file } " alt="" coords="378,266,537,307"/>
+<area shape="rect" id="node7" href="$classlocOptimizationProblem_1_1opt__out.html#a33255df91cc26c45098b3fa70e5326a9" title="{ function_description } " alt="" coords="366,331,549,373"/>
+</map>

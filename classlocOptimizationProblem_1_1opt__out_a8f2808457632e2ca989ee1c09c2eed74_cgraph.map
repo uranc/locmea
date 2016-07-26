@@ -1,0 +1,8 @@
+<map id="locOptimizationProblem.opt_out.solve_ipopt_multi_measurement_2p" name="locOptimizationProblem.opt_out.solve_ipopt_multi_measurement_2p">
+<area shape="rect" id="node2" href="$classlocOptimizationProblem_1_1opt__out.html#a54e20cee0d0f620db12bf4af9b61b73d" title="x is divided into negative and positive elements this function overwrites the initialized optimizatio..." alt="" coords="316,5,543,46"/>
+<area shape="rect" id="node3" href="$classlocOptimizationProblem_1_1opt__out.html#aac8878be63ac8a8480be3d6a54038817" title="Computes objective function f With lifting variable ys constraints. " alt="" coords="312,70,547,111"/>
+<area shape="rect" id="node4" href="$classlocOptimizationProblem_1_1opt__out.html#a2519c0c58817d893c5e28a5636ad307b" title="add slack l1 constraints with lifting variables " alt="" coords="319,135,539,177"/>
+<area shape="rect" id="node5" href="$classlocOptimizationProblem_1_1opt__out.html#ae9d069182d752a33804b7f8d6616cf4f" title="Main Minimization routine. " alt="" coords="338,201,521,242"/>
+<area shape="rect" id="node6" href="$classlocInverseProblem_1_1data__out.html#a6fa0bd1f863610eb022ec63b45d069d7" title="{ writes the results in a file } " alt="" coords="350,266,509,307"/>
+<area shape="rect" id="node7" href="$classlocOptimizationProblem_1_1opt__out.html#a33255df91cc26c45098b3fa70e5326a9" title="{ function_description } " alt="" coords="338,331,521,373"/>
+</map>
