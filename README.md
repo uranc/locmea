@@ -23,7 +23,6 @@ There is 4 main modules of the framework with different functions.
 
 #### locData
 Load the data, visualize, pre-process
- - Requierements - 
 - numpy
 - scipy (Optional)
 - h5py (Optional)

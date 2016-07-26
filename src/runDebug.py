@@ -67,7 +67,7 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
                         'hessian': p_hessian,
                         'linsol': p_linsol,
                         'method': p_method,
-                        't_ind': 35, 't_int': 1, 
+                        't_ind': 35, 't_int': 30, 
                         'sigma': float(p_sparse),
                         'flag_depthweighted': bool(int(p_norm)),
                         'flag_parallel': False,
@@ -75,6 +75,7 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
                         'flag_lift_mask': False,
                         'flag_data_mask': True,
                         'flag_callback': True,
+                        'flag_write_output': False,
                         'flag_callback_plot': True,
                         'callback_steps': 40,
                         'p_dyn': float(p_dynamic)
@@ -106,7 +107,7 @@ elif p_method == 'mask':
 	opt.solve_ipopt_multi_measurement_only_mask()
 
 # 
-opt.solve_ipopt_multi_measurement_slack()
+# opt.solve_ipopt_multi_measurement_slack()
 # opt.solve_ipopt_multi_measurement_2p()
 # ev = opt.evaluate_localization()
 # visualize
@@ -114,6 +115,54 @@ opt.solve_ipopt_multi_measurement_slack()
 # vis.show_snapshot()
 # vis.save_snapshot()
 # opt.set_optimization_variables_thesis()
-# opt.initialize_variables()
+opt.initialize_variables()
 # 
-# 
+# opt.xres = np.array(opt.w(0)['a'].full())
+# opt.xreal = opt.get_ground_truth()[0]
+# opt.xreal[opt.xreal.nonzero()[0],:]
+# vis = visualize(data=data, loc=opt)
+# vis.show_snapshot()
+# file_name = data_path + 'data_sim_low_.hdf5'
+
+# data_options = {'flag_cell': True, 'flag_electode': False}
+# data3 = data_in(file_name, **data_options)
+# elec_pos3 = data3.electrode_pos
+# pots3 = np.array(data3.electrode_rec[:, 35].flatten().reshape(256,1))
+# params = {
+#     'gdX': 10,
+#     'gdY': 10,
+#     'gdZ': 10,
+#     'n_sources': 256,
+# }
+# k2 = KCSD(elec_pos3, pots3, params)
+# k2.estimate_pots()
+# k2.estimate_csd()
+# k2.plot_all()
+
+# from mayavi import mlab
+# opt.xreal = opt.get_ground_truth()[0].reshape(opt.voxels[0,:,:,:].shape)
+# csd = k.solver.estimated_pots[:,:,:,0]
+# # csd = k.solver.estimated_csd[:,:,:,0]
+# csd = k2.solver.estimated_pots[:,:,:,0]
+# csdreal = opt.xreal
+# #setting up a proper gui backend
+
+# mlab.pipeline.image_plane_widget(mlab.pipeline.scalar_field(csd),
+#                         plane_orientation='x_axes',
+#                         slice_index=10,
+#                         )
+# mlab.pipeline.image_plane_widget(mlab.pipeline.scalar_field(csd),
+#                         plane_orientation='y_axes',
+#                         slice_index=10,
+#                         )
+# mlab.outline()
+
+# mlab.pipeline.image_plane_widget(mlab.pipeline.scalar_field(csdreal),
+#                         plane_orientation='x_axes',
+#                         slice_index=10,
+#                         )
+# mlab.pipeline.image_plane_widget(mlab.pipeline.scalar_field(csdreal),
+#                         plane_orientation='y_axes',
+#                         slice_index=10,
+#                         )
+# mlab.outline()

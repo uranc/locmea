@@ -26,14 +26,12 @@ class visualize(object):
         """
         Colormap normalization
         """
-
         def __init__(self, vmin=None, vmax=None, midpoint=None, clip=False):
             """
             Requires a midpoint value
             """
             self.midpoint = midpoint
             Normalize.__init__(self, vmin, vmax, clip)
-
         def __call__(self, value, clip=None):
             """
             @brief      { Requires a midpoint value }
@@ -53,6 +51,7 @@ class visualize(object):
             print key
         self.data = kwargs['data']
         self.xres = kwargs['loc'].xres[:, 0]
+        self.xreal = kwargs['loc'].xreal[0]
         self.datafile_name = kwargs['loc'].datafile_name
         print kwargs['loc'].method
         if kwargs['loc'].method == 'thesis':
@@ -60,7 +59,8 @@ class visualize(object):
         self.voxels = kwargs['loc'].voxels
         # self.t_ind = args[1].t_ind
         self.t_ind = 0
-        self.norm = visualize.MidpointNormalize(midpoint=0)
+        # self.norm = visualize.MidpointNormalize(midpoint=0)
+        self.norm = visualize.MidpointNormalize(vmin=-1,vmax =1,midpoint=0)
 
     def save_snapshot(self, cmax=1e-3, t_ind=35):
         """
@@ -105,14 +105,14 @@ class visualize(object):
             ax1 = plt.subplot2grid(
                 (2, n_depth + cs_width * 2), (0, dl + cs_width * 2))
             ax1.imshow(sss[:, dl, :].T, norm=self.norm,
-                       cmap=plt.cm.RdBu, interpolation='none', origin='lower')
+                   cmap='RdBu', interpolation='none', origin='lower')
             # ax1.set_ylabel('Transmembrane (nA)')
             # ax1.set_xlabel('Time (ms)')
             # second plot
             ax2 = plt.subplot2grid(
                 (2, n_depth + cs_width * 2), (1, dl + cs_width * 2))
             ax2.imshow(sss[:, dl, :].T, norm=self.norm,
-                       cmap=plt.cm.RdBu, interpolation='none', origin='lower')
+                   cmap='RdBu', interpolation='none', origin='lower')
             # ax2.set_ylabel('Electrode Potential(mV)')
             # ax2.set_xlabel('Time (ms)')
         # morphology
@@ -174,6 +174,7 @@ class visualize(object):
         n_depth = self.voxels.shape[2]
         cs_width = n_depth / 2
         resn = self.xres.reshape(rx.shape)
+        resReal = self.xreal.reshape(rx.shape)
         resn_ind = np.abs(resn) > cmax
         xmin, xmax = np.min(vx), np.max(vx)
         ymin, ymax = np.min(vy), np.max(vy)
@@ -194,14 +195,14 @@ class visualize(object):
             ax1 = plt.subplot2grid(
                 (2, n_depth + cs_width * 2), (0, dl + cs_width * 2))
             ax1.imshow(sss[:, dl, :].T, norm=self.norm,
-                       cmap=plt.cm.RdBu, interpolation='none', origin='lower')
+                   cmap='RdBu', interpolation='none', origin='lower')
             # ax1.set_ylabel('Transmembrane (nA)')
             # ax1.set_xlabel('Time (ms)')
-            # second plot
+            # second plot norm=self.norm,
             ax2 = plt.subplot2grid(
                 (2, n_depth + cs_width * 2), (1, dl + cs_width * 2))
-            ax2.imshow(sss[:, dl, :].T, norm=self.norm,
-                       cmap=plt.cm.RdBu, interpolation='none', origin='lower')
+            ax2.imshow(resReal[:, dl, :].T,norm=self.norm,
+                   cmap='RdBu', interpolation='none', origin='lower')
             # ax2.set_ylabel('Electrode Potential(mV)')
             # ax2.set_xlabel('Time (ms)')
         # morphology
