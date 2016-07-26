@@ -9,8 +9,8 @@ var indexSectionsWithContent =
 {
   0: "_acdefgilmnoprstuvwxy",
   1: "dmopv",
-  2: "s",
-  3: "rs",
+  2: "ls",
+  3: "lrs",
   4: "_acefgilmosvw",
   5: "acdefgilmnoprstuvwxy"
 };

@@ -103,36 +103,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="contents">
 <a href="setParamOpt_8py.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno"><a class="line" href="namespacesetParamOpt.html">    1</a></span>&#160;<span class="comment">##</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment"># </span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"># Copyright (C) This program is free software: you can redistribute it and/or</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"># modify it under the terms of the GNU General Public License as published by the</span></div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"># Free Software Foundation, either version 3 of the License, or (at your option)</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"># any later version. This program is distributed in the hope that it will be</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"># useful, but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"># License for more details.</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"># --------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"># Author: Cem Uran &lt;cem.uran@uranus.uni-freiburg.de&gt;</span></div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"># --------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"># Inverse optimizer example</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"># --------------------------------------------------------------------</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"># </span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">from</span> setOptProb <span class="keyword">import</span> opt_out</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment"># @package locParameterOptimization</span></div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment"># Copyright (C) This program is free software: you can redistribute it and/or</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment"># modify it under the terms of the GNU General Public License as published by the</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="comment"># Free Software Foundation, either version 3 of the License, or (at your option)</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="comment"># any later version. This program is distributed in the hope that it will be</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="comment"># useful, but WITHOUT ANY WARRANTY; without even the implied warranty of</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment"># License for more details.</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="comment"># --------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"># Author: Cem Uran &lt;cem.uran@uranus.uni-freiburg.de&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"># --------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="comment"># Inverse optimizer example</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment"># --------------------------------------------------------------------</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment"># </span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keyword">from</span> setOptProb <span class="keyword">import</span> opt_out</div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="comment">##</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment"># </span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">#     Nice class info</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">#     </span></div>
-<div class="line"><a name="l00023"></a><span class="lineno"><a class="line" href="classsetParamOpt_1_1param__opt.html">   23</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsetParamOpt_1_1param__opt.html">param_opt</a>(<a class="code" href="classsetOptProb_1_1opt__out.html">opt_out</a>):</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="comment">##</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="comment"># </span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="comment">#         use data for parameter optimization</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="comment">#         </span></div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classsetParamOpt_1_1param__opt.html#af06662a16182bafba106e67925aeb60e">   28</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetParamOpt_1_1param__opt.html#af06662a16182bafba106e67925aeb60e">__init__</a>(self, *args, **kwargs):</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordflow">print</span> <span class="stringliteral">&quot;hello&quot;</span></div>
-<div class="ttc" id="classsetOptProb_1_1opt__out_html"><div class="ttname"><a href="classsetOptProb_1_1opt__out.html">setOptProb.opt_out</a></div><div class="ttdoc">Class for the optimization problem Child of inverse problem. </div><div class="ttdef"><b>Definition:</b> <a href="setOptProb_8py_source.html#l00031">setOptProb.py:31</a></div></div>
-<div class="ttc" id="classsetParamOpt_1_1param__opt_html"><div class="ttname"><a href="classsetParamOpt_1_1param__opt.html">setParamOpt.param_opt</a></div><div class="ttdoc">Nice class info. </div><div class="ttdef"><b>Definition:</b> <a href="setParamOpt_8py_source.html#l00023">setParamOpt.py:23</a></div></div>
-<div class="ttc" id="classsetParamOpt_1_1param__opt_html_af06662a16182bafba106e67925aeb60e"><div class="ttname"><a href="classsetParamOpt_1_1param__opt.html#af06662a16182bafba106e67925aeb60e">setParamOpt.param_opt.__init__</a></div><div class="ttdeci">def __init__</div><div class="ttdoc">use data for parameter optimization </div><div class="ttdef"><b>Definition:</b> <a href="setParamOpt_8py_source.html#l00028">setParamOpt.py:28</a></div></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">##</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment"># </span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="comment">#     Parameter Optimization using CasADi</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="comment">#     </span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classsetParamOpt_1_1param__opt.html">   24</a></span>&#160;<span class="keyword">class </span><a class="code" href="classsetParamOpt_1_1param__opt.html">param_opt</a>(opt_out):</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="comment">##</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="comment"># </span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="comment">#         use data for parameter optimization</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="comment">#         </span></div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="classsetParamOpt_1_1param__opt.html#af06662a16182bafba106e67925aeb60e">   29</a></span>&#160;    <span class="keyword">def </span><a class="code" href="classsetParamOpt_1_1param__opt.html#af06662a16182bafba106e67925aeb60e">__init__</a>(self, *args, **kwargs):</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <span class="keywordflow">print</span> <span class="stringliteral">&quot;hello&quot;</span></div>
+<div class="ttc" id="classsetParamOpt_1_1param__opt_html"><div class="ttname"><a href="classsetParamOpt_1_1param__opt.html">setParamOpt.param_opt</a></div><div class="ttdoc">Parameter Optimization using CasADi. </div><div class="ttdef"><b>Definition:</b> <a href="setParamOpt_8py_source.html#l00024">setParamOpt.py:24</a></div></div>
+<div class="ttc" id="classsetParamOpt_1_1param__opt_html_af06662a16182bafba106e67925aeb60e"><div class="ttname"><a href="classsetParamOpt_1_1param__opt.html#af06662a16182bafba106e67925aeb60e">setParamOpt.param_opt.__init__</a></div><div class="ttdeci">def __init__</div><div class="ttdoc">use data for parameter optimization </div><div class="ttdef"><b>Definition:</b> <a href="setParamOpt_8py_source.html#l00029">setParamOpt.py:29</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- HTML footer for doxygen 1.8.8-->
 <!-- start footer part -->
@@ -142,7 +142,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 20 2016 14:29:36 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 26 2016 11:14:06 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

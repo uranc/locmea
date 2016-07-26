@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['data',['Data',['../namespaceData.html',1,'']]]
+  ['setparamopt',['setParamOpt',['../namespacesetParamOpt.html',1,'']]]
 ];

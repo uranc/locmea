@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['electrode_5fpos',['electrode_pos',['../classsetInvProb_1_1data__out.html#aca4c24458adc7b0ceb1b893a04d9027f',1,'setInvProb::data_out']]],
-  ['epoch_5fdata',['epoch_data',['../classsetData_1_1data__in.html#ab154573bade5270a3f74f967425e0549',1,'setData::data_in']]],
-  ['eval',['eval',['../classsetOptProb_1_1opt__out_1_1MyCallback.html#ac591b39d19a85e298480ba775609f15e',1,'setOptProb::opt_out::MyCallback']]],
-  ['evaluate_5flocalization',['evaluate_localization',['../classsetInvProb_1_1data__out.html#a568c08ec5c17229d95a56d916df36f45',1,'setInvProb::data_out']]]
+  ['electrode_5fpos',['electrode_pos',['../classlocInverseProblem_1_1data__out.html#af32f49699ea8793daf5b9f2663fea791',1,'locInverseProblem::data_out']]],
+  ['epoch_5fdata',['epoch_data',['../classlocData_1_1data__in.html#a04364b967f5d10a2c1ac100775661f93',1,'locData::data_in']]],
+  ['eval',['eval',['../classlocOptimizationProblem_1_1opt__out_1_1MyCallback.html#a78514302e25dfaa192e5e70f81ea238f',1,'locOptimizationProblem::opt_out::MyCallback']]],
+  ['evaluate_5flocalization',['evaluate_localization',['../classlocInverseProblem_1_1data__out.html#a1ab8f2f79645546199eb3f1d32383ce6',1,'locInverseProblem::data_out']]]
 ];

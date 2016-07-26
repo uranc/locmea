@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['x_5fsize',['x_size',['../classsetOptProb_1_1opt__out.html#a303a5dfb6d9d26918935374de67644cd',1,'setOptProb::opt_out']]],
-  ['xres',['xres',['../classsetOptProb_1_1opt__out.html#af89481aff14c43c3209be4e720e508ca',1,'setOptProb.opt_out.xres()'],['../classsetVisualization_1_1visualize.html#a47b52d08d7ead7775e8552e764056158',1,'setVisualization.visualize.xres()']]]
+  ['x_5fsize',['x_size',['../classlocOptimizationProblem_1_1opt__out.html#a9da041d0fd354f66350dee0ea69a7a9e',1,'locOptimizationProblem::opt_out']]],
+  ['xres',['xres',['../classlocOptimizationProblem_1_1opt__out.html#ad8c7ddf9ec77cca29d10e9519caf844c',1,'locOptimizationProblem.opt_out.xres()'],['../classlocView_1_1visualize.html#a31ba61235757b6ad0306a5bd22e1bdb9',1,'locView.visualize.xres()']]]
 ];

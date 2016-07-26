@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['y',['y',['../classsetOptProb_1_1opt__out.html#ac7aac8345b8a601d0835e43fb60c9451',1,'setOptProb::opt_out']]],
-  ['y_5fsize',['y_size',['../classsetOptProb_1_1opt__out.html#ad2c4fc1ae9f1c035dd736e2e8ea12311',1,'setOptProb::opt_out']]],
-  ['ys',['ys',['../classsetOptProb_1_1opt__out.html#ad9c00e968bf9e9c4ab0563254610c087',1,'setOptProb::opt_out']]]
+  ['y',['y',['../classlocOptimizationProblem_1_1opt__out.html#a49efc57a5dcc06b0e49d739165c5f81b',1,'locOptimizationProblem::opt_out']]],
+  ['y_5fsize',['y_size',['../classlocOptimizationProblem_1_1opt__out.html#a1057a7b31c696e52bd188eb3b9c8592f',1,'locOptimizationProblem::opt_out']]],
+  ['ys',['ys',['../classlocOptimizationProblem_1_1opt__out.html#a53cd4ced93e8dcf35428f4f989ccf39e',1,'locOptimizationProblem::opt_out']]]
 ];

@@ -1,12 +1,12 @@
 var searchData=
 [
-  ['method',['method',['../classsetOptProb_1_1opt__out.html#a82686a6f5a3d507e986aefc6d3418499',1,'setOptProb::opt_out']]],
-  ['mid_5fres',['mid_res',['../classsetOptProb_1_1opt__out_1_1MyCallback.html#ade5e950fd5b93ccc5f1dfa8f75838de6',1,'setOptProb::opt_out::MyCallback']]],
-  ['midpoint',['midpoint',['../classsetOptProb_1_1opt__out_1_1MyCallback_1_1MidpointNormalize.html#a4752967deee91e85eb81cbfabbca7b6a',1,'setOptProb.opt_out.MyCallback.MidpointNormalize.midpoint()'],['../classsetVisualization_1_1MidpointNormalize.html#ad2436d425672fc697aaa8278a2e69992',1,'setVisualization.MidpointNormalize.midpoint()']]],
-  ['midpointnormalize',['MidpointNormalize',['../classsetVisualization_1_1MidpointNormalize.html',1,'setVisualization']]],
-  ['midpointnormalize',['MidpointNormalize',['../classsetOptProb_1_1opt__out_1_1MyCallback_1_1MidpointNormalize.html',1,'setOptProb::opt_out::MyCallback']]],
-  ['minimize_5ffunction',['minimize_function',['../classsetOptProb_1_1opt__out.html#a3c022d3219411d4463467fe2c75eb89c',1,'setOptProb::opt_out']]],
-  ['morpplot',['morpPlot',['../classsetVisualization_1_1visualize.html#ac13f0a582484a7ef0aea1388bb8a78e5',1,'setVisualization::visualize']]],
-  ['mycallback',['mycallback',['../classsetOptProb_1_1opt__out.html#af9eb408320935918ddc1d93427fa607b',1,'setOptProb::opt_out']]],
-  ['mycallback',['MyCallback',['../classsetOptProb_1_1opt__out_1_1MyCallback.html',1,'setOptProb::opt_out']]]
+  ['method',['method',['../classlocOptimizationProblem_1_1opt__out.html#ab4a5c4a678b55ac7044edefbaa0016e1',1,'locOptimizationProblem::opt_out']]],
+  ['mid_5fres',['mid_res',['../classlocOptimizationProblem_1_1opt__out_1_1MyCallback.html#af8686de8bf9d1ffe3d74b14da9d2a906',1,'locOptimizationProblem::opt_out::MyCallback']]],
+  ['midpoint',['midpoint',['../classlocOptimizationProblem_1_1opt__out_1_1MyCallback_1_1MidpointNormalize.html#adf89db9f5c99c3a106d5e00bd4cc4b51',1,'locOptimizationProblem.opt_out.MyCallback.MidpointNormalize.midpoint()'],['../classlocView_1_1visualize_1_1MidpointNormalize.html#ad4ecfc1a7a80f1f7856e8339bf172361',1,'locView.visualize.MidpointNormalize.midpoint()']]],
+  ['midpointnormalize',['MidpointNormalize',['../classlocOptimizationProblem_1_1opt__out_1_1MyCallback_1_1MidpointNormalize.html',1,'locOptimizationProblem::opt_out::MyCallback']]],
+  ['midpointnormalize',['MidpointNormalize',['../classlocView_1_1visualize_1_1MidpointNormalize.html',1,'locView::visualize']]],
+  ['minimize_5ffunction',['minimize_function',['../classlocOptimizationProblem_1_1opt__out.html#ae9d069182d752a33804b7f8d6616cf4f',1,'locOptimizationProblem::opt_out']]],
+  ['morpplot',['morpPlot',['../classlocView_1_1visualize.html#a8927fc41ac52cdfca81cea10fe297816',1,'locView::visualize']]],
+  ['mycallback',['mycallback',['../classlocOptimizationProblem_1_1opt__out.html#a4133309c121f52262b1952cff29d8510',1,'locOptimizationProblem::opt_out']]],
+  ['mycallback',['MyCallback',['../classlocOptimizationProblem_1_1opt__out_1_1MyCallback.html',1,'locOptimizationProblem::opt_out']]]
 ];

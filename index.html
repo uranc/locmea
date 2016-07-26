@@ -95,38 +95,48 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><p>locMEA is a source localization framework for Micro Electrode Array recordings.</p>
 <h2>Getting Started</h2>
 <p>``` git clone <a href="https://github.com/uranc/locmea.git">https://github.com/uranc/locmea.git</a> ```</p>
-<p>Check the tutorials directory for different use cases and tutorials.</p>
+<p>Check the tutorials directory for different use cases and tutorials. For more information about the packages and different functions, please check the documentation at the github page.</p>
+<p>``` uranc.github.io/locmea ```</p>
 <h3>Prerequisities</h3>
 <p>locMEA is developed in python. MATLAB extensions will eventually be. Minimum packages required are:</p>
 <p>There is 4 main modules of the framework with different functions.</p>
-<h4>getData</h4>
+<h4><a class="el" href="namespacelocData.html">locData</a></h4>
 <p>Load the data, visualize, pre-process</p>
 <ul>
 <li>Requierements -</li>
 </ul>
 <p>numpy</p>
 <ul>
-<li>h5py (Optional for hdf5 files)</li>
-<li>Pickle (Optional for pickle files)</li>
+<li>scipy (Optional)</li>
+<li>h5py (Optional)</li>
+<li>LFPy (Optional)</li>
+<li>Pickle (Optional)</li>
 </ul>
-<h4>setInverseProblem</h4>
+<h4><a class="el" href="namespacelocView.html">locView</a></h4>
+<ul>
+<li>numpy</li>
+<li>Matplotlib</li>
+</ul>
+<h4><a class="el" href="namespacelocInverseProblem.html">locInverseProblem</a></h4>
 <p>Define the inverse source localization problem using the recordings and the electrode geometry.</p>
 <ul>
 <li>numpy</li>
 <li>scipy</li>
 </ul>
-<h4>setOptimizationProblem</h4>
+<h4><a class="el" href="namespacelocOptimizationProblem.html">locOptimizationProblem</a></h4>
 <ul>
 <li>numpy</li>
 <li>CasADi</li>
-<li>OpenMP (optional)</li>
+<li>matplotlib (Optional)</li>
 </ul>
 <p>CasADi is an open-source symbolic framework for algorithmic (a.k.a. automatic) differentiation and numeric optimization. requires more packages, check the website for installation details.</p>
 <p>``` <a href="https://github.com/casadi/casadi/wiki">https://github.com/casadi/casadi/wiki</a> ```</p>
-<h4>getVisualization</h4>
+<h4><a class="el" href="namespacelocParameterOptimization.html" title="Copyright (C) This program is free software: you can redistribute it and/or modify it under the terms...">locParameterOptimization</a></h4>
 <ul>
-<li>Matplotlib</li>
+<li>ACADO</li>
+<li>OptimizationProblem (See Above)</li>
 </ul>
+<p>Acado is a parameter optimization framework that works with the CasADi framework.</p>
 <h3>Installing</h3>
 <p>Currently the project is in developement, you can check the repo to have an idea.</p>
 <p>``` git clone <a href="https://github.com/uranc/locmea.git">https://github.com/uranc/locmea.git</a> ```</p>
@@ -160,7 +170,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 </div>
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jul 20 2016 14:29:36 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jul 26 2016 11:14:06 for locMEA by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.6
 </small></address>

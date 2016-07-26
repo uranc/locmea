@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['setdata',['setData',['../namespacesetData.html',1,'']]],
-  ['setinvprob',['setInvProb',['../namespacesetInvProb.html',1,'']]],
-  ['setoptprob',['setOptProb',['../namespacesetOptProb.html',1,'']]],
-  ['setparamopt',['setParamOpt',['../namespacesetParamOpt.html',1,'']]],
-  ['setvisualization',['setVisualization',['../namespacesetVisualization.html',1,'']]]
+  ['locdata',['locData',['../namespacelocData.html',1,'']]],
+  ['locinverseproblem',['locInverseProblem',['../namespacelocInverseProblem.html',1,'']]],
+  ['locoptimizationproblem',['locOptimizationProblem',['../namespacelocOptimizationProblem.html',1,'']]],
+  ['locparameteroptimization',['locParameterOptimization',['../namespacelocParameterOptimization.html',1,'']]],
+  ['locview',['locView',['../namespacelocView.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['electrode_5fpos',['electrode_pos',['../classsetInvProb_1_1data__out.html#aca4c24458adc7b0ceb1b893a04d9027f',1,'setInvProb::data_out']]]
+  ['electrode_5fpos',['electrode_pos',['../classlocInverseProblem_1_1data__out.html#af32f49699ea8793daf5b9f2663fea791',1,'locInverseProblem::data_out']]]
 ];

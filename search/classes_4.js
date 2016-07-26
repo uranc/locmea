@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['visualize',['visualize',['../classsetVisualization_1_1visualize.html',1,'setVisualization']]]
+  ['visualize',['visualize',['../classlocView_1_1visualize.html',1,'locView']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['voxels',['voxels',['../classsetInvProb_1_1data__out.html#a04880d7bb3413fdea838347859b69fd3',1,'setInvProb.data_out.voxels()'],['../classsetOptProb_1_1opt__out_1_1MyCallback.html#adbe2f29a44c7f99252ceb2e7fe80275c',1,'setOptProb.opt_out.MyCallback.voxels()'],['../classsetVisualization_1_1visualize.html#ae6f153869bd7c060cf2b7a0e8517de83',1,'setVisualization.visualize.voxels()']]]
+  ['voxels',['voxels',['../classlocInverseProblem_1_1data__out.html#a9465c7b56d8112aea67f6dd2eaea37b6',1,'locInverseProblem.data_out.voxels()'],['../classlocOptimizationProblem_1_1opt__out_1_1MyCallback.html#a1cf37d721ce8d7d383ca9902763715e8',1,'locOptimizationProblem.opt_out.MyCallback.voxels()'],['../classlocView_1_1visualize.html#a8c424a53c380d2a2b4b5c0925f9848e8',1,'locView.visualize.voxels()']]]
 ];
