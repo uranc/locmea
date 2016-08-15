@@ -1033,7 +1033,10 @@ class opt_out(data_out):
             if self.flag_lift_mask:
                 self.g.append(self.m[j] - self.m[j] * self.m[j])
                 self.lbg.append(0)
-                self.ubg.append(0)
+                self.ubg.append(0.5)
+                # self.g.append(1 - np.sqrt(self.m[j]**2 + (1 - self.m[j]**2)))
+                # self.lbg.append(0)
+                # self.ubg.append(1)
 
     def add_background_costs_constraints_thesis(self):
         """
@@ -1054,13 +1057,13 @@ class opt_out(data_out):
     def add_tv_mask_costs_constraints_thesis(self):
         """
         add smoothness constraints with lifting variables
-
+        
         @param      self  The object
-
-        @return     { description_of_the_return_value }
+        
+        @return     { None }
         """
-        # grad_m = self.cmp_fwd_diff(self.m, False)
-        grad_m = self.cmp_gradient(self.m, False)
+        grad_m = self.cmp_fwd_diff(self.m, False)
+        # grad_m = self.cmp_gradient(self.m, False)
         for cm in range(self.m.shape[0]):
             self.g.append(ca.dot(grad_m[:, cm], grad_m[:, cm])**0.5)
             self.lbg.append(0)
@@ -1072,7 +1075,7 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         average_mask = self.cmp_fwd_diff(self.m, True)
         average_sx = self.cmp_fwd_diff(self.s[:, 0], True)[0, :]
@@ -1091,10 +1094,10 @@ class opt_out(data_out):
     def add_s_magnitude_costs_constraints_thesis(self):
         """
         add smoothness constraints with lifting variables
-
+        
         @param      self  The object
-
-        @return     { description_of_the_return_value }
+        
+        @return     { None }
         """
         for b in range(self.x_size):
             self.g.append(ca.dot(self.s[b, :], self.s[b, :]))
@@ -1104,10 +1107,10 @@ class opt_out(data_out):
     def add_s_smooth_costs_constraints_thesis(self):
         """
         add smoothness constraints with lifting variables
-
+        
         @param      self  The object
-
-        @return     { description_of_the_return_value }
+        
+        @return     { None }
         """
         grad = []
         grad_x = self.cmp_fwd_diff(self.s[:, 0], False)
@@ -1124,10 +1127,10 @@ class opt_out(data_out):
     def solve_ipopt_multi_measurement_thesis(self):
         """
         Reform source space x as the difference of x+ - x-
-
+        
         @param      self  The object
-
-        @return     { description_of_the_return_value }
+        
+        @return     { None }
         """
         # self.set_optimization_variables_only_mask_thesis()
         self.set_optimization_variables_thesis()
@@ -1157,10 +1160,10 @@ class opt_out(data_out):
     def set_optimization_variables_only_mask(self):
         """
         thesis implementation
-
+        
         @param      self  The optimization object
-
-        @return     { description_of_the_return_value }
+        
+        @return     { None }
         """
         self.w = struct_symMX([entry("a", shape=(self.x_size, self.t_int)),
                                entry("m", shape=(self.x_size)),
@@ -1180,17 +1183,17 @@ class opt_out(data_out):
     def solve_ipopt_multi_measurement_only_mask(self):
         """
         Reform source space x as the difference of x+ - x-
-
+        
         @param      self  The optimization object
-
-        @return     { description_of_the_return_value }
+        
+        @return     { None }
         """
         self.set_optimization_variables_only_mask()
         t0 = time.time()
-        self.add_background_costs_constraints_thesis()
+        # self.add_background_costs_constraints_thesis()
         self.add_data_costs_constraints_thesis()
         self.add_l1_costs_constraints_thesis()
-        # self.add_tv_mask_costs_constraints_thesis()
+        self.add_tv_mask_costs_constraints_thesis()
         t1 = time.time()
         print "Set constraints in %.3f seconds" % (t1 - t0)
         t0 = time.time()
