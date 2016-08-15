@@ -61,7 +61,7 @@ Acado is a parameter optimization framework that works with the CasADi framework
 
 ### Installing
 
-Currently the project is in developement, you can check the repo to have an idea.
+Currently the project is in developement, you can check the repository to have an idea.
 
 
 ```
@@ -103,7 +103,7 @@ This project is licensed under the GNU GENERAL PUBLIC LICENSE Version 3, meaning
 
 * Thanks to all the great developers that are used in this framework. 
 - CasADi, LFPy, NEURON
-- numpy, scipy, matplotlib, h5py, pickle, Doxygen
+- numpy, scipy, matplotlib, h5py, pickle, Doxygen..
 
-* Thanks to BWUniCluster for allowing the resources and the all computational power.
+* Thanks to BWUniCluster for the resources and all the computational power.
 

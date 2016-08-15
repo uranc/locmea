@@ -50,19 +50,19 @@ class visualize(object):
         for key in kwargs.keys():
             print key
         self.data = kwargs['data']
-        self.xres = kwargs['loc'].xres[:, 0]
-        self.xreal = kwargs['loc'].xreal[0]
+        self.xres = kwargs['loc'].xres
+        self.gt = kwargs['loc'].gt
         self.datafile_name = kwargs['loc'].datafile_name
         print kwargs['loc'].method
         if kwargs['loc'].method == 'thesis':
             self.sres = kwargs['loc'].sres
         self.voxels = kwargs['loc'].voxels
         # self.t_ind = args[1].t_ind
-        self.t_ind = 0
+        self.t_ind = kwargs['loc'].t_ind
         # self.norm = visualize.MidpointNormalize(midpoint=0)
         self.norm = visualize.MidpointNormalize(vmin=-1,vmax =1,midpoint=0)
 
-    def save_snapshot(self, cmax=1e-3, t_ind=35):
+    def save_snapshot(self, cmax=1e-3, t_ind=0):
         """
         Saves a .png snapshot for a single time index
 
@@ -84,7 +84,8 @@ class visualize(object):
         # result
         n_depth = self.voxels.shape[2]
         cs_width = n_depth / 2
-        resn = self.xres.reshape(rx.shape)
+        resn = self.xres[:, t_ind].reshape(rx.shape)
+        resReal = self.gt[:,t_ind].reshape(rx.shape)
         resn_ind = np.abs(resn) > cmax
         xmin, xmax = np.min(vx), np.max(vx)
         ymin, ymax = np.min(vy), np.max(vy)
@@ -111,7 +112,7 @@ class visualize(object):
             # second plot
             ax2 = plt.subplot2grid(
                 (2, n_depth + cs_width * 2), (1, dl + cs_width * 2))
-            ax2.imshow(sss[:, dl, :].T, norm=self.norm,
+            ax2.imshow(resReal[:, dl, :].T, norm=self.norm,
                    cmap='RdBu', interpolation='none', origin='lower')
             # ax2.set_ylabel('Electrode Potential(mV)')
             # ax2.set_xlabel('Time (ms)')
@@ -126,7 +127,7 @@ class visualize(object):
         ax.scatter(data.cell_pos[ind, 0],
                    data.cell_pos[ind, 1],
                    data.cell_pos[ind, 2],
-                   c=data.cell_csd[ind, t_ind],
+                   c=data.cell_csd[ind, 38],
                    norm=self.norm,
                    cmap='RdBu',
                    marker='o')  # midpoints
@@ -153,7 +154,7 @@ class visualize(object):
         # # self.fig.tight_layout()
         plt.savefig(fname)
 
-    def show_snapshot(self, cmax=1e-3, t_ind=35):
+    def show_snapshot(self, cmax=1e-3, t_ind=0):
         """
         Displays a snapshot for a single time index
 
@@ -173,8 +174,8 @@ class visualize(object):
         # result
         n_depth = self.voxels.shape[2]
         cs_width = n_depth / 2
-        resn = self.xres.reshape(rx.shape)
-        resReal = self.xreal.reshape(rx.shape)
+        resn = self.xres[:, t_ind].reshape(rx.shape)
+        resReal = self.gt[:, t_ind].reshape(rx.shape)
         resn_ind = np.abs(resn) > cmax
         xmin, xmax = np.min(vx), np.max(vx)
         ymin, ymax = np.min(vy), np.max(vy)
@@ -216,7 +217,7 @@ class visualize(object):
         ax.scatter(data.cell_pos[ind, 0],
                    data.cell_pos[ind, 1],
                    data.cell_pos[ind, 2],
-                   c=data.cell_csd[ind, t_ind],
+                   c=data.cell_csd[ind, 38],
                    norm=self.norm,
                    cmap='RdBu',
                    marker='o')  # midpoints
@@ -271,7 +272,7 @@ class visualize(object):
         vx, vy, vz = vx.flatten(), vy.flatten(), vz.flatten()
         # result
         ress = self.sres.reshape(rx.shape[0], rx.shape[1], rx.shape[2], 3)
-        resn = self.xres.reshape(rx.shape)
+        resn = self.xres[:, t_ind].reshape(rx.shape)
         resn_ind = np.abs(resn) > cmax
         xmin, xmax = np.min(vx), np.max(vx)
         ymin, ymax = np.min(vy), np.max(vy)

@@ -67,37 +67,20 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
                         'hessian': p_hessian,
                         'linsol': p_linsol,
                         'method': p_method,
-                        't_ind': 35, 't_int': 30, 
+                        't_ind': 38, 't_int': 1, 
                         'sigma': float(p_sparse),
                         'flag_depthweighted': bool(int(p_norm)),
                         'flag_parallel': False,
                         'datafile_name': 'output_file',
                         'flag_lift_mask': False,
-                        'flag_data_mask': True,
-                        'flag_callback': True,
-                        'flag_write_output': False,
+                        'flag_data_mask': False,
+                        'flag_write_output': True,
+                        'flag_callback': False,
+                        'flag_callback_output': False,
                         'flag_callback_plot': True,
                         'callback_steps': 40,
                         'p_dyn': float(p_dynamic)
                         }
-
-# optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
-#                         'solver':' ',
-#                         'hessian': 'p_hessian',
-#                         'linsol': 'p_linsol',
-#                         'method': 'p_method',
-#                         't_ind': 35, 't_int': 1, 
-#                         'sigma': float(0),
-#                         'flag_depthweighted': bool(int(0)),
-#                         'flag_parallel': False,
-#                         'datafile_name': 'output_file',
-#                         'flag_lift_mask': False,
-#                         'flag_data_mask': True,
-#                         'flag_callback': True,
-#                         'flag_callback_plot': True,
-#                         'callback_steps': 40,
-#                         'p_dyn': float(1)
-#                         }
 
 
 opt = opt_out(data, **optimization_options)
@@ -105,17 +88,15 @@ if p_method == 'thesis':
 	opt.solve_ipopt_multi_measurement_thesis()
 elif p_method == 'mask':
 	opt.solve_ipopt_multi_measurement_only_mask()
-
-# 
-# opt.solve_ipopt_multi_measurement_slack()
-# opt.solve_ipopt_multi_measurement_2p()
-# ev = opt.evaluate_localization()
+elif p_method == 'slack':
+    opt.solve_ipopt_multi_measurement_slack()
+elif p_method == '2p':
+    opt.solve_ipopt_multi_measurement_2p()
 # visualize
-# vis = visualize(data=data, loc=opt)
-# vis.show_snapshot()
-# vis.save_snapshot()
+vis = visualize(data=data, loc=opt)
+vis.save_snapshot()
 # opt.set_optimization_variables_thesis()
-opt.initialize_variables()
+# opt.initialize_variables()
 # 
 # opt.xres = np.array(opt.w(0)['a'].full())
 # opt.xreal = opt.get_ground_truth()[0]

@@ -60,7 +60,7 @@ class opt_out(data_out):
         def __init__(self, name, nx, ng, np, opts={}):
             """
             Callback class is used for the optimization
-
+            
             @param      self  The object
             @param      name  The name
             @param      nx    { Number of optimization variables x }
@@ -70,24 +70,27 @@ class opt_out(data_out):
                               results.
             """
             ca.Callback.__init__(self)
-            self.norm = opt_out.MyCallback.MidpointNormalize(midpoint=0)
+            # self.norm = opt_out.MyCallback.MidpointNormalize(midpoint=0)
+            self.norm = opt_out.MyCallback.MidpointNormalize(vmin=-10,vmax =10,midpoint=0)
             self.iter = 0
             self.data_to_save = []
             self.datafile_name = opts['filename']
             self.flag_callback_plot = opts['flag_callback_plot']
+            self.flag_callback_output = opts['flag_callback_output']
             self.s_shape = opts['str_shape']
             self.data = opts['data_cb']
             self.voxels = opts['voxels_cb']
+            self.gt = opts['gt']
             opts['filename'] = None
             opts['flag_callback_plot'] = None
+            opts['flag_callback_output'] = None
             opts['str_shape'] = None
             opts['data_cb'] = None
             opts['voxels_cb'] = None
-            # opts['w'] = None
+            opts['gt'] = None
             self.nx = nx
             self.ng = ng
             self.np = np
-
             opts['input_scheme'] = ca.nlpsol_out()
             opts['output_scheme'] = ['ret']
             self.construct(name, opts)
@@ -107,7 +110,7 @@ class opt_out(data_out):
             else:
                 return ca.Sparsity(0, 0)
 
-        def save_snapshot(self, xres_mid, fname, cmax=1e-3, t_ind=35):
+        def save_snapshot(self, xres_mid, fname, cmax=1e-3, t_ind=0):
             """
             Save a figure showing the intermediate results.
 
@@ -131,7 +134,8 @@ class opt_out(data_out):
             # result
             n_depth = self.voxels.shape[2]
             cs_width = n_depth / 2
-            resn = xres_mid.reshape(rx.shape)
+            resn = xres_mid[:, t_ind].reshape(rx.shape)
+            resReal = self.gt[:,t_ind].reshape(rx.shape)
             resn_ind = np.abs(resn) > cmax
             xmin, xmax = np.min(vx), np.max(vx)
             ymin, ymax = np.min(vy), np.max(vy)
@@ -142,11 +146,6 @@ class opt_out(data_out):
             # csd plot
             sss = np.zeros(resn.shape)
             sss[resn_ind] = resn[resn_ind]
-            # res_min = np.min(sss)
-            # res_max = np.max(sss)
-            # res_zero = 1 - res_max/(res_max + np.abs(res_min))
-            # orgcmap = mcm.RdBu
-            # shiftedcmap = self.shiftedColorMap(orgcmap, midpoint=res_zero, name='shifted')
             for dl in range(n_depth):
                 # (2,n_depth+2,3+dl)
                 ax1 = plt.subplot2grid(
@@ -158,7 +157,7 @@ class opt_out(data_out):
                 # second plot
                 ax2 = plt.subplot2grid(
                     (2, n_depth + cs_width * 2), (1, dl + cs_width * 2))
-                ax2.imshow(sss[:, dl, :].T, norm=self.norm,
+                ax2.imshow(resReal[:, dl, :].T, norm=self.norm,
                            cmap=plt.cm.RdBu, interpolation='none', origin='lower')
                 # ax2.set_ylabel('Electrode Potential(mV)')
                 # ax2.set_xlabel('Time (ms)')
@@ -173,7 +172,7 @@ class opt_out(data_out):
             ax.scatter(data.cell_pos[ind, 0],
                        data.cell_pos[ind, 1],
                        data.cell_pos[ind, 2],
-                       c=data.cell_csd[ind, t_ind],
+                       c=data.cell_csd[ind, 38],
                        norm=self.norm,
                        cmap='RdBu',
                        marker='o')  # midpoints
@@ -202,11 +201,12 @@ class opt_out(data_out):
 
         def eval(self, arg):
             """
-            @brief      { This is the function that CasADi calls at every step. }
-
+            @brief      { This is the function that CasADi calls at every step.
+                        }
+            
             @param      self  The object
             @param      arg   The argument
-
+            
             @return     { 0 }
             """
             darg = {}
@@ -217,32 +217,35 @@ class opt_out(data_out):
             self.mid_res = self.s_shape(sol)
             xres_mid = self.mid_res['a'].full()
             print xres_mid.shape
-            self.data_to_save = self.mid_res
-            # if self.iter % 1 == 0:
             fname = '../results/' + self.datafile_name + \
-                '/' + self.datafile_name + \
-                '_iter_' + str(self.iter)
-            # mkdir
-            if not os.path.exists(os.path.dirname(fname)):
-                try:
-                    os.makedirs(os.path.dirname(fname))
-                except OSError as exc:  # Guard against race condition
-                    if exc.errno != errno.EEXIST:
-                        raise
-            print fname + ' written.'
-            with open(fname, 'wb') as f:
-                pc.dump(self.data_to_save, f)
-            # self.data_to_save = []
-            # self.data_to_save.append(self.iter)
-                if self.flag_callback_plot:
-                    self.save_snapshot(xres_mid[:, 0], fname)
+                    '/' + self.datafile_name + \
+                    '_iter_' + str(self.iter)
+            if self.flag_callback_output:
+                if not os.path.exists(os.path.dirname(fname)):
+                    try:
+                        os.makedirs(os.path.dirname(fname))
+                    except OSError as exc:  # Guard against race condition
+                        if exc.errno != errno.EEXIST:
+                            raise
+                print fname + ' written.'
+                self.data_to_save = self.mid_res
+                with open(fname, 'wb') as f:
+                    pc.dump(self.data_to_save, f)
+            if self.flag_callback_plot:
+                if not os.path.exists(os.path.dirname(fname)):
+                    try:
+                        os.makedirs(os.path.dirname(fname))
+                    except OSError as exc:  # Guard against race condition
+                        if exc.errno != errno.EEXIST:
+                            raise
+                self.save_snapshot(xres_mid, fname)
             self.iter = self.iter + 1
             return [0]
 
     def __init__(self, *args, **kwargs):
         """
         Options for optimization
-
+        
         @param      self    Optimization object
         @param      args    Optimization options
         @param      kwargs  Optimization options
@@ -283,6 +286,7 @@ class opt_out(data_out):
         self.flag_data_mask = self.opt_opt['flag_data_mask']
         self.flag_callback = self.opt_opt['flag_callback']
         self.flag_callback_plot = self.opt_opt['flag_callback_plot']
+        self.flag_callback_output = self.opt_opt['flag_callback_output']
         self.p_solver = self.opt_opt['solver']
         self.p_hessian = self.opt_opt['hessian']
         self.p_linsol = self.opt_opt['linsol']
@@ -310,6 +314,7 @@ class opt_out(data_out):
         @return     { None }
         """
         self.w0 = self.w(0)
+        csd = self.get_ground_truth()[0]
         if self.method == 'thesis':
             tmp_s0 = np.random.randn(self.s.shape[0], self.s.shape[1])
             for i in range(self.s.shape[0]):
@@ -318,18 +323,25 @@ class opt_out(data_out):
             print 'initialization: Thesis'
         print self.method
         if self.method == 'thesis' or self.method == 'mask':
+            self.gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['a'].shape))
             tmp_m0 = np.random.rand(self.m.shape[0])
-            #     tmp_a0 = np.random.randn(self.a.shape[0],self.a.shape[1])
+            tmp_a0 = np.random.randn(self.a.shape[0], self.a.shape[1])
             self.w0['m'] = tmp_m0
-            #     self.w0['a'] = tmp_a0
-            #     print 'initialization: Thesis or Mask'
-            csd = self.get_ground_truth()[0]
-            gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['a'].shape))
-            # print gt.shape
-            # mask_init = np.where(gt > 0, 1, 0).T[0]
-            activity_init = gt
-            # self.w0['m'] = mask_init
-            self.w0['a'] = activity_init
+            self.w0['a'] = tmp_a0
+            print 'initialization: Thesis or Mask'
+            self.w0['m'] = np.where(np.abs(self.gt) > 0, 1, 0).T[0]
+            self.w0['a'] = self.gt
+        if self.method == 'slack':
+            self.gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['x'].shape))
+            self.w0['x'] = self.gt
+        if self.method == '2p':
+            self.gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['xs_pos'].shape))
+            pos_charges = np.zeros(self.w0['xs_pos'].shape)
+            neg_charges = np.zeros(self.w0['xs_neg'].shape)
+            pos_charges[self.gt > 0] = self.gt[self.gt > 0]
+            neg_charges[self.gt < 0] = self.gt[self.gt < 0]
+            self.w0['xs_pos'] = pos_charges
+            self.w0['xs_neg'] = neg_charges
 
     def minimize_function(self):
         """
@@ -345,6 +357,7 @@ class opt_out(data_out):
         self.ubg = ca.vertcat(*self.ubg)
         # Initialize at 0
         self.initialize_variables()
+        self.w0 = self.w(0)
         # if self.method == 'sigma_par':
         #     self.w0['sigma'] = self.sigma_value
         # Create NLP
@@ -369,17 +382,20 @@ class opt_out(data_out):
             print self.g.shape[0]
             self.mycallback = opt_out.MyCallback('mycallback', self.w.shape[0], self.g.shape[0], 0,
                                                  opts={'filename': self.datafile_name,
-                                                       'flag_callback_plot': self.flag_callback_plot, 'str_shape': self.str_shape, 'data_cb': self.data, 'voxels_cb': self.voxels})
+                                                       'flag_callback_plot': self.flag_callback_plot,
+                                                       'flag_callback_output': self.flag_callback_output,
+                                                       'str_shape': self.str_shape,
+                                                       'data_cb': self.data,
+                                                       'gt': self.gt,
+                                                       'voxels_cb': self.voxels})
             self.opts["iteration_callback"] = self.mycallback
             self.opts["iteration_callback_step"] = self.callback_steps
-
         # Create solver
         print "Initializing the solver"
         if self.p_solver == 'ipopt':
             self.solver = ca.nlpsol("solver", "ipopt", self.nlp, self.opts)
         elif self.p_solver == 'sqp':
-            self.solver = ca.qpsol("solver", "qpoases",
-                                   self.nlp)  # {'sparse':True}
+            self.solver = ca.qpsol("solver", "qpoases", self.nlp)
         # Solve NLP
         self.args = {}
         self.args["x0"] = self.w0
@@ -541,7 +557,7 @@ class opt_out(data_out):
                   1 * (x[ind2, t] - x[ind_2, t])) / (12 * h)
         return dz
 
-    def cmp_gradient(self, smooth_entity, flag_tmp_smooth=False, h=1., flag_second=True):
+    def cmp_gradient(self, smooth_entity, flag_tmp_smooth=False, h=1., flag_second=False):
         """
         Computes the forward difference for the whole volume.
 
@@ -886,8 +902,7 @@ class opt_out(data_out):
         @return     { description_of_the_return_value }
         """
         self.w = struct_symMX([entry("xs_pos", shape=(self.x_size, self.t_int)),
-                               entry("xs_neg", shape=(
-                                   self.x_size, self.t_int)),
+                               entry("xs_neg", shape=(self.x_size, self.t_int)),
                                entry("ys", shape=(self.y.shape))])
         self.xs_pos, self.xs_neg, self.ys = self.w[...]
         self.g = []
@@ -959,8 +974,7 @@ class opt_out(data_out):
             save_this['opts'] = self.opt_opt
             self.write_with_pickle(save_this)
             self.write_casadi_structure(self.res_struct)
-        self.xres = self.res_struct['xs_pos'].full(
-        ) - self.res_struct['xs_neg'].full()
+        self.xres = self.res_struct['xs_pos'].full() - self.res_struct['xs_neg'].full()
 
     def set_optimization_variables_thesis(self):
         """
@@ -1014,16 +1028,12 @@ class opt_out(data_out):
 
         @return     { description_of_the_return_value }
         """
-        print self.sigma_value
         for j in range(self.m.shape[0]):
             self.f += self.sigma_value * (self.m[j])
             if self.flag_lift_mask:
                 self.g.append(self.m[j] - self.m[j] * self.m[j])
                 self.lbg.append(0)
                 self.ubg.append(0)
-            # self.g.append(self.sigma)
-            # self.lbg.append(self.sigma_value)
-            # self.ubg.append(self.sigma_value)
 
     def add_background_costs_constraints_thesis(self):
         """
@@ -1049,20 +1059,21 @@ class opt_out(data_out):
 
         @return     { description_of_the_return_value }
         """
-        grad_m = self.cmp_fwd_diff(self.m, False)
+        # grad_m = self.cmp_fwd_diff(self.m, False)
+        grad_m = self.cmp_gradient(self.m, False)
         for cm in range(self.m.shape[0]):
-            self.g.append(ca.dot(grad_m[:, cm], grad_m[:, cm]))
+            self.g.append(ca.dot(grad_m[:, cm], grad_m[:, cm])**0.5)
             self.lbg.append(0)
             self.ubg.append(self.p_dyn)
 
     def add_smoothness_costs_constraints_thesis(self):
         """
-         add smoothness constraints with lifting variables
-
-         @param      self  The object
-
-         @return     { description_of_the_return_value }
-         """
+        @brief      Adds a smoothness costs constraints thesis.
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
+        """
         average_mask = self.cmp_fwd_diff(self.m, True)
         average_sx = self.cmp_fwd_diff(self.s[:, 0], True)[0, :]
         average_sy = self.cmp_fwd_diff(self.s[:, 1], True)[1, :]
@@ -1176,14 +1187,14 @@ class opt_out(data_out):
         """
         self.set_optimization_variables_only_mask()
         t0 = time.time()
-        # self.add_data_costs_constraints_thesis()
-        # self.add_l1_costs_constraints_thesis()
-        # self.add_background_costs_constraints_thesis()
+        self.add_background_costs_constraints_thesis()
+        self.add_data_costs_constraints_thesis()
+        self.add_l1_costs_constraints_thesis()
         # self.add_tv_mask_costs_constraints_thesis()
         t1 = time.time()
         print "Set constraints in %.3f seconds" % (t1 - t0)
         t0 = time.time()
-        # self.minimize_function()
+        self.minimize_function()
         t1 = time.time()
         print "Minimize in %.3f seconds" % (t1 - t0)
         if self.opt_opt['flag_write_output']:
@@ -1192,7 +1203,7 @@ class opt_out(data_out):
             save_this['opts'] = self.opt_opt
             self.write_with_pickle(save_this)
             self.write_casadi_structure(self.res_struct)
-        # self.xres = self.res_struct['a'].full()
+        self.xres = self.res_struct['a'].full()
 
     def get_ground_truth(self, method='shephard'):
         """
