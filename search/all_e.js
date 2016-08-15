@@ -6,8 +6,6 @@ var searchData=
   ['set_5foptimization_5fvariables_5fonly_5fmask',['set_optimization_variables_only_mask',['../classlocOptimizationProblem_1_1opt__out.html#a8480f52e16417210d219766a64e67090',1,'locOptimizationProblem::opt_out']]],
   ['set_5foptimization_5fvariables_5fslack',['set_optimization_variables_slack',['../classlocOptimizationProblem_1_1opt__out.html#a5b89a60581545edefe8dbdf5f9466db6',1,'locOptimizationProblem::opt_out']]],
   ['set_5foptimization_5fvariables_5fthesis',['set_optimization_variables_thesis',['../classlocOptimizationProblem_1_1opt__out.html#a7e08fb80010f8673c384d58f4c593c83',1,'locOptimizationProblem::opt_out']]],
-  ['setparamopt',['setParamOpt',['../namespacesetParamOpt.html',1,'']]],
-  ['setparamopt_2epy',['setParamOpt.py',['../setParamOpt_8py.html',1,'']]],
   ['show_5fforward_5fmatrix',['show_forward_matrix',['../classlocView_1_1visualize.html#a2bf7c00594804deb6caf381188bda306',1,'locView::visualize']]],
   ['show_5fmovie',['show_movie',['../classlocView_1_1visualize.html#a26e41b6a8c5d69c028adddac24f95686',1,'locView::visualize']]],
   ['show_5fs_5ffield',['show_s_field',['../classlocView_1_1visualize.html#a4b46d429284abc7f00850c79be9b68f9',1,'locView::visualize']]],

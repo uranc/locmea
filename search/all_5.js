@@ -5,6 +5,7 @@ var searchData=
   ['fig',['fig',['../classlocView_1_1visualize.html#ac7e7d5b91f20ca731aaca5e098210e2b',1,'locView::visualize']]],
   ['filter_5fbpass_5fdata',['filter_bpass_data',['../classlocData_1_1data__in.html#a309f2947318a5b9ac2a30654799ae241',1,'locData::data_in']]],
   ['flag_5fcallback',['flag_callback',['../classlocOptimizationProblem_1_1opt__out.html#a8d18bafb65ac43c973de7dc82e6d7550',1,'locOptimizationProblem::opt_out']]],
+  ['flag_5fcallback_5foutput',['flag_callback_output',['../classlocOptimizationProblem_1_1opt__out_1_1MyCallback.html#a4be0d1d46eed2d5d5887b8fd96211aef',1,'locOptimizationProblem.opt_out.MyCallback.flag_callback_output()'],['../classlocOptimizationProblem_1_1opt__out.html#a8a0af893d4bceb5bb3da6be559b313b0',1,'locOptimizationProblem.opt_out.flag_callback_output()']]],
   ['flag_5fcallback_5fplot',['flag_callback_plot',['../classlocOptimizationProblem_1_1opt__out_1_1MyCallback.html#ad10aca9cab9316aa287f5508ffe01638',1,'locOptimizationProblem.opt_out.MyCallback.flag_callback_plot()'],['../classlocOptimizationProblem_1_1opt__out.html#afad7eb5505326ee16e95189c1ca7da33',1,'locOptimizationProblem.opt_out.flag_callback_plot()']]],
   ['flag_5fcell',['flag_cell',['../classlocData_1_1data__in.html#a3a7089d22620fc09c30a894429e16075',1,'locData::data_in']]],
   ['flag_5fdata_5fmask',['flag_data_mask',['../classlocOptimizationProblem_1_1opt__out.html#ac3f68f723dd5ab325fb541368cdf890c',1,'locOptimizationProblem::opt_out']]],

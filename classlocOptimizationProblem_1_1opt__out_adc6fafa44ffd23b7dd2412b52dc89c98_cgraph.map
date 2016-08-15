@@ -1,5 +1,9 @@
 <map id="locOptimizationProblem.opt_out.solve_ipopt_multi_measurement_only_mask" name="locOptimizationProblem.opt_out.solve_ipopt_multi_measurement_only_mask">
-<area shape="rect" id="node2" href="$classlocOptimizationProblem_1_1opt__out.html#a8480f52e16417210d219766a64e67090" title="thesis implementation " alt="" coords="293,5,499,61"/>
-<area shape="rect" id="node3" href="$classlocInverseProblem_1_1data__out.html#a6fa0bd1f863610eb022ec63b45d069d7" title="{ writes the results in a file } " alt="" coords="317,85,475,126"/>
-<area shape="rect" id="node4" href="$classlocOptimizationProblem_1_1opt__out.html#a33255df91cc26c45098b3fa70e5326a9" title="{ function_description } " alt="" coords="305,150,487,191"/>
+<area shape="rect" id="node2" href="$classlocOptimizationProblem_1_1opt__out.html#a8480f52e16417210d219766a64e67090" title="thesis implementation " alt="" coords="319,5,524,61"/>
+<area shape="rect" id="node3" href="$classlocOptimizationProblem_1_1opt__out.html#a399b857b6b5d5b7ee9ff765574e6e4d9" title="add background constraints with lifting variables " alt="" coords="329,85,514,141"/>
+<area shape="rect" id="node4" href="$classlocOptimizationProblem_1_1opt__out.html#ad206cf2addad166f191ef546baaa8ac3" title="Computes objective function f With lifting variable ys constraints. " alt="" coords="293,165,549,206"/>
+<area shape="rect" id="node5" href="$classlocOptimizationProblem_1_1opt__out.html#a1290610db93f169175d0ea01e422e3b4" title="add slack l1 constraints with lifting variables " alt="" coords="301,230,542,271"/>
+<area shape="rect" id="node6" href="$classlocOptimizationProblem_1_1opt__out.html#ae9d069182d752a33804b7f8d6616cf4f" title="Main Minimization routine. " alt="" coords="330,295,513,337"/>
+<area shape="rect" id="node7" href="$classlocInverseProblem_1_1data__out.html#a6fa0bd1f863610eb022ec63b45d069d7" title="{ writes the results in a file } " alt="" coords="342,361,501,402"/>
+<area shape="rect" id="node8" href="$classlocOptimizationProblem_1_1opt__out.html#a33255df91cc26c45098b3fa70e5326a9" title="{ function_description } " alt="" coords="330,426,513,467"/>
 </map>
