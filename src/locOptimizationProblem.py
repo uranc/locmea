@@ -71,7 +71,7 @@ class opt_out(data_out):
             """
             ca.Callback.__init__(self)
             # self.norm = opt_out.MyCallback.MidpointNormalize(midpoint=0)
-            self.norm = opt_out.MyCallback.MidpointNormalize(vmin=-10,vmax =10,midpoint=0)
+            self.norm = opt_out.MyCallback.MidpointNormalize(vmin=-5,vmax =5,midpoint=0)
             self.iter = 0
             self.data_to_save = []
             self.datafile_name = opts['filename']
@@ -218,8 +218,7 @@ class opt_out(data_out):
             xres_mid = self.mid_res['a'].full()
             print xres_mid.shape
             fname = '../results/' + self.datafile_name + \
-                    '/' + self.datafile_name + \
-                    '_iter_' + str(self.iter)
+                    '/' + 'iter_' + '{:04d}'.format(self.iter)
             if self.flag_callback_output:
                 if not os.path.exists(os.path.dirname(fname)):
                     try:
@@ -273,8 +272,7 @@ class opt_out(data_out):
 
         self.opt_opt.update(kwargs)
         self.solver = self.opt_opt['solver']
-        self.datafile_name = self.opt_opt[
-            'datafile_name'] + '_' + str(time.time())
+        self.datafile_name = self.opt_opt['datafile_name']
         self.callback_steps = self.opt_opt['callback_steps']
         self.t_ind = self.opt_opt['t_ind']
         self.t_int = self.opt_opt['t_int']
@@ -287,6 +285,7 @@ class opt_out(data_out):
         self.flag_callback = self.opt_opt['flag_callback']
         self.flag_callback_plot = self.opt_opt['flag_callback_plot']
         self.flag_callback_output = self.opt_opt['flag_callback_output']
+        self.flag_init = self.opt_opt['flag_init']
         self.p_solver = self.opt_opt['solver']
         self.p_hessian = self.opt_opt['hessian']
         self.p_linsol = self.opt_opt['linsol']
@@ -326,14 +325,20 @@ class opt_out(data_out):
             self.gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['a'].shape))
             tmp_m0 = np.random.rand(self.m.shape[0])
             tmp_a0 = np.random.randn(self.a.shape[0], self.a.shape[1])
-            self.w0['m'] = tmp_m0
-            self.w0['a'] = tmp_a0
             print 'initialization: Thesis or Mask'
-            self.w0['m'] = np.where(np.abs(self.gt) > 0, 1, 0).T[0]
-            self.w0['a'] = self.gt
+            if self.flag_init == 'rand':
+                self.w0['m'] = tmp_m0
+                self.w0['a'] = tmp_a0
+            if self.flag_init == 'gt':
+                self.w0['m'] = np.where(np.abs(self.gt) > 0, 1, 0).T[0]
+                self.w0['a'] = self.gt
+            if self.flag_init == 'randm':
+                self.w0['a'] = self.gt
+                self.w0['m'] = tmp_m0
         if self.method == 'slack':
             self.gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['x'].shape))
-            self.w0['x'] = self.gt
+            if self.flag_init == 'rand':
+                self.w0['x'] = np.random.randn(self.gt)
         if self.method == '2p':
             self.gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['xs_pos'].shape))
             pos_charges = np.zeros(self.w0['xs_pos'].shape)
@@ -357,7 +362,7 @@ class opt_out(data_out):
         self.ubg = ca.vertcat(*self.ubg)
         # Initialize at 0
         self.initialize_variables()
-        self.w0 = self.w(0)
+        # self.w0 = self.w(0)
         # if self.method == 'sigma_par':
         #     self.w0['sigma'] = self.sigma_value
         # Create NLP
@@ -757,8 +762,7 @@ class opt_out(data_out):
 
         @return     { description_of_the_return_value }
         """
-        fname = '../results/' + self.datafile_name + \
-            '/' + self.datafile_name + '_struct'
+        fname = '../results/' + self.datafile_name + '/' + 'struct.cs'
         struct_to_save.save(fname)
 
     def load_casadi_structure(self, fname):
@@ -1033,8 +1037,8 @@ class opt_out(data_out):
             if self.flag_lift_mask:
                 # self.g.append(self.m[j] - self.m[j] * self.m[j])
                 # self.lbg.append(0)
-                # self.ubg.append(0)
-                self.g.append(1 - np.sqrt(self.m[j]**2 + (1 - self.m[j])**2))
+                # self.ubg.append(self)
+                self.g.append(1 - (self.m[j]**2 + (1 - self.m[j])**2)**0.5)
                 self.lbg.append(0)
                 self.ubg.append(0)
 
@@ -1062,12 +1066,14 @@ class opt_out(data_out):
         
         @return     { None }
         """
-        grad_m = self.cmp_fwd_diff(self.m, False)
-        # grad_m = self.cmp_gradient(self.m, False)
+        if self.flag_tv == 'cent':
+            grad_m = self.cmp_gradient(self.m, False)
+        if self.flag_tv == 'fwd':
+            grad_m = self.cmp_fwd_diff(self.m, False)
         for cm in range(self.m.shape[0]):
             self.g.append(ca.dot(grad_m[:, cm], grad_m[:, cm])**0.5)
             self.lbg.append(0)
-            self.ubg.append(self.p_dyn)
+            self.ubg.append(3**0.5)
 
     def add_smoothness_costs_constraints_thesis(self):
         """
@@ -1193,7 +1199,8 @@ class opt_out(data_out):
         # self.add_background_costs_constraints_thesis()
         self.add_data_costs_constraints_thesis()
         self.add_l1_costs_constraints_thesis()
-        self.add_tv_mask_costs_constraints_thesis()
+        if self.flag_tv != 'none':
+            self.add_tv_mask_costs_constraints_thesis()
         t1 = time.time()
         print "Set constraints in %.3f seconds" % (t1 - t0)
         t0 = time.time()

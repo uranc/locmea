@@ -195,7 +195,7 @@ class data_out(object):
         @return     { None }
         """
         fname = '../results/'+self.datafile_name + \
-                    '/' + self.datafile_name 
+                    '/' + 'pickle.data' 
         # mkdir
         if not os.path.exists(os.path.dirname(fname)):
             try:

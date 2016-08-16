@@ -60,9 +60,9 @@ class visualize(object):
         # self.t_ind = args[1].t_ind
         self.t_ind = kwargs['loc'].t_ind
         # self.norm = visualize.MidpointNormalize(midpoint=0)
-        self.norm = visualize.MidpointNormalize(vmin=-1,vmax =1,midpoint=0)
+        self.norm = visualize.MidpointNormalize(vmin=-5,vmax =5,midpoint=0)
 
-    def save_snapshot(self, cmax=1e-3, t_ind=0):
+    def save_snapshot(self, ffname, cmax=1e-3, t_ind=0):
         """
         Saves a .png snapshot for a single time index
 
@@ -72,8 +72,7 @@ class visualize(object):
 
         @return     { None }
         """
-        fname = '../results/' + self.datafile_name + \
-            '/' + self.datafile_name + '_final.png'
+        fname = ffname + '_' + '{:04d}'.format(t_ind) + '.png'
         data = self.data
         # self.fig = plt.figure(figsize=(20, 10))
         plt.figure(figsize=(20, 10))
@@ -154,6 +153,18 @@ class visualize(object):
         # # self.fig.tight_layout()
         plt.savefig(fname)
 
+    def save_movie(self, fname, cmax=1e-3):
+        """
+        Displays a movie for multiple time indices
+        
+        @param      self  The visualization object
+        
+        @return     { None }
+        """
+        # '{:04d}'.format(self.iter)
+        for fr in range(self.xres.shape[1]):
+          self.save_snapshot(fname, t_ind=fr)
+        
     def show_snapshot(self, cmax=1e-3, t_ind=0):
         """
         Displays a snapshot for a single time index
@@ -242,16 +253,7 @@ class visualize(object):
         ax.elev = 7
         # show all
         # # self.fig.tight_layout()
-        plt.show()
-
-    def show_movie(self):
-        """
-        Displays a movie for multiple time indices
-
-        @param      self  The visualization object
-
-        @return     { None }
-        """
+        plt.show()        
 
     def show_s_field(self):
         """

@@ -17,10 +17,8 @@ import getopt
 
 
 # Data path/filename
-t_ind = 38
 data_path = '../data/'
 file_name = data_path + 'data_sim_low.hdf5'
-
 data_options = {'flag_cell': True, 'flag_electode': False}
 data = data_in(file_name, **data_options)
 
@@ -34,7 +32,7 @@ data = data_in(file_name, **data_options)
 
 print 'Number of arguments:', len(sys.argv), 'arguments.'
 print 'Argument List:', str(sys.argv)
-opts, args = getopt.getopt(sys.argv[1:], "s:h:l:m:n:p:d:")  # sol:hes:norm:sp:dyn:")
+opts, args = getopt.getopt(sys.argv[1:], "s:h:l:m:n:p:d:t:b:e:f:g:")  # sol:hes:norm:sp:dyn:")
 for opt, arg in opts:
     if opt in ("-m"):
         p_method = arg 
@@ -50,7 +48,16 @@ for opt, arg in opts:
         p_dynamic = arg 
     elif opt in ("-l"):
         p_linsol = arg 
-
+    elif opt in ("-t"):
+        p_time = arg 
+    elif opt in ("-b"):
+        t_ind = arg 
+    elif opt in ("-e"):
+        t_int = arg 
+    elif opt in ("-f"):
+        p_fin = arg 
+    elif opt in ("-g"):
+        p_tv = arg 
 print 'Method is ', p_method
 print 'NLP Solver is ', p_solver
 print 'Linear Solver is ', p_linsol
@@ -58,8 +65,12 @@ print 'Hessian is ', p_hessian
 print 'Norm is ', bool(int(p_norm))
 print 'Sparsity is ', float(p_sparse)
 print 'Dynamics bound is ', float(p_dynamic)
+print 'Temporal is ', p_time
+print 'Begin time is ', float(t_ind)
+print 'Interval is ', float(t_int)
+#python -i runDebug.py -m mask -s ipopt -p 0 -d 50 -n 1 -h limited-memory -l mums -t smv -b 38 -i 1
 
-#python -i runDebug.py -m mask -s ipopt -p 0 -d 50 -n 1 -h limited-memory -l mums
+dfname = '' + p_method + '_' + p_sparse + '_' + p_time + '_' + t_ind + '_' + t_int + '_' + p_fin + '_' + p_tv + '_' + str(np.random.randint(1000))
 
 # Optimize
 optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
@@ -67,18 +78,20 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
                         'hessian': p_hessian,
                         'linsol': p_linsol,
                         'method': p_method,
-                        't_ind': 38, 't_int': 1, 
+                        't_ind': int(t_ind), 't_int': int(t_int), 
                         'sigma': float(p_sparse),
                         'flag_depthweighted': bool(int(p_norm)),
                         'flag_parallel': False,
-                        'datafile_name': 'output_file',
+                        'datafile_name': dfname,
                         'flag_lift_mask': True,
                         'flag_data_mask': True,
                         'flag_write_output': True,
                         'flag_callback': True,
                         'flag_callback_output': False,
                         'flag_callback_plot': True,
-                        'callback_steps': 40,
+                        'flag_init': p_fin,
+                        'flag_tv': p_tv,
+                        'callback_steps': 5,
                         'p_dyn': float(p_dynamic)
                         }
 
@@ -94,7 +107,10 @@ elif p_method == '2p':
     opt.solve_ipopt_multi_measurement_2p()
 # visualize
 vis = visualize(data=data, loc=opt)
-vis.save_snapshot()
+fname = '../results/' + dfname + '/' + 'final'
+vis.save_snapshot(fname)
+fname = '../results/' + dfname + '/' + 'fv'
+vis.save_movie(fname)
 # opt.set_optimization_variables_thesis()
 # opt.initialize_variables()
 # 
