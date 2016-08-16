@@ -32,7 +32,7 @@ data = data_in(file_name, **data_options)
 
 print 'Number of arguments:', len(sys.argv), 'arguments.'
 print 'Argument List:', str(sys.argv)
-opts, args = getopt.getopt(sys.argv[1:], "s:h:l:m:n:p:d:t:b:e:f:g:")  # sol:hes:norm:sp:dyn:")
+opts, args = getopt.getopt(sys.argv[1:], "s:h:l:m:n:p:d:t:b:e:f:g:r:")  # sol:hes:norm:sp:dyn:")
 for opt, arg in opts:
     if opt in ("-m"):
         p_method = arg 
@@ -58,6 +58,9 @@ for opt, arg in opts:
         p_fin = arg 
     elif opt in ("-g"):
         p_tv = arg 
+    elif opt in ("-r"):
+        p_back = arg 
+        
 print 'Method is ', p_method
 print 'NLP Solver is ', p_solver
 print 'Linear Solver is ', p_linsol
@@ -70,7 +73,7 @@ print 'Begin time is ', float(t_ind)
 print 'Interval is ', float(t_int)
 #python -i runDebug.py -m mask -s ipopt -p 0 -d 50 -n 1 -h limited-memory -l mums -t smv -b 38 -i 1
 
-dfname = '' + p_method + '_' + p_sparse + '_' + p_time + '_' + t_ind + '_' + t_int + '_' + p_fin + '_' + p_tv + '_' + str(np.random.randint(1000))
+dfname = '' + p_method + '_' + p_sparse + '_' + p_time + '_' + t_ind + '_' + t_int + '_' + p_fin + '_' + p_tv + '_' + p_back + '_' +  str(np.random.randint(1000))
 
 # Optimize
 optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
@@ -91,6 +94,7 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
                         'flag_callback_plot': True,
                         'flag_init': p_fin,
                         'flag_tv': p_tv,
+                        'flag_background': bool(int(p_back)),
                         'callback_steps': 5,
                         'p_dyn': float(p_dynamic)
                         }

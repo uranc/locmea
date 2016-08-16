@@ -286,6 +286,8 @@ class opt_out(data_out):
         self.flag_callback_plot = self.opt_opt['flag_callback_plot']
         self.flag_callback_output = self.opt_opt['flag_callback_output']
         self.flag_init = self.opt_opt['flag_init']
+        self.flag_tv = self.opt_opt['flag_tv']
+        self.flag_background = self.opt_opt['flag_background']
         self.p_solver = self.opt_opt['solver']
         self.p_hessian = self.opt_opt['hessian']
         self.p_linsol = self.opt_opt['linsol']
@@ -1196,7 +1198,8 @@ class opt_out(data_out):
         """
         self.set_optimization_variables_only_mask()
         t0 = time.time()
-        # self.add_background_costs_constraints_thesis()
+        if self.flag_background:
+            self.add_background_costs_constraints_thesis()
         self.add_data_costs_constraints_thesis()
         self.add_l1_costs_constraints_thesis()
         if self.flag_tv != 'none':
