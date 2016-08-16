@@ -997,8 +997,8 @@ class opt_out(data_out):
         self.sigma = ca.MX.sym('sigma')
         self.lbx = self.w(-ca.inf)
         self.ubx = self.w(ca.inf)
-        self.lbx['m'] = 0
-        self.ubx['m'] = 1
+        # self.lbx['m'] = 0
+        # self.ubx['m'] = 1
 
     def add_data_costs_constraints_thesis(self):
         """
@@ -1031,12 +1031,12 @@ class opt_out(data_out):
         for j in range(self.m.shape[0]):
             self.f += self.sigma_value * (self.m[j])
             if self.flag_lift_mask:
-                self.g.append(self.m[j] - self.m[j] * self.m[j])
-                self.lbg.append(0)
-                self.ubg.append(0.5)
-                # self.g.append(1 - np.sqrt(self.m[j]**2 + (1 - self.m[j]**2)))
+                # self.g.append(self.m[j] - self.m[j] * self.m[j])
                 # self.lbg.append(0)
-                # self.ubg.append(1)
+                # self.ubg.append(0)
+                self.g.append(1 - np.sqrt(self.m[j]**2 + (1 - self.m[j])**2))
+                self.lbg.append(0)
+                self.ubg.append(0)
 
     def add_background_costs_constraints_thesis(self):
         """
