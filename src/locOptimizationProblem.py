@@ -12,6 +12,8 @@ from locInverseProblem import data_out
 import casadi as ca
 import numpy as np
 from casadi.tools import struct_symMX, entry, repeated
+from casadi.tools import *
+from scipy.spatial.distance import cdist
 import pickle as pc
 import os
 import os.path
@@ -413,6 +415,8 @@ class opt_out(data_out):
                                                        'voxels_cb': self.voxels})
             self.opts["iteration_callback"] = self.mycallback
             self.opts["iteration_callback_step"] = self.callback_steps
+            self.opts["fixed_variable_treatment"] = 'make_constraint'
+            # self.opts["fixed_variable_treatment"] = 'relax_bounds'
         # Create solver
         print "Initializing the solver"
         if self.p_solver == 'ipopt':
@@ -1012,6 +1016,7 @@ class opt_out(data_out):
                                ])
         self.a, self.m, self.s, self.ys = self.w[...]
         self.g = []
+        self.gBlock = []
         self.lbg = []
         self.ubg = []
         self.f = 0
@@ -1056,9 +1061,14 @@ class opt_out(data_out):
                 # self.g.append(self.m[j] - self.m[j] * self.m[j])
                 # self.lbg.append(0)
                 # self.ubg.append(self)
-                self.g.append(1 - (self.m[j]**2 + (1 - self.m[j])**2)**0.5)
-                self.lbg.append(0)
-                self.ubg.append(0)
+                if self.flag_sparsity_pattern:
+                    self.gBlock.append(1 - (self.m[j]**2 + (1 - self.m[j])**2)**0.5)
+                    self.lbg.append(0)
+                    self.ubg.append(0)
+                else:
+                    self.g.append(1 - (self.m[j]**2 + (1 - self.m[j])**2)**0.5)
+                    self.lbg.append(0)
+                    self.ubg.append(0)
 
     def add_background_costs_constraints_thesis(self):
         """
@@ -1195,7 +1205,6 @@ class opt_out(data_out):
         
         @return     { None }
         """
-        # self.set_optimization_variables_only_mask_thesis()
         self.set_optimization_variables_thesis()
         t0 = time.time()
         self.add_data_costs_constraints_thesis()
@@ -1242,9 +1251,17 @@ class opt_out(data_out):
         self.ubx = self.w(ca.inf)
         if self.flag_sparsity_pattern:
             self.w = struct_symMX([(entry("a", repeat=[self.x_size, self.t_int]),
-                       entry("m", shape=self.x_size),
-                       entry("ys", shape=self.y.shape))
+                       entry("m", repeat=self.x_size)),
+                       entry("ys", shape=self.y.shape)
                        ])
+            self.a, self.m, self.ys = self.w[...]
+            self.g = []
+            self.lbg = []
+            self.ubg = []
+            self.f = 0
+            self.sigma = ca.MX.sym('sigma')
+            self.lbx = self.w(-ca.inf)
+            self.ubx = self.w(ca.inf)
 
 
     def solve_ipopt_multi_measurement_only_mask(self):
@@ -1319,13 +1336,11 @@ class opt_out(data_out):
         vox_csd = np.zeros((vx.shape[0], vis_cell_csd.shape[1]))
         vox_pt = np.zeros(vx.shape[0])
         if method == 'shephard':
-            for ivv in nnz_ind_in_vox:
-                vox_cell_pos = vis_cell_pos[ind_in_vox[ivv, :]]
-                vox_cell_csd = vis_cell_csd[ind_in_vox[ivv, :]]
-                vox_pos = [vx[ivv], vy[ivv], vz[ivv]]
-                vox_dis = 1. / \
-                    np.sum(np.abs(vox_cell_pos - vox_pos)**2, axis=-1)
-                vox_csd[ivv] = np.dot(vox_dis.T, vox_cell_csd) / np.sum(vox_dis)
+            vox_cell_pos = vis_cell_pos
+            vox_cell_csd = vis_cell_csd
+            vox_pos = np.array([vx, vy, vz]).T
+            vox_dis = 1./cdist(vox_cell_pos, vox_pos)**2
+            vox_csd = np.dot(vox_dis.T, vox_cell_csd) / np.sum(vox_dis.T, axis = 1).reshape(vox_dis.T.shape[0], 1)
         elif method == 'modified':
             for ivv in nnz_ind_in_vox:
                 vox_cell_pos = vis_cell_pos[ind_in_vox[ivv, :]]

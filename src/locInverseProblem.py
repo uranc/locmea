@@ -245,6 +245,6 @@ class data_out(object):
         vis_cell_pos = data.cell_pos[ind_cell.nonzero()[0],:]
         ind_rec = self.xres.nonzero()[0]
         rec_pos = self.voxels.reshape(3,-1).T[ind_rec,:]
-        closest_ind_to_cell = np.argmin(cdist(vis_cell_pos,rec_pos),1)
-        closest_ind_to_rec = np.argmin(cdist(vis_cell_pos,rec_pos),0)
-        return self.xres[closest_ind_to_cell]-data.cell_csd[ind_cell,self.t_ind]
+        closest_ind_to_cell = np.argmin(cdist(vis_cell_pos, rec_pos),1)
+        closest_ind_to_rec = np.argmin(cdist(vis_cell_pos, rec_pos),0)
+        return self.xres[closest_ind_to_cell] - data.cell_csd[ind_cell, self.t_ind]
