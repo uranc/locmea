@@ -1,9 +1,21 @@
 <map id="locOptimizationProblem.opt_out.solve_ipopt_multi_measurement_only_mask" name="locOptimizationProblem.opt_out.solve_ipopt_multi_measurement_only_mask">
-<area shape="rect" id="node2" href="$classlocOptimizationProblem_1_1opt__out.html#a8480f52e16417210d219766a64e67090" title="thesis implementation " alt="" coords="319,5,524,61"/>
-<area shape="rect" id="node3" href="$classlocOptimizationProblem_1_1opt__out.html#a399b857b6b5d5b7ee9ff765574e6e4d9" title="add background constraints with lifting variables " alt="" coords="329,85,514,141"/>
-<area shape="rect" id="node4" href="$classlocOptimizationProblem_1_1opt__out.html#ad206cf2addad166f191ef546baaa8ac3" title="Computes objective function f With lifting variable ys constraints. " alt="" coords="293,165,549,206"/>
-<area shape="rect" id="node5" href="$classlocOptimizationProblem_1_1opt__out.html#a1290610db93f169175d0ea01e422e3b4" title="add slack l1 constraints with lifting variables " alt="" coords="301,230,542,271"/>
-<area shape="rect" id="node6" href="$classlocOptimizationProblem_1_1opt__out.html#ae9d069182d752a33804b7f8d6616cf4f" title="Main Minimization routine. " alt="" coords="330,295,513,337"/>
-<area shape="rect" id="node7" href="$classlocInverseProblem_1_1data__out.html#a6fa0bd1f863610eb022ec63b45d069d7" title="{ writes the results in a file } " alt="" coords="342,361,501,402"/>
-<area shape="rect" id="node8" href="$classlocOptimizationProblem_1_1opt__out.html#a33255df91cc26c45098b3fa70e5326a9" title="{ function_description } " alt="" coords="330,426,513,467"/>
+<area shape="rect" id="node2" href="$classlocOptimizationProblem_1_1opt__out.html#a8480f52e16417210d219766a64e67090" title="thesis implementation " alt="" coords="332,5,537,61"/>
+<area shape="rect" id="node3" href="$classlocOptimizationProblem_1_1opt__out.html#a399b857b6b5d5b7ee9ff765574e6e4d9" title="add background constraints with lifting variables " alt="" coords="342,85,527,141"/>
+<area shape="rect" id="node4" href="$classlocOptimizationProblem_1_1opt__out.html#ad206cf2addad166f191ef546baaa8ac3" title="Computes objective function f With lifting variable ys constraints. " alt="" coords="307,165,563,206"/>
+<area shape="rect" id="node5" href="$classlocOptimizationProblem_1_1opt__out.html#a1290610db93f169175d0ea01e422e3b4" title="add slack l1 constraints with lifting variables " alt="" coords="314,230,555,271"/>
+<area shape="rect" id="node6" href="$classlocOptimizationProblem_1_1opt__out.html#aa46912d0a6d5283f1ffc93854a6dedfb" title="Adds a temporal smoothness constraints. " alt="" coords="331,295,538,351"/>
+<area shape="rect" id="node7" href="$classlocOptimizationProblem_1_1opt__out.html#a389d623415546b275f321c6f7a9f5534" title="Adds a total charge constraints. " alt="" coords="324,374,545,415"/>
+<area shape="rect" id="node8" href="$classlocOptimizationProblem_1_1opt__out.html#ae1f1560cad6dbbff37ee20b3c4a880cc" title="add smoothness constraints with lifting variables " alt="" coords="294,439,575,481"/>
+<area shape="rect" id="node17" href="$classlocOptimizationProblem_1_1opt__out.html#a18c293f8d18d2a0fc35d26897eed4a24" title="Adds a minimum normalize. " alt="" coords="343,505,526,546"/>
+<area shape="rect" id="node18" href="$classlocOptimizationProblem_1_1opt__out.html#ae9d069182d752a33804b7f8d6616cf4f" title="Main Minimization routine. " alt="" coords="343,570,526,611"/>
+<area shape="rect" id="node19" href="$classlocInverseProblem_1_1data__out.html#a6fa0bd1f863610eb022ec63b45d069d7" title="{ writes the results in a file } " alt="" coords="355,635,514,677"/>
+<area shape="rect" id="node20" href="$classlocOptimizationProblem_1_1opt__out.html#a33255df91cc26c45098b3fa70e5326a9" title="{ function_description } " alt="" coords="343,701,526,742"/>
+<area shape="rect" id="node9" href="$classlocOptimizationProblem_1_1opt__out.html#a9d9a5eab7a13d0acb95d2d9ac34e548e" title="Computes the forward difference for the whole volume. " alt="" coords="625,374,807,415"/>
+<area shape="rect" id="node13" href="$classlocOptimizationProblem_1_1opt__out.html#a0d23d36133ca397f12f16b819b8f6941" title="{ Compute forward difference } " alt="" coords="625,505,807,546"/>
+<area shape="rect" id="node10" href="$classlocOptimizationProblem_1_1opt__out.html#ac538fcc370d38cb6cf2f7927f5893623" title="Computes the forward difference along x dimension. " alt="" coords="857,275,1039,317"/>
+<area shape="rect" id="node11" href="$classlocOptimizationProblem_1_1opt__out.html#af746984601703d2ae8779e790e91c202" title="Computes the forward difference along y dimension. " alt="" coords="857,341,1039,382"/>
+<area shape="rect" id="node12" href="$classlocOptimizationProblem_1_1opt__out.html#aed8ed57053ffb9031005d8ceca784011" title="Computes the forward difference along z dimension. " alt="" coords="857,406,1039,447"/>
+<area shape="rect" id="node14" href="$classlocOptimizationProblem_1_1opt__out.html#a418b36e09fed10e018a3feb09e3503d6" title="Computes the forward difference along x dimension. " alt="" coords="857,471,1039,513"/>
+<area shape="rect" id="node15" href="$classlocOptimizationProblem_1_1opt__out.html#a5838538e226e1ca84a7be00ccd587ed2" title="Computes the forward difference along y dimension. " alt="" coords="857,537,1039,578"/>
+<area shape="rect" id="node16" href="$classlocOptimizationProblem_1_1opt__out.html#a0ec49fd830062422fe6fb07bb2a48ef2" title="Computes the forward difference along z dimension. " alt="" coords="857,602,1039,643"/>
 </map>

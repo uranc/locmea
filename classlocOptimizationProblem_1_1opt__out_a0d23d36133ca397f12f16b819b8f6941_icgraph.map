@@ -1,5 +1,7 @@
 <map id="locOptimizationProblem.opt_out.cmp_fwd_diff" name="locOptimizationProblem.opt_out.cmp_fwd_diff">
-<area shape="rect" id="node2" href="$classlocOptimizationProblem_1_1opt__out.html#a95b614659f399b9f8229fbdb129888b9" title="Adds a smoothness costs constraints thesis. " alt="" coords="237,5,427,61"/>
-<area shape="rect" id="node4" href="$classlocOptimizationProblem_1_1opt__out.html#ad51e55d5cd00857e47a81aa9f34b7997" title="add smoothness constraints with lifting variables " alt="" coords="241,85,423,141"/>
-<area shape="rect" id="node3" href="$classlocOptimizationProblem_1_1opt__out.html#a3ffac0f79434aeb240b29faa926cf8d9" title="Reform source space x as the difference of x+ &#45; x&#45;. " alt="" coords="475,53,755,94"/>
+<area shape="rect" id="node2" href="$classlocOptimizationProblem_1_1opt__out.html#ae1f1560cad6dbbff37ee20b3c4a880cc" title="add smoothness constraints with lifting variables " alt="" coords="238,165,519,206"/>
+<area shape="rect" id="node5" href="$classlocOptimizationProblem_1_1opt__out.html#a95b614659f399b9f8229fbdb129888b9" title="Adds a smoothness costs constraints thesis. " alt="" coords="284,5,473,61"/>
+<area shape="rect" id="node6" href="$classlocOptimizationProblem_1_1opt__out.html#ad51e55d5cd00857e47a81aa9f34b7997" title="add smoothness constraints with lifting variables " alt="" coords="287,85,470,141"/>
+<area shape="rect" id="node3" href="$classlocOptimizationProblem_1_1opt__out.html#a3ffac0f79434aeb240b29faa926cf8d9" title="Reform source space x as the difference of x+ &#45; x&#45;. " alt="" coords="568,93,848,134"/>
+<area shape="rect" id="node4" href="$classlocOptimizationProblem_1_1opt__out.html#adc6fafa44ffd23b7dd2412b52dc89c98" title="Reform source space x as the difference of x+ &#45; x&#45;. " alt="" coords="589,157,827,213"/>
 </map>

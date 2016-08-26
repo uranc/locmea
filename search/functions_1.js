@@ -7,8 +7,11 @@ var searchData=
   ['add_5fl1_5fcosts_5fconstraints_5f2p',['add_l1_costs_constraints_2p',['../classlocOptimizationProblem_1_1opt__out.html#a2519c0c58817d893c5e28a5636ad307b',1,'locOptimizationProblem::opt_out']]],
   ['add_5fl1_5fcosts_5fconstraints_5fslack',['add_l1_costs_constraints_slack',['../classlocOptimizationProblem_1_1opt__out.html#a4281fc64c77411052101f17e339bc982',1,'locOptimizationProblem::opt_out']]],
   ['add_5fl1_5fcosts_5fconstraints_5fthesis',['add_l1_costs_constraints_thesis',['../classlocOptimizationProblem_1_1opt__out.html#a1290610db93f169175d0ea01e422e3b4',1,'locOptimizationProblem::opt_out']]],
+  ['add_5fmin_5fnorm',['add_min_norm',['../classlocOptimizationProblem_1_1opt__out.html#a18c293f8d18d2a0fc35d26897eed4a24',1,'locOptimizationProblem::opt_out']]],
   ['add_5fs_5fmagnitude_5fcosts_5fconstraints_5fthesis',['add_s_magnitude_costs_constraints_thesis',['../classlocOptimizationProblem_1_1opt__out.html#a097bf105d264f02525b6174cb3629217',1,'locOptimizationProblem::opt_out']]],
   ['add_5fs_5fsmooth_5fcosts_5fconstraints_5fthesis',['add_s_smooth_costs_constraints_thesis',['../classlocOptimizationProblem_1_1opt__out.html#ad51e55d5cd00857e47a81aa9f34b7997',1,'locOptimizationProblem::opt_out']]],
   ['add_5fsmoothness_5fcosts_5fconstraints_5fthesis',['add_smoothness_costs_constraints_thesis',['../classlocOptimizationProblem_1_1opt__out.html#a95b614659f399b9f8229fbdb129888b9',1,'locOptimizationProblem::opt_out']]],
+  ['add_5ftemporal_5fsmoothness_5fconstraints',['add_temporal_smoothness_constraints',['../classlocOptimizationProblem_1_1opt__out.html#aa46912d0a6d5283f1ffc93854a6dedfb',1,'locOptimizationProblem::opt_out']]],
+  ['add_5ftotal_5fcharge_5fconstraints',['add_total_charge_constraints',['../classlocOptimizationProblem_1_1opt__out.html#a389d623415546b275f321c6f7a9f5534',1,'locOptimizationProblem::opt_out']]],
   ['add_5ftv_5fmask_5fcosts_5fconstraints_5fthesis',['add_tv_mask_costs_constraints_thesis',['../classlocOptimizationProblem_1_1opt__out.html#ae1f1560cad6dbbff37ee20b3c4a880cc',1,'locOptimizationProblem::opt_out']]]
 ];
