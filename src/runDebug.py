@@ -11,7 +11,6 @@ import casadi as ca
 import numpy as np
 import matplotlib.pyplot as plt
 import pickle as pc
-import time
 import sys
 import getopt
 
@@ -71,9 +70,8 @@ print 'Dynamics bound is ', float(p_dynamic)
 print 'Temporal is ', p_time
 print 'Begin time is ', float(t_ind)
 print 'Interval is ', float(t_int)
-#python -i runDebug.py -m mask -s ipopt -p 0 -d 50 -n 1 -h limited-memory -l mums -t smv -b 38 -i 1
 
-dfname = '' + p_method + '_' + p_sparse + '_' + p_time + '_' + t_ind + '_' + t_int + '_' + p_fin + '_' + p_tv + '_' + p_back + '_' +  str(np.random.randint(1000))
+dfname = '' + p_method + '_' + p_sparse +'_' + p_norm + '_' + p_time + '_' + t_ind + '_' + t_int + '_' + p_fin + '_' + p_tv + '_' + p_back + '_' +  str(np.random.randint(1000))
 
 # Optimize
 optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
@@ -87,18 +85,21 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
                         'flag_parallel': False,
                         'datafile_name': dfname,
                         'flag_lift_mask': True,
-                        'flag_data_mask': True,
+                        'flag_data_mask': False,
                         'flag_write_output': True,
-                        'flag_callback': True,
+                        'flag_callback': False,
                         'flag_callback_output': False,
-                        'flag_callback_plot': True,
+                        'flag_callback_plot': False,
+                        'flag_sparsity_pattern': False,
+                        'flag_total': False,
+                        'flag_temporal': True,
+                        'flag_min_norm': False,
                         'flag_init': p_fin,
                         'flag_tv': p_tv,
                         'flag_background': bool(int(p_back)),
                         'callback_steps': 5,
                         'p_dyn': float(p_dynamic)
                         }
-
 
 opt = opt_out(data, **optimization_options)
 if p_method == 'thesis':

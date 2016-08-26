@@ -25,7 +25,7 @@ except ImportError:
 
 class opt_out(data_out):
     """
-    Class for the optimization problem Child of inverse problem
+    @brief  Class for the optimization problem Child of inverse problem.
     """
     class MyCallback(ca.Callback):
         """
@@ -80,8 +80,10 @@ class opt_out(data_out):
             self.s_shape = opts['str_shape']
             self.data = opts['data_cb']
             self.voxels = opts['voxels_cb']
+            self.p_method = opts['p_method']
             self.gt = opts['gt']
             opts['filename'] = None
+            opts['p_method'] = None
             opts['flag_callback_plot'] = None
             opts['flag_callback_output'] = None
             opts['str_shape'] = None
@@ -215,7 +217,14 @@ class opt_out(data_out):
             sol = darg['x']
             # print self.str_shape
             self.mid_res = self.s_shape(sol)
-            xres_mid = self.mid_res['a'].full()
+            if self.p_method == 'thesis':
+                xres_mid = self.mid_res['a'].full()
+            elif self.p_method == 'mask':
+                xres_mid = self.mid_res['a'].full()
+            elif self.p_method == 'slack':
+                xres_mid = self.mid_res['x'].full()
+            elif self.p_method == '2p':
+                xres_mid = self.mid_res['xs_pos'].full() - self.mid_res['xs_neg'].full()
             print xres_mid.shape
             fname = '../results/' + self.datafile_name + \
                     '/' + 'iter_' + '{:04d}'.format(self.iter)
@@ -243,7 +252,7 @@ class opt_out(data_out):
 
     def __init__(self, *args, **kwargs):
         """
-        Options for optimization
+        @brief      Options for optimization
         
         @param      self    Optimization object
         @param      args    Optimization options
@@ -254,7 +263,7 @@ class opt_out(data_out):
                         'datafile_name': 'output_file',
                         'callback_steps': 100,
                         'method': 'not_thesis',
-                        't_ind': 35,
+                        't_ind': 38,
                         't_int': 1,
                         'flag_depthweighted': True,
                         'sigma': 0.1,
@@ -285,7 +294,11 @@ class opt_out(data_out):
         self.flag_callback = self.opt_opt['flag_callback']
         self.flag_callback_plot = self.opt_opt['flag_callback_plot']
         self.flag_callback_output = self.opt_opt['flag_callback_output']
+        self.flag_sparsity_pattern = self.opt_opt['flag_sparsity_pattern']
+        self.flag_total = self.opt_opt['flag_total']
+        self.flag_temporal = self.opt_opt['flag_temporal']
         self.flag_init = self.opt_opt['flag_init']
+        self.flag_min_norm = self.opt_opt['flag_min_norm']
         self.flag_tv = self.opt_opt['flag_tv']
         self.flag_background = self.opt_opt['flag_background']
         self.p_solver = self.opt_opt['solver']
@@ -297,7 +310,8 @@ class opt_out(data_out):
         # ######################## #
         print self.opt_opt
         self.y = self.data.electrode_rec[:, self.t_ind:self.t_ind + self.t_int]
-        self.y_size = self.y.flatten().shape[0]
+        self.y_size = self.y.shape[0]
+        self.t_size = self.y.shape[1]
         self.x_size = self.voxels[0, :].flatten().shape[0]
         fwd = self.cmp_fwd_matrix(self.electrode_pos, self.voxels)
         if self.flag_depthweighted:
@@ -308,10 +322,10 @@ class opt_out(data_out):
 
     def initialize_variables(self):
         """
-        Initialization for the optimization problem
-
+        @brief      Initialization for the optimization problem
+        
         @param      self  The object
-
+        
         @return     { None }
         """
         self.w0 = self.w(0)
@@ -337,6 +351,10 @@ class opt_out(data_out):
             if self.flag_init == 'randm':
                 self.w0['a'] = self.gt
                 self.w0['m'] = tmp_m0
+            if self.flag_init == 'mask':
+                self.w0['a'] = tmp_a0
+                self.w0['m'] = np.where(np.abs(self.gt) > 0, 1, 0).T[0]
+
         if self.method == 'slack':
             self.gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['x'].shape))
             if self.flag_init == 'rand':
@@ -352,21 +370,18 @@ class opt_out(data_out):
 
     def minimize_function(self):
         """
-        Main Minimization routine
-
-        @param      self Optimization Object
-
+        @brief      Main Minimization routine
+        
+        @param      self  Optimization Object
+        
         @return     { None }
         """
         self.str_shape = self.w(0)
         self.g = ca.vertcat(*self.g)
         self.lbg = ca.vertcat(*self.lbg)
         self.ubg = ca.vertcat(*self.ubg)
-        # Initialize at 0
+        # Initialize 
         self.initialize_variables()
-        # self.w0 = self.w(0)
-        # if self.method == 'sigma_par':
-        #     self.w0['sigma'] = self.sigma_value
         # Create NLP
         self.nlp = {"x": self.w, "f": self.f, "g": self.g}
         # NLP solver options
@@ -393,6 +408,7 @@ class opt_out(data_out):
                                                        'flag_callback_output': self.flag_callback_output,
                                                        'str_shape': self.str_shape,
                                                        'data_cb': self.data,
+                                                       'p_method': self.method,
                                                        'gt': self.gt,
                                                        'voxels_cb': self.voxels})
             self.opts["iteration_callback"] = self.mycallback
@@ -415,8 +431,8 @@ class opt_out(data_out):
 
     def cmp_dx(self, smooth_entity, i, j, k, t, h=1.):
         """
-        Computes the forward difference along x dimension.
-
+        @brief      Computes the forward difference along x dimension.
+        
         @param      self           The optimization object
         @param      smooth_entity  The image to smooth
         @param      i              { pixel index for x - dimension}
@@ -424,7 +440,7 @@ class opt_out(data_out):
         @param      k              { pixel index for z - dimension}
         @param      t              { time index }
         @param      h              { discretization step }
-
+        
         @return     { returns the x derivative for a single pixel }
         """
         x = smooth_entity
@@ -463,8 +479,8 @@ class opt_out(data_out):
 
     def cmp_dy(self, smooth_entity, i, j, k, t, h=1.):
         """
-        Computes the forward difference along y dimension.
-
+        @brief      Computes the forward difference along y dimension.
+        
         @param      self           The optimization object
         @param      smooth_entity  The image to smooth
         @param      i              { pixel index for x - dimension}
@@ -472,7 +488,7 @@ class opt_out(data_out):
         @param      k              { pixel index for z - dimension}
         @param      t              { time index }
         @param      h              { discretization step }
-
+        
         @return     { returns the y derivative for a single pixel }
         """
         x = smooth_entity
@@ -518,8 +534,8 @@ class opt_out(data_out):
 
     def cmp_dz(self, smooth_entity, i, j, k, t, h=1.):
         """
-        Computes the forward difference along z dimension.
-
+        @brief      Computes the forward difference along z dimension.
+        
         @param      self           The optimization object
         @param      smooth_entity  The image to smooth
         @param      i              { pixel index for x - dimension}
@@ -527,7 +543,7 @@ class opt_out(data_out):
         @param      k              { pixel index for z - dimension}
         @param      t              { time index }
         @param      h              { discretization step }
-
+        
         @return     { returns the z derivative for a single pixel }
         """
         x = smooth_entity
@@ -566,15 +582,15 @@ class opt_out(data_out):
 
     def cmp_gradient(self, smooth_entity, flag_tmp_smooth=False, h=1., flag_second=False):
         """
-        Computes the forward difference for the whole volume.
-
+        @brief      Computes the forward difference for the whole volume.
+        
         @param      self             {The optimization object}
         @param      smooth_entity    {The image to smooth}
         @param      flag_tmp_smooth  {The flag temporary smooth}
         @param      h                {discretization step}
         @param      flag_second      {The flag for second order approxiamion}
         @param      t     {time index}
-
+        
         @return     { returns the gradient for a the whole image }
         """
         # initials
@@ -611,8 +627,8 @@ class opt_out(data_out):
 
     def cmp_fwd_dx(self, smooth_entity, flag_average, i, j, k, t, h=1.):
         """
-        Computes the forward difference along x dimension.
-
+        @brief      Computes the forward difference along x dimension.
+        
         @param      self           The optimization object
         @param      smooth_entity  The image to smooth
         @param      flag_average   The flag to get mask average
@@ -621,7 +637,7 @@ class opt_out(data_out):
         @param      k              { pixel index for z - dimension}
         @param      t              { time index }
         @param      h              { discretization step }
-
+        
         @return     { returns the gradient for a single pixel }
         """
         x = smooth_entity
@@ -673,8 +689,8 @@ class opt_out(data_out):
 
     def cmp_fwd_dz(self, smooth_entity, flag_average, i, j, k, t, h=1.):
         """
-        Computes the forward difference along z dimension.
-
+        @brief      Computes the forward difference along z dimension.
+        
         @param      self           The optimization object
         @param      smooth_entity  The image to smooth
         @param      flag_average   The flag to get mask average
@@ -683,7 +699,7 @@ class opt_out(data_out):
         @param      k              { pixel index for z - dimension}
         @param      t              { time index }
         @param      h              { discretization step }
-
+        
         @return     { returns the gradient for a single pixel }
         """
         x = smooth_entity
@@ -704,15 +720,15 @@ class opt_out(data_out):
 
     def cmp_fwd_diff(self, smooth_entity, flag_average=False, flag_tmp_smooth=False, h=1., flag_second=False):
         """
-        <F7>cmp_gradient
-
+        @brief      { Compute forward difference }
+        
         @param      self             The object
         @param      smooth_entity    The smooth entity
         @param      flag_average     The flag average
         @param      flag_tmp_smooth  The flag temporary smooth
         @param      h                { parameter_description }
         @param      flag_second      The flag second
-
+        
         @return     { description_of_the_return_value }
         """
         # initials
@@ -780,15 +796,15 @@ class opt_out(data_out):
 
     def optimize_waveform(self, x):
         """
-        fit waveform to a bimodal alpha function
-
+        @brief      fit waveform to a bimodal alpha function
+        
         @param      self  The object
         @param      x     { parameter_description }
-
+        
         @return     { description_of_the_return_value }
         """
         srate = self.data.srate
-        fit_data = self.data.cell_csd[i, 36:]
+        fit_data = self.data.cell_csd[i, 38:]
         # fit_data = x
         tlin = np.linspace(
             1. / srate, (fit_data.shape[0] - 1) / srate, fit_data.shape[0] - 1. / srate)
@@ -799,8 +815,7 @@ class opt_out(data_out):
         r = ca.vertcat(t1, t2, a)
         f = (ca.exp(-t * t1) * t * t1 * t1 - ca.exp(-t * t2) * t * t2 * t2) * a
         F = ca.Function("F", [r, t], [f])
-        Y = [(fit_data[i] - F(r, tlin[i]))**2
-             for i in range(fit_data.shape[0])]
+        Y = [(fit_data[i] - F(r, tlin[i]))**2 for i in range(fit_data.shape[0])]
         nlp_root = {"x": r, "f": sum(Y)}
         root_solver = ca.nlpsol("solver", "ipopt", nlp_root,
                                 {'ipopt.file_print_level': 0,
@@ -816,10 +831,10 @@ class opt_out(data_out):
 
     def set_optimization_variables_slack(self):
         """
-        Variables for the lifted version
-
+        @brief      Variables for the lifted version
+        
         @param      self  The object
-
+        
         @return     { description_of_the_return_value }
         """
         self.w = struct_symMX([entry("x", shape=(self.x_size, self.t_int)),
@@ -835,26 +850,26 @@ class opt_out(data_out):
 
     def add_data_costs_constraints_slack(self):
         """
-        Computes objective function f With lifting variable ys constraints
-
+        @brief      Computes objective function f With lifting variable ys
+                    constraints
+        
         @param      self  The object
-
+        
         @return     { description_of_the_return_value }
         """
         for i in range(self.y.shape[0]):
             for ti in range(self.t_int):
                 self.f += (self.y[i, ti] - self.ys[i, ti])**2
-                self.g.append(self.ys[i, ti] -
-                              ca.dot(self.fwd[i, :].T, self.x[:, ti]))
+                self.g.append(self.ys[i, ti] - ca.dot(self.fwd[i, :].T, self.x[:, ti]))
                 self.lbg.append(0)
                 self.ubg.append(0)
 
     def add_l1_costs_constraints_slack(self):
         """
-        add slack l1 constraints with lifting variables
-
+        @brief      add slack l1 constraints with lifting variables
+        
         @param      self  The object
-
+        
         @return     { description_of_the_return_value }
         """
         for j in range(self.w['xs'].shape[0]):
@@ -874,10 +889,10 @@ class opt_out(data_out):
 
     def solve_ipopt_multi_measurement_slack(self):
         """
-        MMV L1
-
+        @brief      MMV L1
+        
         @param      self  The object
-
+        
         @return     { description_of_the_return_value }
         """
         t0 = time.time()
@@ -900,11 +915,11 @@ class opt_out(data_out):
 
     def set_optimization_variables_2p(self):
         """
-        x is divided into negative and positive elements this function
-        overwrites the initialized optimization variables
-
+        @brief      x is divided into negative and positive elements this
+                    function overwrites the initialized optimization variables
+        
         @param      self  The object
-
+        
         @return     { description_of_the_return_value }
         """
         self.w = struct_symMX([entry("xs_pos", shape=(self.x_size, self.t_int)),
@@ -920,26 +935,26 @@ class opt_out(data_out):
 
     def add_data_costs_constraints_2p(self):
         """
-        Computes objective function f With lifting variable ys constraints
-
+        @brief      Computes objective function f With lifting variable ys
+                    constraints
+        
         @param      self  The object
-
+        
         @return     { description_of_the_return_value }
         """
         for i in range(self.y.shape[0]):
             for ti in range(self.t_int):
                 self.f += (self.y[i, ti] - self.ys[i, ti])**2
-                self.g.append(self.ys[i, ti] -
-                              ca.dot(self.fwd[i, :].T, (self.xs_pos[:, ti] - self.xs_neg[:, ti])))
+                self.g.append(self.ys[i, ti] - ca.dot(self.fwd[i, :].T, (self.xs_pos[:, ti] - self.xs_neg[:, ti])))
                 self.lbg.append(0)
                 self.ubg.append(0)
 
     def add_l1_costs_constraints_2p(self):
         """
-        add slack l1 constraints with lifting variables
-
+        @brief      add slack l1 constraints with lifting variables
+        
         @param      self  The object
-
+        
         @return     { description_of_the_return_value }
         """
         for j in range(self.xs_pos.shape[0]):
@@ -958,10 +973,10 @@ class opt_out(data_out):
 
     def solve_ipopt_multi_measurement_2p(self):
         """
-        Reform source space x as the difference of x+ - x-
-
+        @brief      Reform source space x as the difference of x+ - x-
+        
         @param      self  The object
-
+        
         @return     { description_of_the_return_value }
         """
         t0 = time.time()
@@ -984,10 +999,10 @@ class opt_out(data_out):
 
     def set_optimization_variables_thesis(self):
         """
-        thesis implementation
-
+        @brief      thesis implementation
+        
         @param      self  The object
-
+        
         @return     { description_of_the_return_value }
         """
         self.w = struct_symMX([entry("a", shape=(self.x_size, self.t_int)),
@@ -1008,30 +1023,31 @@ class opt_out(data_out):
 
     def add_data_costs_constraints_thesis(self):
         """
-         Computes objective function f With lifting variable ys constraints
-
-         @param      self  The object
-
-         @return     { description_of_the_return_value }
-         """
+        @brief      Computes objective function f With lifting variable ys
+                    constraints
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
+        """
         for i in range(self.y.shape[0]):
             for ti in range(self.t_int):
                 self.f += (self.y[i, ti] - self.ys[i, ti])**2
                 if self.flag_data_mask:
-                    self.g.append(self.ys[i, ti] -
-                                  ca.dot(self.fwd[i, :].T, self.a[:, ti] * self.m))
+                    # self.g.append(self.ys[i, ti] - ca.dot(self.fwd[i, :].T, self.a[:, ti] * self.m))
+                    self.g.append(self.ys[i, ti] - ca.dot(self.fwd[i, :].T, self.a[:, ti] * self.m))
                 else:
-                    self.g.append(self.ys[i, ti] -
-                                  ca.dot(self.fwd[i, :].T, self.a[:, ti]))
+                    # self.g.append(self.ys[i, ti] - ca.dot(self.fwd[i, :].T, self.a[:, ti]))
+                    self.g.append(self.ys[i, ti] - ca.dot(self.fwd[i, :].T, self.a[:, ti]))
                 self.lbg.append(0)
                 self.ubg.append(0)
 
     def add_l1_costs_constraints_thesis(self):
         """
-        add slack l1 constraints with lifting variables
-
+        @brief      add slack l1 constraints with lifting variables
+        
         @param      self  The object
-
+        
         @return     { description_of_the_return_value }
         """
         for j in range(self.m.shape[0]):
@@ -1046,10 +1062,10 @@ class opt_out(data_out):
 
     def add_background_costs_constraints_thesis(self):
         """
-        add background constraints with lifting variables
-
+        @brief      add background constraints with lifting variables
+        
         @param      self  The object
-
+        
         @return     { description_of_the_return_value }
         """
         for b in range(self.m.shape[0]):
@@ -1062,7 +1078,7 @@ class opt_out(data_out):
 
     def add_tv_mask_costs_constraints_thesis(self):
         """
-        add smoothness constraints with lifting variables
+        @brief      add smoothness constraints with lifting variables
         
         @param      self  The object
         
@@ -1101,7 +1117,7 @@ class opt_out(data_out):
 
     def add_s_magnitude_costs_constraints_thesis(self):
         """
-        add smoothness constraints with lifting variables
+        @brief      add smoothness constraints with lifting variables
         
         @param      self  The object
         
@@ -1112,9 +1128,48 @@ class opt_out(data_out):
             self.lbg.append(1)
             self.ubg.append(1)
 
+    def add_temporal_smoothness_constraints(self):
+        """
+        @brief      Adds a temporal smoothness constraints.
+        
+        @param      self  The optimization object
+        
+        @return     { None }
+        """
+        for ts in range(self.t_size):
+            for tx in range(self.x_size):
+                if ts != self.t_size-1:
+                    self.g.append((self.a[tx, ts+1]-self.a[tx, ts])**2)
+                    self.lbg.append(0)
+                    self.ubg.append(20)
+
+    def add_total_charge_constraints(self):
+        """
+        @brief      Adds a total charge constraints.
+        
+        @param      self  The optimization object
+        
+        @return     { None }
+        """
+        for ts in range(self.t_size):
+            self.g.append(sum([self.a[:, ts]]))
+            self.lbg.append(0)
+            self.ubg.append(20)
+
+    def add_min_norm(self):
+        """
+        @brief      Adds a minimum normalize.
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
+        """
+        for ts in range(self.t_size):
+            self.f += ca.dot(self.a[:, ts], self.a[:, ts])
+            
     def add_s_smooth_costs_constraints_thesis(self):
         """
-        add smoothness constraints with lifting variables
+        @brief      add smoothness constraints with lifting variables
         
         @param      self  The object
         
@@ -1134,7 +1189,7 @@ class opt_out(data_out):
 
     def solve_ipopt_multi_measurement_thesis(self):
         """
-        Reform source space x as the difference of x+ - x-
+        @brief      Reform source space x as the difference of x+ - x-
         
         @param      self  The object
         
@@ -1167,7 +1222,7 @@ class opt_out(data_out):
 
     def set_optimization_variables_only_mask(self):
         """
-        thesis implementation
+        @brief      thesis implementation
         
         @param      self  The optimization object
         
@@ -1185,12 +1240,16 @@ class opt_out(data_out):
         self.sigma = ca.MX.sym('sigma')
         self.lbx = self.w(-ca.inf)
         self.ubx = self.w(ca.inf)
-        # self.lbx['m'] = 0
-        # self.ubx['m'] = 1
+        if self.flag_sparsity_pattern:
+            self.w = struct_symMX([(entry("a", repeat=[self.x_size, self.t_int]),
+                       entry("m", shape=self.x_size),
+                       entry("ys", shape=self.y.shape))
+                       ])
+
 
     def solve_ipopt_multi_measurement_only_mask(self):
         """
-        Reform source space x as the difference of x+ - x-
+        @brief      Reform source space x as the difference of x+ - x-
         
         @param      self  The optimization object
         
@@ -1202,9 +1261,15 @@ class opt_out(data_out):
             self.add_background_costs_constraints_thesis()
         self.add_data_costs_constraints_thesis()
         self.add_l1_costs_constraints_thesis()
+        if self.flag_temporal:
+            self.add_temporal_smoothness_constraints()
+        if self.flag_total:
+            self.add_total_charge_constraints()
         if self.flag_tv != 'none':
             self.add_tv_mask_costs_constraints_thesis()
         t1 = time.time()
+        if self.flag_min_norm:
+            self.add_min_norm()
         print "Set constraints in %.3f seconds" % (t1 - t0)
         t0 = time.time()
         self.minimize_function()
@@ -1221,9 +1286,10 @@ class opt_out(data_out):
     def get_ground_truth(self, method='shephard'):
         """
         @brief      Get the ground truth.
-
-        @param      self  The optimization object
-
+        
+        @param      self    The optimization object
+        @param      method  The method
+        
         @return     Ground truth.
         """
         data = self.data
@@ -1282,7 +1348,7 @@ class opt_out(data_out):
         from pykCSD.pykCSD import KCSD
         elec_pos = (self.electrode_pos[:, :])
         pots = np.array(self.data.electrode_rec[
-                        :, 35].flatten().reshape(64, 1))
+                        :, 38].flatten().reshape(64, 1))
         params = {
             'gdX': 5,
             'gdY': 5,
