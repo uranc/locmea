@@ -341,7 +341,8 @@ class opt_out(data_out):
         print self.method
         if self.method == 'thesis' or self.method == 'mask':
             self.gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['a'].shape))
-            tmp_m0 = np.random.rand(self.m.shape[0])
+            # tmp_m0 = np.random.rand(self.m.shape[0])
+            tmp_m0 = np.ones(self.m.shape[0])*0.5
             tmp_a0 = np.random.randn(self.a.shape[0], self.a.shape[1])
             print 'initialization: Thesis or Mask'
             if self.flag_init == 'rand':
@@ -356,7 +357,6 @@ class opt_out(data_out):
             if self.flag_init == 'mask':
                 self.w0['a'] = tmp_a0
                 self.w0['m'] = np.where(np.abs(self.gt) > 0, 1, 0).T[0]
-
         if self.method == 'slack':
             self.gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['x'].shape))
             if self.flag_init == 'rand':
@@ -385,6 +385,9 @@ class opt_out(data_out):
         # Initialize 
         self.initialize_variables()
         # Create NLP
+        print self.f
+        print self.w0['m']
+        # print self.g
         self.nlp = {"x": self.w, "f": self.f, "g": self.g}
         # NLP solver options
         if self.p_solver == 'ipopt':
@@ -1047,6 +1050,16 @@ class opt_out(data_out):
                 self.lbg.append(0)
                 self.ubg.append(0)
 
+    def add_ordered_constraints_mask(self):
+        """
+        @brief      Adds an ordered constraints mask.
+        
+        @param      self  The object
+        
+        @return     { description_of_the_return_value }
+        """
+        
+
     def add_l1_costs_constraints_thesis(self):
         """
         @brief      add slack l1 constraints with lifting variables
@@ -1055,20 +1068,13 @@ class opt_out(data_out):
         
         @return     { description_of_the_return_value }
         """
+        print self.sigma_value*2
         for j in range(self.m.shape[0]):
             self.f += self.sigma_value * (self.m[j])
             if self.flag_lift_mask:
-                # self.g.append(self.m[j] - self.m[j] * self.m[j])
-                # self.lbg.append(0)
-                # self.ubg.append(self)
-                if self.flag_sparsity_pattern:
-                    self.gBlock.append(1 - (self.m[j]**2 + (1 - self.m[j])**2)**0.5)
-                    self.lbg.append(0)
-                    self.ubg.append(0)
-                else:
-                    self.g.append(1 - (self.m[j]**2 + (1 - self.m[j])**2)**0.5)
-                    self.lbg.append(0)
-                    self.ubg.append(0)
+                self.g.append(1 - (self.m[j]**2 + (1 - self.m[j])**2)**0.5)
+                self.lbg.append(0)
+                self.ubg.append(0)
 
     def add_background_costs_constraints_thesis(self):
         """
@@ -1249,6 +1255,8 @@ class opt_out(data_out):
         self.sigma = ca.MX.sym('sigma')
         self.lbx = self.w(-ca.inf)
         self.ubx = self.w(ca.inf)
+        self.lbx['m'] = 0
+        self.ubx['m'] = 1
         if self.flag_sparsity_pattern:
             self.w = struct_symMX([(entry("a", repeat=[self.x_size, self.t_int]),
                        entry("m", repeat=self.x_size)),
@@ -1262,7 +1270,8 @@ class opt_out(data_out):
             self.sigma = ca.MX.sym('sigma')
             self.lbx = self.w(-ca.inf)
             self.ubx = self.w(ca.inf)
-
+            self.lbx['m'] = 0
+            self.ubx['m'] = 1
 
     def solve_ipopt_multi_measurement_only_mask(self):
         """
