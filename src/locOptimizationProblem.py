@@ -342,21 +342,21 @@ class opt_out(data_out):
         if self.method == 'thesis' or self.method == 'mask':
             self.gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['a'].shape))
             # tmp_m0 = np.random.rand(self.m.shape[0])
-            tmp_m0 = np.ones(self.m.shape[0])*0.5
+            tmp_m0 = np.ones(self.m.shape[0])*0.5 + np.random.randn(self.m.shape[0])/10
             tmp_a0 = np.random.randn(self.a.shape[0], self.a.shape[1])
             print 'initialization: Thesis or Mask'
             if self.flag_init == 'rand':
                 self.w0['m'] = tmp_m0
                 self.w0['a'] = tmp_a0
             if self.flag_init == 'gt':
-                self.w0['m'] = np.where(np.abs(self.gt) > 0, 1, 0).T[0]
+                self.w0['m'] = np.where(np.abs(self.gt) > 1e-3, 1, 0).T[0]
                 self.w0['a'] = self.gt
             if self.flag_init == 'randm':
                 self.w0['a'] = self.gt
                 self.w0['m'] = tmp_m0
             if self.flag_init == 'mask':
                 self.w0['a'] = tmp_a0
-                self.w0['m'] = np.where(np.abs(self.gt) > 0, 1, 0).T[0]
+                self.w0['m'] = np.where(np.abs(self.gt) > 1e-3, 1, 0).T[0]
         if self.method == 'slack':
             self.gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['x'].shape))
             if self.flag_init == 'rand':
@@ -385,9 +385,6 @@ class opt_out(data_out):
         # Initialize 
         self.initialize_variables()
         # Create NLP
-        print self.f
-        print self.w0['m']
-        # print self.g
         self.nlp = {"x": self.w, "f": self.f, "g": self.g}
         # NLP solver options
         if self.p_solver == 'ipopt':
@@ -418,8 +415,9 @@ class opt_out(data_out):
                                                        'voxels_cb': self.voxels})
             self.opts["iteration_callback"] = self.mycallback
             self.opts["iteration_callback_step"] = self.callback_steps
-            self.opts["fixed_variable_treatment"] = 'make_constraint'
-            # self.opts["fixed_variable_treatment"] = 'relax_bounds'
+        # self.opts["ipopt.fixed_variable_treatment"] = 'make_constraint'
+        self.opts["ipopt.fixed_variable_treatment"] = 'relax_bounds'
+        self.opts["ipopt.tol"] = 1e-5
         # Create solver
         print "Initializing the solver"
         if self.p_solver == 'ipopt':
@@ -1307,7 +1305,7 @@ class opt_out(data_out):
             save_this['opts'] = self.opt_opt
             self.write_with_pickle(save_this)
             self.write_casadi_structure(self.res_struct)
-        self.xres = self.res_struct['a'].full()
+        self.xres = self.res_struct['a'].full() * self.res_struct['m'].full() 
 
     def get_ground_truth(self, method='shephard'):
         """

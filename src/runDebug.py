@@ -74,7 +74,7 @@ print 'Interval is ', float(t_int)
 dfname = '' + p_method + '_' + p_sparse +'_' + p_norm + '_' + p_time + '_' + t_ind + '_' + t_int + '_' + p_fin + '_' + p_tv + '_' + p_back + '_' +  str(np.random.randint(1000))
 
 # Optimize
-optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
+optimization_options = {'p_vres':20, 'p_jlen':0, 'p_erad': 10,
                         'solver': p_solver,
                         'hessian': p_hessian,
                         'linsol': p_linsol,
@@ -87,9 +87,9 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
                         'flag_lift_mask': False,
                         'flag_data_mask': True,
                         'flag_write_output': False,
-                        'flag_callback': False,
+                        'flag_callback': True,
                         'flag_callback_output': False,
-                        'flag_callback_plot': False,
+                        'flag_callback_plot': True,
                         'flag_sparsity_pattern': False,
                         'flag_total': False,
                         'flag_temporal': False,
@@ -110,13 +110,15 @@ elif p_method == 'slack':
     opt.solve_ipopt_multi_measurement_slack()
 elif p_method == '2p':
     opt.solve_ipopt_multi_measurement_2p()
-opt.set_optimization_variables_only_mask()
+
+# ff = '/home/dell/dan/mask_1000000000000000_0_smv_38_1_gt_cent_0_291/struct.cs'
+# czc = opt.load_casadi_structure(ff)
 # visualize
-# vis = visualize(data=data, loc=opt)
-# fname = '../results/' + dfname + '/' + 'final'
-# vis.save_snapshot(fname)
-# fname = '../results/' + dfname + '/' + 'fv'
-# vis.save_movie(fname)
+vis = visualize(data=data, loc=opt)
+fname = '../results/' + dfname + '/' + 'final'
+vis.save_snapshot(fname)
+fname = '../results/' + dfname + '/' + 'fv'
+vis.save_movie(fname)
 # opt.set_optimization_variables_thesis()
 # opt.initialize_variables()
 # 
