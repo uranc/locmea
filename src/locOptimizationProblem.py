@@ -280,7 +280,6 @@ class opt_out(data_out):
                         'hessian': 'exact',
                         'linsol': 'ma57'
                         }
-
         self.opt_opt.update(kwargs)
         self.solver = self.opt_opt['solver']
         self.datafile_name = self.opt_opt['datafile_name']
@@ -331,7 +330,7 @@ class opt_out(data_out):
         @return     { None }
         """
         self.w0 = self.w(0)
-        csd = self.get_ground_truth()[0]
+        csd = self.get_ground_truth(method = 'modified')[0]
         if self.method == 'thesis':
             tmp_s0 = np.random.randn(self.s.shape[0], self.s.shape[1])
             for i in range(self.s.shape[0]):
@@ -342,8 +341,9 @@ class opt_out(data_out):
         if self.method == 'thesis' or self.method == 'mask':
             self.gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['a'].shape))
             # tmp_m0 = np.random.rand(self.m.shape[0])
-            tmp_m0 = np.ones(self.m.shape[0])*0.5 + np.random.randn(self.m.shape[0])/10
-            tmp_a0 = np.random.randn(self.a.shape[0], self.a.shape[1])
+            tmp_m0 = np.ones(self.m.shape[0])*0.5 + np.random.randn(self.m.shape[0])/50
+            print tmp_m0
+            tmp_a0 = np.random.randn(self.a.shape[0], self.a.shape[1])/50
             print 'initialization: Thesis or Mask'
             if self.flag_init == 'rand':
                 self.w0['m'] = tmp_m0
@@ -391,7 +391,8 @@ class opt_out(data_out):
             self.opts = {"ipopt.max_iter": 100000,
                          "ipopt.hessian_approximation": self.p_hessian,
                          }
-            self.opts
+            self.opts["ipopt.fixed_variable_treatment"] = 'relax_bounds'
+            self.opts["ipopt.tol"] = 1e-5
             if self.p_linsol[:2] == 'MA':
                 print "###################"
                 print "Using linear solver"
@@ -416,8 +417,6 @@ class opt_out(data_out):
             self.opts["iteration_callback"] = self.mycallback
             self.opts["iteration_callback_step"] = self.callback_steps
         # self.opts["ipopt.fixed_variable_treatment"] = 'make_constraint'
-        self.opts["ipopt.fixed_variable_treatment"] = 'relax_bounds'
-        self.opts["ipopt.tol"] = 1e-5
         # Create solver
         print "Initializing the solver"
         if self.p_solver == 'ipopt':
@@ -734,7 +733,7 @@ class opt_out(data_out):
         @param      h                { parameter_description }
         @param      flag_second      The flag second
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         # initials
         x = smooth_entity
@@ -778,12 +777,12 @@ class opt_out(data_out):
 
     def write_casadi_structure(self, struct_to_save):
         """
-        @brief      { function_description }
+        @brief      { write casadi structure }
 
         @param      self            The object.
         @param      struct_to_save  The struct to save
 
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         fname = '../results/' + self.datafile_name + '/' + 'struct.cs'
         struct_to_save.save(fname)
@@ -795,7 +794,7 @@ class opt_out(data_out):
         @param      self   The object.
         @param      fname  The fname
 
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         return ca.tools.struct_load(fname)
 
@@ -806,7 +805,7 @@ class opt_out(data_out):
         @param      self  The object
         @param      x     { parameter_description }
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         srate = self.data.srate
         fit_data = self.data.cell_csd[i, 38:]
@@ -840,7 +839,7 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         self.w = struct_symMX([entry("x", shape=(self.x_size, self.t_int)),
                                entry("xs", shape=(self.x_size)),
@@ -860,7 +859,7 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         for i in range(self.y.shape[0]):
             for ti in range(self.t_int):
@@ -875,7 +874,7 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         for j in range(self.w['xs'].shape[0]):
             tmp = 0
@@ -898,7 +897,7 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         t0 = time.time()
         self.set_optimization_variables_slack()
@@ -925,7 +924,7 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         self.w = struct_symMX([entry("xs_pos", shape=(self.x_size, self.t_int)),
                                entry("xs_neg", shape=(self.x_size, self.t_int)),
@@ -945,7 +944,7 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         for i in range(self.y.shape[0]):
             for ti in range(self.t_int):
@@ -960,7 +959,7 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         for j in range(self.xs_pos.shape[0]):
             tmp_pos = 0
@@ -982,7 +981,7 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         t0 = time.time()
         self.set_optimization_variables_2p()
@@ -1008,7 +1007,7 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         self.w = struct_symMX([entry("a", shape=(self.x_size, self.t_int)),
                                entry("m", shape=(self.x_size)),
@@ -1034,17 +1033,17 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         for i in range(self.y.shape[0]):
             for ti in range(self.t_int):
-                self.f += (self.y[i, ti] - self.ys[i, ti])**2
+                # self.f += (self.y[i, ti] - self.ys[i, ti])**2
                 if self.flag_data_mask:
                     # self.g.append(self.ys[i, ti] - ca.dot(self.fwd[i, :].T, self.a[:, ti] * self.m))
-                    self.g.append(self.ys[i, ti] - ca.dot(self.fwd[i, :].T, self.a[:, ti] * self.m))
+                    self.g.append(self.y[i, ti] - ca.dot(self.fwd[i, :].T, self.a[:, ti] * self.m))
                 else:
                     # self.g.append(self.ys[i, ti] - ca.dot(self.fwd[i, :].T, self.a[:, ti]))
-                    self.g.append(self.ys[i, ti] - ca.dot(self.fwd[i, :].T, self.a[:, ti]))
+                    self.g.append(self.y[i, ti] - ca.dot(self.fwd[i, :].T, self.a[:, ti]))
                 self.lbg.append(0)
                 self.ubg.append(0)
 
@@ -1054,7 +1053,7 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         
 
@@ -1064,7 +1063,7 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         print self.sigma_value*2
         for j in range(self.m.shape[0]):
@@ -1080,7 +1079,7 @@ class opt_out(data_out):
         
         @param      self  The object
         
-        @return     { description_of_the_return_value }
+        @return     { None }
         """
         for b in range(self.m.shape[0]):
             tmp = 0
@@ -1103,9 +1102,11 @@ class opt_out(data_out):
         if self.flag_tv == 'fwd':
             grad_m = self.cmp_fwd_diff(self.m, False)
         for cm in range(self.m.shape[0]):
-            self.g.append(ca.dot(grad_m[:, cm], grad_m[:, cm])**0.5)
+            self.g.append(ca.dot(grad_m[:, cm], grad_m[:, cm]))
+            #self.g.append(ca.dot(grad_m[:, cm], grad_m[:, cm]))
             self.lbg.append(0)
-            self.ubg.append(3**0.5)
+            # self.ubg.append(3**0.5)
+            self.ubg.append(3)
 
     def add_smoothness_costs_constraints_thesis(self):
         """
@@ -1243,9 +1244,10 @@ class opt_out(data_out):
         """
         self.w = struct_symMX([entry("a", shape=(self.x_size, self.t_int)),
                                entry("m", shape=(self.x_size)),
-                               entry("ys", shape=(self.y.shape)),
+                               # entry("ys", shape=(self.y.shape)),
                                ])
-        self.a, self.m, self.ys = self.w[...]
+        # self.a, self.m, self.ys = self.w[...]
+        self.a, self.m = self.w[...]
         self.g = []
         self.lbg = []
         self.ubg = []
@@ -1307,7 +1309,7 @@ class opt_out(data_out):
             self.write_casadi_structure(self.res_struct)
         self.xres = self.res_struct['a'].full() * self.res_struct['m'].full() 
 
-    def get_ground_truth(self, method='shephard'):
+    def get_ground_truth(self, method = 'shephard'):
         """
         @brief      Get the ground truth.
         

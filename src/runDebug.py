@@ -74,7 +74,7 @@ print 'Interval is ', float(t_int)
 dfname = '' + p_method + '_' + p_sparse +'_' + p_norm + '_' + p_time + '_' + t_ind + '_' + t_int + '_' + p_fin + '_' + p_tv + '_' + p_back + '_' +  str(np.random.randint(1000))
 
 # Optimize
-optimization_options = {'p_vres':20, 'p_jlen':0, 'p_erad': 10,
+optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
                         'solver': p_solver,
                         'hessian': p_hessian,
                         'linsol': p_linsol,
@@ -85,7 +85,7 @@ optimization_options = {'p_vres':20, 'p_jlen':0, 'p_erad': 10,
                         'flag_parallel': False,
                         'datafile_name': dfname,
                         'flag_lift_mask': False,
-                        'flag_data_mask': True,
+                        'flag_data_mask': False,
                         'flag_write_output': False,
                         'flag_callback': True,
                         'flag_callback_output': False,
@@ -100,6 +100,13 @@ optimization_options = {'p_vres':20, 'p_jlen':0, 'p_erad': 10,
                         'callback_steps': 5,
                         'p_dyn': float(p_dynamic)
                         }
+if int(p_back) == 0:
+    optimization_options['flag_data_mask'] = True
+elif int(p_back) == 1:
+    optimization_options['flag_data_mask'] = False
+elif int(p_back) == 2:
+    optimization_options['flag_data_mask'] = True
+
 
 opt = opt_out(data, **optimization_options)
 if p_method == 'thesis':
@@ -111,15 +118,18 @@ elif p_method == 'slack':
 elif p_method == '2p':
     opt.solve_ipopt_multi_measurement_2p()
 
+print opt.res_struct['m']
+# opt.flag_tv = 'fwd'
+# opt.set_optimization_variables_thesis()
+# opt.add_tv_mask_costs_constraints_thesis()
 # ff = '/home/dell/dan/mask_1000000000000000_0_smv_38_1_gt_cent_0_291/struct.cs'
 # czc = opt.load_casadi_structure(ff)
-# visualize
+# # visualize
 vis = visualize(data=data, loc=opt)
 fname = '../results/' + dfname + '/' + 'final'
 vis.save_snapshot(fname)
 fname = '../results/' + dfname + '/' + 'fv'
 vis.save_movie(fname)
-# opt.set_optimization_variables_thesis()
 # opt.initialize_variables()
 # 
 # opt.xres = np.array(opt.w(0)['a'].full())
