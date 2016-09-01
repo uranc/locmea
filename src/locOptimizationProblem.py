@@ -330,7 +330,7 @@ class opt_out(data_out):
         @return     { None }
         """
         self.w0 = self.w(0)
-        csd = self.get_ground_truth(method = 'modified')[0]
+        csd = self.get_ground_truth()[0]
         if self.method == 'thesis':
             tmp_s0 = np.random.randn(self.s.shape[0], self.s.shape[1])
             for i in range(self.s.shape[0]):
@@ -343,7 +343,7 @@ class opt_out(data_out):
             # tmp_m0 = np.random.rand(self.m.shape[0])
             tmp_m0 = np.ones(self.m.shape[0])*0.5 + np.random.randn(self.m.shape[0])/50
             print tmp_m0
-            tmp_a0 = np.random.randn(self.a.shape[0], self.a.shape[1])/50
+            tmp_a0 = np.random.randn(self.a.shape[0], self.a.shape[1])/10
             print 'initialization: Thesis or Mask'
             if self.flag_init == 'rand':
                 self.w0['m'] = tmp_m0
@@ -369,6 +369,28 @@ class opt_out(data_out):
             neg_charges[self.gt < 0] = self.gt[self.gt < 0]
             self.w0['xs_pos'] = pos_charges
             self.w0['xs_neg'] = neg_charges
+        if self.method == 'dipole':
+            self.gt = np.reshape(csd[:,self.t_ind:self.t_ind+self.t_int], (self.w0['x_pos'].shape))
+            pos_charges = np.zeros(self.w0['x_pos'].shape)
+            neg_charges = np.zeros(self.w0['x_neg'].shape)
+            pos_charges[self.gt > 0] = self.gt[self.gt > 0]
+            neg_charges[self.gt < 0] = self.gt[self.gt < 0]
+            tmp_m0_pos = np.ones(self.m_pos.shape[0])*0.5 + np.random.randn(self.m_pos.shape[0])/50
+            tmp_m0_neg = np.ones(self.m_pos.shape[0])*0.5 + np.random.randn(self.m_pos.shape[0])/50
+            print tmp_m0_pos
+            tmp_a0_pos = np.random.randn(self.x_pos.shape[0], self.x_pos.shape[1])/10
+            tmp_a0_neg = np.random.randn(self.x_pos.shape[0], self.x_pos.shape[1])/10
+            print 'initialization: Thesis or Mask'
+            if self.flag_init == 'rand':
+                self.w0['m_pos'] = tmp_m0_pos
+                self.w0['m_neg'] = tmp_m0_neg
+                self.w0['x_pos'] = tmp_a0_pos
+                self.w0['x_neg'] = tmp_a0_neg
+            if self.flag_init == 'gt':
+                self.w0['m_pos'] = np.where(pos_charges > 1e-3, 1, 0).T[0]
+                self.w0['m_neg'] = np.where(neg_charges > 1e-3, 1, 0).T[0]
+                self.w0['x_pos'] = pos_charges
+                self.w0['x_neg'] = neg_charges
 
     def minimize_function(self):
         """
@@ -1047,15 +1069,112 @@ class opt_out(data_out):
                 self.lbg.append(0)
                 self.ubg.append(0)
 
-    def add_ordered_constraints_mask(self):
+    def solve_dipole(self):
         """
-        @brief      Adds an ordered constraints mask.
+        @brief      Dipole model.
         
         @param      self  The object
         
         @return     { None }
         """
-        
+        self.w = struct_symMX([entry("x_pos", shape=[self.x_size, self.t_int]),
+                               entry("x_neg", shape=[self.x_size, self.t_int]),
+                               entry("m_pos", shape=self.x_size),
+                               entry("m_neg", shape=self.x_size),
+                               ])
+        self.x_pos, self.x_neg, self.m_pos, self.m_neg = self.w[...]
+        self.g = []
+        self.lbg = []
+        self.ubg = []
+        self.f = 0
+        self.sigma = ca.MX.sym('sigma')
+        self.lbx = self.w(0)
+        self.ubx = self.w(ca.inf)
+        self.lbx['m_pos'] = 0
+        self.ubx['m_pos'] = 1
+        self.lbx['m_neg'] = 0
+        self.ubx['m_neg'] = 1
+
+        # Feasible Set Constraints (Might be negative)
+        for fj in range(self.m_pos.shape[0]):
+            self.g.append(self.m_pos[fj])
+            self.g.append(self.m_neg[fj])
+            self.lbg.append(0)
+            self.lbg.append(0)
+            self.ubg.append(ca.inf)
+            self.ubg.append(ca.inf)
+            for ftj in range(self.t_int):
+                self.g.append(self.x_pos[fj, ftj])
+                self.g.append(self.x_neg[fj, ftj])
+                self.lbg.append(0)
+                self.lbg.append(0)
+                self.ubg.append(ca.inf)
+                self.ubg.append(ca.inf)
+
+        # Measurement constraints
+        for i in range(self.y.shape[0]):
+            for ti in range(self.t_int):
+                self.g.append(self.y[i, ti] - ca.dot(self.fwd[i, :].T, (self.x_pos[:, ti] - self.x_neg[:, ti])))
+                self.lbg.append(0)
+                self.ubg.append(0)
+
+        # Compute gradient for the mask
+        grad_m_pos = self.cmp_gradient(self.m_pos, False)
+        grad_m_neg = self.cmp_gradient(self.m_neg, False)
+    
+        # Data term and constraints
+        for j in range(self.m_pos.shape[0]):
+
+            # Sparsity
+            self.f += self.m_pos[j] + self.m_neg[j]
+
+            # Mask
+            # Tikhonov
+            self.g.append(ca.dot(grad_m_pos[:, j], grad_m_pos[:, j]))
+            self.g.append(ca.dot(grad_m_neg[:, j], grad_m_neg[:, j]))
+            self.lbg.append(0)
+            self.ubg.append(3)
+            self.lbg.append(0)
+            self.ubg.append(3)
+
+            # TV
+            # self.g.append(ca.dot(grad_m_pos[:, j], grad_m_pos[:, j])**0.5)
+            # self.g.append(ca.dot(grad_m_neg[:, j], grad_m_neg[:, j])**0.5)
+            # self.lbg.append(0)
+            # self.ubg.append(3**0.5)
+            # self.lbg.append(0)
+            # self.ubg.append(3**0.5)
+
+            # Background
+            tmp_pos = 0
+            tmp_neg = 0
+            for jb in range(self.t_int):
+                tmp_pos += self.x_pos[j, jb]
+                tmp_neg += self.x_neg[j, jb]
+            self.g.append(tmp_pos*(1 - self.m_pos[j]))
+            self.lbg.append(0)
+            self.ubg.append(0)
+            self.g.append(tmp_neg*(1 - self.m_neg[j]))
+            self.lbg.append(0)
+            self.ubg.append(0)            
+
+            # Binary
+            if self.flag_lift_mask:
+                # Positive Mask
+                self.g.append(1 - (self.m_pos[j]**2 + (1 - self.m_pos[j])**2)**0.5)
+                self.lbg.append(0)
+                self.ubg.append(0)
+                # Negative Mask
+                self.g.append(1 - (self.m_neg[j]**2 + (1 - self.m_neg[j])**2)**0.5)
+                self.lbg.append(0)
+                self.ubg.append(0)
+
+            # Optimization
+            self.minimize_function()
+
+            # Results
+            self.xres = (self.res_struct['x_pos'].full() - self.res_struct['x_neg'].full())  \
+                         *(self.res_struct['m_pos'].full() + self.res_struct['m_neg'].full())
 
     def add_l1_costs_constraints_thesis(self):
         """
@@ -1257,21 +1376,6 @@ class opt_out(data_out):
         self.ubx = self.w(ca.inf)
         self.lbx['m'] = 0
         self.ubx['m'] = 1
-        if self.flag_sparsity_pattern:
-            self.w = struct_symMX([(entry("a", repeat=[self.x_size, self.t_int]),
-                       entry("m", repeat=self.x_size)),
-                       entry("ys", shape=self.y.shape)
-                       ])
-            self.a, self.m, self.ys = self.w[...]
-            self.g = []
-            self.lbg = []
-            self.ubg = []
-            self.f = 0
-            self.sigma = ca.MX.sym('sigma')
-            self.lbx = self.w(-ca.inf)
-            self.ubx = self.w(ca.inf)
-            self.lbx['m'] = 0
-            self.ubx['m'] = 1
 
     def solve_ipopt_multi_measurement_only_mask(self):
         """
@@ -1307,7 +1411,7 @@ class opt_out(data_out):
             save_this['opts'] = self.opt_opt
             self.write_with_pickle(save_this)
             self.write_casadi_structure(self.res_struct)
-        self.xres = self.res_struct['a'].full() * self.res_struct['m'].full() 
+        self.xres = self.res_struct['a'].full() * self.res_struct['m'].full()
 
     def get_ground_truth(self, method = 'shephard'):
         """

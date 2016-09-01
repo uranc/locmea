@@ -87,9 +87,9 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
                         'flag_lift_mask': False,
                         'flag_data_mask': False,
                         'flag_write_output': False,
-                        'flag_callback': True,
+                        'flag_callback': False,
                         'flag_callback_output': False,
-                        'flag_callback_plot': True,
+                        'flag_callback_plot': False,
                         'flag_sparsity_pattern': False,
                         'flag_total': False,
                         'flag_temporal': False,
@@ -100,12 +100,6 @@ optimization_options = {'p_vres':10, 'p_jlen':0, 'p_erad': 10,
                         'callback_steps': 5,
                         'p_dyn': float(p_dynamic)
                         }
-if int(p_back) == 0:
-    optimization_options['flag_data_mask'] = True
-elif int(p_back) == 1:
-    optimization_options['flag_data_mask'] = False
-elif int(p_back) == 2:
-    optimization_options['flag_data_mask'] = True
 
 
 opt = opt_out(data, **optimization_options)
@@ -117,8 +111,10 @@ elif p_method == 'slack':
     opt.solve_ipopt_multi_measurement_slack()
 elif p_method == '2p':
     opt.solve_ipopt_multi_measurement_2p()
+elif p_method == 'dipole':
+    opt.solve_dipole()
 
-print opt.res_struct['m']
+print opt.res_struct['m_pos']
 # opt.flag_tv = 'fwd'
 # opt.set_optimization_variables_thesis()
 # opt.add_tv_mask_costs_constraints_thesis()
